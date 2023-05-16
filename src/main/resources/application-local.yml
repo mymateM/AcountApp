@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    hikari:
+      data-source-properties:
+        rewriteBatchedStatements: true
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      format_sql: true
+      ddl-auto: create
+    show-sql: true
+
+    logging:
+      level:
+        org:
+          hibernate:
+            SQL: DEBUG
+            type:
+              descriptor:
+                sql:
+                  BasicBinder: TRACE
+    open-in-view: false
+
+logging:
+  level:
+    com.zaxxer.hikari: TRACE
+    com.zaxxer.hikari.HikariConfig: DEBUG
