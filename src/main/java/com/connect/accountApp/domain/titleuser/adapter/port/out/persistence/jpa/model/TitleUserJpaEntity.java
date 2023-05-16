@@ -1,0 +1,45 @@
+package com.connect.accountApp.domain.titleuser.adapter.port.out.persistence.jpa.model;
+
+import com.connect.accountApp.domain.title.adapter.out.persistence.jpa.model.TitleJpaEntity;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+public class TitleUserJpaEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long titleUserId;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private UserJpaEntity userJpaEntity;
+
+  @ManyToOne
+  @JoinColumn(name = "title_id")
+  private TitleJpaEntity titleJpaEntity;
+
+  private LocalDateTime createdAt;
+
+  @Builder
+  public TitleUserJpaEntity(Long titleUserId,
+      UserJpaEntity userJpaEntity,
+      TitleJpaEntity titleJpaEntity, LocalDateTime createdAt) {
+    this.titleUserId = titleUserId;
+    this.userJpaEntity = userJpaEntity;
+    this.titleJpaEntity = titleJpaEntity;
+    this.createdAt = createdAt;
+  }
+}
