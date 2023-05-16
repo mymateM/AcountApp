@@ -1,23 +1,19 @@
 package com.connect.accountApp.global.error.exception;
 
-import com.swulab.eatswunee.global.error.ErrorCode;
+import com.connect.accountApp.global.error.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class BusinessException extends RuntimeException {
-
+public class BusinessException extends RuntimeException{
   private ErrorCode errorCode;
 
-  public BusinessException(final ErrorCode errorCode, final String message) {
+  public BusinessException(String message, ErrorCode errorCode) {
     super(message);
     this.errorCode = errorCode;
   }
 
-  public BusinessException(final ErrorCode errorCode) {
-    super(errorCode.getTitle());
+  public BusinessException(ErrorCode errorCode) {
+    super(errorCode.getMessage());
     this.errorCode = errorCode;
   }
-
-
-
 }
