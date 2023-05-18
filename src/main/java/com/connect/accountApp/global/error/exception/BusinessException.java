@@ -2,8 +2,10 @@ package com.connect.accountApp.global.error.exception;
 
 import com.connect.accountApp.global.error.ErrorCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class BusinessException extends RuntimeException{
   private ErrorCode errorCode;
 
@@ -16,4 +18,6 @@ public class BusinessException extends RuntimeException{
     super(errorCode.getMessage());
     this.errorCode = errorCode;
   }
+
+
 }

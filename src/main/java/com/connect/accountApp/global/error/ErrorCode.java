@@ -12,7 +12,13 @@ public enum ErrorCode {
   ENTITY_NOT_FOUND(404, "C003", "요청한 값이 존재하지 않습니다."),
   INTERNAL_SERVER_ERROR(500, "C004", "서버 에러"),
   INVALID_TYPE_VALUE(400, "C005", "올바르지 않은 타입입니다."),
-  INVALID_REQUEST(400, "C010", "잘못된 요청입니다.");
+  INVALID_REQUEST(400, "C010", "잘못된 요청입니다."),
+
+  // USER
+  USER_NOT_FOUND(404, "S001", "존재하지 않는 사용자입니다."),
+
+  // Household
+  HOUSEHOLD_NOT_FOUND(404, "H001", "존재하지 않는 가구입니다.");
 
 
   private int status;
