@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "expense")
 public class ExpenseJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +34,6 @@ public class ExpenseJpaEntity {
   @ManyToOne
   @JoinColumn(name = "user_id")
   private UserJpaEntity userJpaEntity;
-
-  @ManyToOne
-  @JoinColumn(name = "household_id")
-  private HouseHoldJpaEntity houseHoldJpaEntity;
 
   @Enumerated(EnumType.STRING)
   private ExpenseCategory expenseCategory;
@@ -52,7 +50,6 @@ public class ExpenseJpaEntity {
     this.expenseContent = expenseContent;
     this.expenseMemo = expenseMemo;
     this.userJpaEntity = userJpaEntity;
-    this.houseHoldJpaEntity = houseHoldJpaEntity;
     this.expenseCategory = expenseCategory;
   }
 }
