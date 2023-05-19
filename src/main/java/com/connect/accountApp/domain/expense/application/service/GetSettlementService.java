@@ -26,7 +26,7 @@ public class GetSettlementService implements GetSettlementUseCase {
   public SettlementCommand getSettlement(Long userId) {
 
     User user = getUserPort.getUser(userId);
-    Household household = getHouseholdPort.getHousehold(user.getUserId());
+    Household household = getHouseholdPort.getHousehold(user.getHousehold().getHouseholdId());
     LocalDate householdSettlementDate = household.getHouseholdSettlementDate();
 
     //TODO : 날짜에 맞추기
