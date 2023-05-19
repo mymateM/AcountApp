@@ -52,7 +52,7 @@ jobs:
       
     - name: Generate deployment package
       run: |
-        mkidr -p before-deploy
+        mkidir -p before-deploy
         cp scripts/*.sh before-deploy/
         cp appspec.yml before-deploy/
         cp build/libs/*.jar before-deploy/
