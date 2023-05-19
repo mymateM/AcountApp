@@ -3,6 +3,8 @@ spring:
     group:
       local:
         - localdb
-    active: local
+      dev:
+        - devdb
+    active: dev
   pid:
     file: /home/ec2-user/app/step2/accountApp.pid
