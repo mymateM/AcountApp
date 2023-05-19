@@ -40,6 +40,41 @@ public class ExpenseQueryRepository {
         .fetch();
   }
 
+  public TotalExpenseCommand getUserTotalExpenseQuery(Long userId, LocalDate date) {
+
+    return queryFactory
+        .select(Projections.constructor(TotalExpenseCommand.class,
+            userJpaEntity.userId,
+            userJpaEntity.userName,
+            expenseJpaEntity.expenseAmount.sum().as("userTotalExpense"),
+            userJpaEntity.userRatio
+        ))
+        .from(expenseJpaEntity)
+        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
+        .where(
+            userJpaEntity.userId.eq(userId),
+            betweenDate(date.atStartOfDay())
+        )
+        .fetchOne();
+  }
+
+
+  public Integer getHouseholdTotalExpense(Long householdId, LocalDate date) {
+
+    return queryFactory
+        .select(
+            expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense")
+        )
+        .from(expenseJpaEntity)
+        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
+        .where(
+            eqHouseholdId(householdId),
+            betweenDate(date.atStartOfDay())
+        )
+        .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
+        .fetchOne();
+  }
+
   private BooleanExpression eqHouseholdId(Long householdId) {
     log.info("householdId : {}", householdId);
     return householdId != null ? userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId) : null;

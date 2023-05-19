@@ -42,7 +42,6 @@ public class ExpenseJpaEntity {
   public ExpenseJpaEntity(Long expenseId, int expenseAmount, LocalDateTime expenseDate,
       String expenseContent, String expenseMemo,
       UserJpaEntity userJpaEntity,
-      HouseHoldJpaEntity houseHoldJpaEntity,
       ExpenseCategory expenseCategory) {
     this.expenseId = expenseId;
     this.expenseAmount = expenseAmount;

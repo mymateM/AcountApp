@@ -1,17 +1,22 @@
 package com.connect.accountApp.domain.user.adapter.out.persistence;
 
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserQueryRepository;
+import com.connect.accountApp.domain.user.application.port.out.GetRoommateSendMoneyPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
+import com.connect.accountApp.domain.user.application.port.out.command.RoommateSendMoneyCommand;
 import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.domain.user.exception.UserNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements GetUserPort {
+public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoneyPort {
 
   private final UserJpaRepository userJpaRepository;
+  private final UserQueryRepository userQueryRepository;
   private final UserMapper userMapper;
 
   @Override
@@ -23,5 +28,10 @@ public class UserPersistenceAdapter implements GetUserPort {
     User user = userMapper.mapToDomainEntity(userJpaEntity);
 
     return user;
+  }
+
+  @Override
+  public List<RoommateSendMoneyCommand> getRoommateSendMoney(Long householdId, Long userId) {
+    return userQueryRepository.getRoommateSendMoney(householdId, userId);
   }
 }
