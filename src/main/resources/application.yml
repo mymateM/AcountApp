@@ -4,3 +4,5 @@ spring:
       local:
         - localdb
     active: local
+  pid:
+    file: /home/ec2-user/app/step2/accountApp.pid
