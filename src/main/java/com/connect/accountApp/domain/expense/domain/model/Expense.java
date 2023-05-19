@@ -1,6 +1,5 @@
 package com.connect.accountApp.domain.expense.domain.model;
 
-import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -18,21 +17,18 @@ public class Expense {
   private String expenseContent;
   private String expenseMemo;
   private User user;
-  private Household household;
   private ExpenseCategory expenseCategory;
 
   @Builder
   public Expense(Long expenseId, int expenseAmount, LocalDateTime expenseDate,
       String expenseContent, String expenseMemo,
-      User user, Household household,
-      ExpenseCategory expenseCategory) {
+      User user, ExpenseCategory expenseCategory) {
     this.expenseId = expenseId;
     this.expenseAmount = expenseAmount;
     this.expenseDate = expenseDate;
     this.expenseContent = expenseContent;
     this.expenseMemo = expenseMemo;
     this.user = user;
-    this.household = household;
     this.expenseCategory = expenseCategory;
   }
 }
