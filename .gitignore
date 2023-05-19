@@ -38,3 +38,4 @@ out/
 application-local.yml
 application-localdb.yml
 import.sql
+application-devdb.yml
