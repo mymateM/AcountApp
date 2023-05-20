@@ -1,0 +1,3 @@
+[submodule "accountApp-config"]
+	path = accountApp-config
+	url = git@github.com:ehBeak/accountApp-config.git
