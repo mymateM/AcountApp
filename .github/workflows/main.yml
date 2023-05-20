@@ -1,6 +1,6 @@
 env:
   S3_BUCKET_NAME: connect-build-file
-  PROJECT_NAME: AccountApp
+  PROJECT_NAME: accountApp
   CODE_DEPLOY_APP_NAME: accountApp
   CODE_DEPLOY_GROUP_NAME: connect-accountApp-group
   
