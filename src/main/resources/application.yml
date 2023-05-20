@@ -7,4 +7,4 @@ spring:
         - devdb
     active: dev
   pid:
-    file: /home/ec2-user/app/step2/accountApp.pid
+    file: /home/ubuntu/app/step2/accountApp.pid
