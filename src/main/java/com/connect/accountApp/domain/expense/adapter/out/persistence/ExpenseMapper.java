@@ -25,7 +25,7 @@ public class ExpenseMapper {
   }
 
   public ExpenseJpaEntity mapToJpaEntity(Expense expense) {
-    ExpenseJpaEntity.builder()
+    return ExpenseJpaEntity.builder()
         .expenseId(expense.getExpenseId())
         .expenseAmount(expense.getExpenseAmount())
         .expenseDate(expense.getExpenseDate())
