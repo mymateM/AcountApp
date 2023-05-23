@@ -21,18 +21,18 @@ public class Notification {
 
   private Expense expense;
   private Bill bill;
-  private User user;
+  private String senderName;
 
   @Builder
   public Notification(Long notiId,
       NotiCategory notiCategory, String notiContent, boolean notiIsRead, LocalDateTime notiCreatedAt,
-      Expense expense, Bill bill, User user) {
+      Expense expense, Bill bill, String senderName) {
     this.notiId = notiId;
     this.notiCategory = notiCategory;
     this.notiContent = notiContent;
     this.notiIsRead = notiIsRead;
     this.expense = expense;
     this.bill = bill;
-    this.user = user;
+    this.senderName = senderName;
   }
 }

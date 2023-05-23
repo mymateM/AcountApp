@@ -3,8 +3,6 @@ package com.connect.accountApp.domain.notification.adapter.out.persistence.jpa.m
 import com.connect.accountApp.domain.bill.adapter.out.persistence.jpa.model.BillJpaEntity;
 import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.ExpenseJpaEntity;
 import com.connect.accountApp.domain.notification.domain.model.NotiCategory;
-import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
-import com.connect.accountApp.domain.user.domain.model.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "notification")
+@Table(name = "notifications")
 public class NotificationJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,16 +41,14 @@ public class NotificationJpaEntity {
   @JoinColumn(name = "bill_id")
   private BillJpaEntity billJpaEntity;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private UserJpaEntity userJpaEntity;
+  private String senderName;
 
   @Builder
   public NotificationJpaEntity(Long notiId,
       NotiCategory notiCategory, String notiContent, boolean notiIsRead, LocalDateTime notiCreatedAt,
       ExpenseJpaEntity expenseJpaEntity,
       BillJpaEntity billJpaEntity,
-      UserJpaEntity userJpaEntity) {
+      String senderName) {
     this.notiId = notiId;
     this.notiCategory = notiCategory;
     this.notiContent = notiContent;
@@ -60,6 +56,6 @@ public class NotificationJpaEntity {
     this.notiCreatedAt = notiCreatedAt;
     this.expenseJpaEntity = expenseJpaEntity;
     this.billJpaEntity = billJpaEntity;
-    this.userJpaEntity = userJpaEntity;
+    this.senderName = senderName;
   }
 }

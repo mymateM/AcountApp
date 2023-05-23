@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "usernotificaiton")
+@Table(name = "user_notification")
 public class UserNotificationJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
