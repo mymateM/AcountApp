@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.notification.domain.model;
 
 import com.connect.accountApp.domain.bill.domain.model.Bill;
 import com.connect.accountApp.domain.expense.domain.model.Expense;
+import com.connect.accountApp.domain.user.domain.model.User;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,16 +21,18 @@ public class Notification {
 
   private Expense expense;
   private Bill bill;
+  private User user;
 
   @Builder
   public Notification(Long notiId,
       NotiCategory notiCategory, String notiContent, boolean notiIsRead, LocalDateTime notiCreatedAt,
-      Expense expense, Bill bill) {
+      Expense expense, Bill bill, User user) {
     this.notiId = notiId;
     this.notiCategory = notiCategory;
     this.notiContent = notiContent;
     this.notiIsRead = notiIsRead;
     this.expense = expense;
     this.bill = bill;
+    this.user = user;
   }
 }

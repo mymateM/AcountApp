@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.bill.adapter.out.persistence.BillMapper;
 import com.connect.accountApp.domain.expense.adapter.out.persistence.ExpenseMapper;
 import com.connect.accountApp.domain.notification.adapter.out.persistence.jpa.model.NotificationJpaEntity;
 import com.connect.accountApp.domain.notification.domain.model.Notification;
+import com.connect.accountApp.domain.user.adapter.out.persistence.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ public class NotificationMapper {
 
   private final ExpenseMapper expenseMapper;
   private final BillMapper billMapper;
+  private final UserMapper userMapper;
 
   public Notification mapToDomainEntity(NotificationJpaEntity notificationJpaEntity) {
     return Notification.builder()
@@ -23,6 +25,7 @@ public class NotificationMapper {
         .notiCreatedAt(notificationJpaEntity.getNotiCreatedAt())
         .expense(expenseMapper.mapToDomainEntity(notificationJpaEntity.getExpenseJpaEntity()))
         .bill(billMapper.mapToDomainEntity(notificationJpaEntity.getBillJpaEntity()))
+        .user(userMapper.mapToDomainEntity(notificationJpaEntity.getUserJpaEntity()))
         .build();
   }
 
@@ -35,6 +38,7 @@ public class NotificationMapper {
         .notiCreatedAt(notification.getNotiCreatedAt())
         .expenseJpaEntity(expenseMapper.mapToJpaEntity(notification.getExpense()))
         .billJpaEntity(billMapper.mapToJpaEntity(notification.getBill()))
+        .userJpaEntity(userMapper.mapToJpaEntity(notification.getUser()))
         .build();
   }
 
