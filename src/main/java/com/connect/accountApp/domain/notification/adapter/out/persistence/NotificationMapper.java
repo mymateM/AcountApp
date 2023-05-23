@@ -20,6 +20,7 @@ public class NotificationMapper {
         .notiCategory(notificationJpaEntity.getNotiCategory())
         .notiContent(notificationJpaEntity.getNotiContent())
         .notiIsRead(notificationJpaEntity.isNotiIsRead())
+        .notiCreatedAt(notificationJpaEntity.getNotiCreatedAt())
         .expense(expenseMapper.mapToDomainEntity(notificationJpaEntity.getExpenseJpaEntity()))
         .bill(billMapper.mapToDomainEntity(notificationJpaEntity.getBillJpaEntity()))
         .build();
@@ -31,6 +32,7 @@ public class NotificationMapper {
         .notiCategory(notification.getNotiCategory())
         .notiContent(notification.getNotiContent())
         .notiIsRead(notification.isNotiIsRead())
+        .notiCreatedAt(notification.getNotiCreatedAt())
         .expenseJpaEntity(expenseMapper.mapToJpaEntity(notification.getExpense()))
         .billJpaEntity(billMapper.mapToJpaEntity(notification.getBill()))
         .build();

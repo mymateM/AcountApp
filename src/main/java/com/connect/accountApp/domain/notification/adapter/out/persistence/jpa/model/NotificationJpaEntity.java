@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class NotificationJpaEntity {
   private NotiCategory notiCategory;
   private String notiContent;
   private boolean notiIsRead;
+  private LocalDateTime notiCreatedAt;
 
   @ManyToOne
   @JoinColumn(name = "expense_id")
@@ -41,13 +43,14 @@ public class NotificationJpaEntity {
 
   @Builder
   public NotificationJpaEntity(Long notiId,
-      NotiCategory notiCategory, String notiContent, boolean notiIsRead,
+      NotiCategory notiCategory, String notiContent, boolean notiIsRead, LocalDateTime notiCreatedAt,
       ExpenseJpaEntity expenseJpaEntity,
       BillJpaEntity billJpaEntity) {
     this.notiId = notiId;
     this.notiCategory = notiCategory;
     this.notiContent = notiContent;
     this.notiIsRead = notiIsRead;
+    this.notiCreatedAt = notiCreatedAt;
     this.expenseJpaEntity = expenseJpaEntity;
     this.billJpaEntity = billJpaEntity;
   }
