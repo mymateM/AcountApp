@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "notification")
+@Table(name = "notifications")
 public class NotificationJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +31,7 @@ public class NotificationJpaEntity {
   private NotiCategory notiCategory;
   private String notiContent;
   private boolean notiIsRead;
+  private LocalDateTime notiCreatedAt;
 
   @ManyToOne
   @JoinColumn(name = "expense_id")
@@ -39,16 +41,21 @@ public class NotificationJpaEntity {
   @JoinColumn(name = "bill_id")
   private BillJpaEntity billJpaEntity;
 
+  private String senderName;
+
   @Builder
   public NotificationJpaEntity(Long notiId,
-      NotiCategory notiCategory, String notiContent, boolean notiIsRead,
+      NotiCategory notiCategory, String notiContent, boolean notiIsRead, LocalDateTime notiCreatedAt,
       ExpenseJpaEntity expenseJpaEntity,
-      BillJpaEntity billJpaEntity) {
+      BillJpaEntity billJpaEntity,
+      String senderName) {
     this.notiId = notiId;
     this.notiCategory = notiCategory;
     this.notiContent = notiContent;
     this.notiIsRead = notiIsRead;
+    this.notiCreatedAt = notiCreatedAt;
     this.expenseJpaEntity = expenseJpaEntity;
     this.billJpaEntity = billJpaEntity;
+    this.senderName = senderName;
   }
 }
