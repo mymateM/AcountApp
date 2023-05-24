@@ -1,9 +1,11 @@
 package com.connect.accountApp.domain.notification.adapter.out.persistence;
 
+import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
 import static com.connect.accountApp.domain.notification.adapter.out.persistence.jpa.model.QNotificationJpaEntity.notificationJpaEntity;
 import static com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.QUserNotificationJpaEntity.userNotificationJpaEntity;
 
 import com.connect.accountApp.domain.notification.adapter.out.persistence.jpa.model.NotificationJpaEntity;
+import com.connect.accountApp.domain.notification.application.port.out.command.FindExpenseNotificationCommand;
 import com.connect.accountApp.domain.notification.application.port.out.command.NotificationCommand;
 import com.connect.accountApp.domain.notification.domain.model.NotiCategory;
 import com.querydsl.core.types.Projections;
@@ -41,6 +43,46 @@ public class NotificationQueryRepository {
         .fetch();
   }
 
+
+  public List<FindExpenseNotificationCommand> findExpenseNotifications(Long userId) {
+
+    int size = jpaQueryFactory
+        .select(Projections.constructor(FindExpenseNotificationCommand.class,
+            userNotificationJpaEntity.notificationJpaEntity.expenseJpaEntity.expenseCategory.as("category"), // 카테고리
+            userNotificationJpaEntity.notificationJpaEntity.notiCreatedAt.as("createdAt"),
+            userNotificationJpaEntity.notificationJpaEntity.notiIsRead,
+            userNotificationJpaEntity.notificationJpaEntity.expenseJpaEntity.expenseAmount,
+            userNotificationJpaEntity.notificationJpaEntity.senderName
+        ))
+        .from(userNotificationJpaEntity)
+        .join(userNotificationJpaEntity.notificationJpaEntity, notificationJpaEntity)
+        .join(notificationJpaEntity.expenseJpaEntity, expenseJpaEntity)
+        .where(
+            eqUserId(userId),
+            eqNotiCategory(NotiCategory.ALARM_EXPENSE)
+        )
+        .fetch().size();
+
+    log.info("size : {}", size);
+    return jpaQueryFactory
+        .select(Projections.constructor(FindExpenseNotificationCommand.class,
+            expenseJpaEntity.expenseCategory.as("category"), // 카테고리
+            userNotificationJpaEntity.notificationJpaEntity.notiCreatedAt.as("createdAt"),
+            userNotificationJpaEntity.notificationJpaEntity.notiIsRead,
+            expenseJpaEntity.expenseAmount,
+            userNotificationJpaEntity.notificationJpaEntity.senderName
+        ))
+        .from(userNotificationJpaEntity)
+        .join(userNotificationJpaEntity.notificationJpaEntity, notificationJpaEntity)
+        .join(notificationJpaEntity.expenseJpaEntity, expenseJpaEntity)
+        .where(
+            eqUserId(userId),
+            eqNotiCategory(NotiCategory.ALARM_EXPENSE)
+        )
+        .fetch();
+  }
+
+
   private BooleanExpression eqUserId(Long userId) {
     log.info("[NotificationQueryRepository] userId : {}", userId);
     return userId != null ? userNotificationJpaEntity.userJpaEntity.userId.eq(userId) : null;
@@ -49,5 +91,10 @@ public class NotificationQueryRepository {
   private BooleanExpression notInNotiCategory(NotiCategory notiCategory) {
     log.info("[NotificationQueryRepository] notiCategory : {}", notiCategory);
     return notiCategory != null ? userNotificationJpaEntity.notificationJpaEntity.notiCategory.notIn(notiCategory) : null;
+  }
+
+  private BooleanExpression eqNotiCategory(NotiCategory notiCategory) {
+    log.info("[NotificationQueryRepository] notiCategory : {}", notiCategory);
+    return notiCategory != null ? userNotificationJpaEntity.notificationJpaEntity.notiCategory.eq(notiCategory) : null;
   }
 }
