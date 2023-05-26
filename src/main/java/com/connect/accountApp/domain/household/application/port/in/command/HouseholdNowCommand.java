@@ -14,7 +14,6 @@ public class HouseholdNowCommand {
 
 
   private Long householdId;
-  private LocalDate settlementDate;
   private int householdSettlementDDay;
   private int householdBudget;
   private int householdByPreviousExpense;
@@ -25,7 +24,6 @@ public class HouseholdNowCommand {
 
   public HouseholdNowCommand(Household household, LocalDate settlementDate, int householdByNowExpense, int householdByPreviousExpense) {
     this.householdId = household.getHouseholdId();
-    this.settlementDate = household.getHouseholdSettlementDate();
     this.householdSettlementDDay = calHouseholdSettlementDDay(settlementDate);
     this.householdBudget = household.getHouseholdBudget();
     this.householdByPreviousExpense = householdByPreviousExpense;
