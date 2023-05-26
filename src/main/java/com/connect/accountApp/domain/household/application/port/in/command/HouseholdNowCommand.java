@@ -33,7 +33,7 @@ public class HouseholdNowCommand {
   }
 
   private int calHouseholdSettlementDDay(LocalDate settlementDate) {
-    return Long.valueOf(DAYS.between(settlementDate, LocalDate.now())).intValue();
+    return Long.valueOf(DAYS.between(LocalDate.now(), settlementDate.plusMonths(1))).intValue();
   }
 
   private int calHouseholdNowExpenseDiff() {
