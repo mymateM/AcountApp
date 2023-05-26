@@ -21,7 +21,8 @@ public class ExpenseQueryRepository {
 
   private final JPAQueryFactory queryFactory;
 
-  public List<TotalExpenseCommand> getTotalExpenseQuery(Long householdId, LocalDate date) {
+  public List<TotalExpenseCommand> getTotalExpenseQuery(Long householdId, LocalDateTime startTime,
+      LocalDateTime endTime) {
 
     return queryFactory
         .select(Projections.constructor(TotalExpenseCommand.class,
@@ -34,7 +35,7 @@ public class ExpenseQueryRepository {
         .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
         .where(
             eqHouseholdId(householdId),
-            betweenDate(date.atStartOfDay())
+            betweenDate(startTime, endTime)
         )
         .groupBy(userJpaEntity.userId)
         .fetch();
@@ -59,7 +60,7 @@ public class ExpenseQueryRepository {
   }
 
 
-  public Integer getHouseholdTotalExpense(Long householdId, LocalDate date) {
+  public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 
     return queryFactory
         .select(
@@ -69,7 +70,7 @@ public class ExpenseQueryRepository {
         .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
         .where(
             eqHouseholdId(householdId),
-            betweenDate(date.atStartOfDay())
+            betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
         )
         .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
         .fetchOne();
@@ -84,6 +85,13 @@ public class ExpenseQueryRepository {
     log.info("startDate : {}, endDate : {}",date.plusDays(1).minusSeconds(1), date);
     return date != null ? expenseJpaEntity.expenseDate
         .between(date.minusMonths(1).minusSeconds(1), date) : null;
+  }
+
+  private BooleanExpression betweenDate(LocalDateTime startDate, LocalDateTime endDate) {
+    log.info("startDate : {}, endDate : {}",startDate, endDate);
+
+    return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate
+        .between(startDate, endDate) : null;
   }
 
 }

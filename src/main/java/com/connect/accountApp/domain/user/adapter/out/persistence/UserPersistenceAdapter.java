@@ -1,7 +1,10 @@
 package com.connect.accountApp.domain.user.adapter.out.persistence;
 
+import com.connect.accountApp.domain.household.adapter.out.persistence.HouseholdMapper;
+import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserQueryRepository;
+import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
 import com.connect.accountApp.domain.user.application.port.out.GetRoommateSendMoneyPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.application.port.out.command.RoommateSendMoneyCommand;
@@ -13,11 +16,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoneyPort {
+public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoneyPort,
+    FindHouseholdUserListPort {
 
   private final UserJpaRepository userJpaRepository;
   private final UserQueryRepository userQueryRepository;
   private final UserMapper userMapper;
+  private final HouseholdMapper householdMapper;
 
   @Override
   public User getUser(Long userId) {
@@ -33,5 +38,15 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
   @Override
   public List<RoommateSendMoneyCommand> getRoommateSendMoney(Long householdId, Long userId) {
     return userQueryRepository.getRoommateSendMoney(householdId, userId);
+  }
+
+
+  @Override
+  public List<User> findHouseholdUserList(Household household) {
+    List<UserJpaEntity> userJpaEntities = userJpaRepository.findAllByHouseHoldJpaEntity(
+        householdMapper.mapToJpaEntity(household));
+
+    return userJpaEntities.stream()
+        .map(userMapper::mapToDomainEntity).toList();
   }
 }

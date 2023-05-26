@@ -1,9 +1,9 @@
 package com.connect.accountApp.domain.expense.application.port.out;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public interface GetHouseholdTotalExpensePort {
 
-  int getHouseholdTotalExpense(Long householdId, LocalDate date);
+  int getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime);
 
 }

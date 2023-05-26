@@ -19,4 +19,8 @@ public class TotalExpenseCommand {
     this.userTotalExpense = userTotalExpense;
     this.userRatio = userRatio;
   }
+
+  public void updateUserTotalExpense(int userTotalExpense) {
+    this.userTotalExpense = userTotalExpense;
+  }
 }
