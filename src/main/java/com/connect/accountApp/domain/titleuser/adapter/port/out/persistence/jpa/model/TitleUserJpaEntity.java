@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.titleuser.adapter.port.out.persistence.jpa
 import com.connect.accountApp.domain.title.adapter.out.persistence.jpa.model.TitleJpaEntity;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,14 +27,15 @@ public class TitleUserJpaEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long titleUserId;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private UserJpaEntity userJpaEntity;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "title_id")
   private TitleJpaEntity titleJpaEntity;
 
+  @CreationTimestamp
   private LocalDateTime createdAt;
 
   @Builder
