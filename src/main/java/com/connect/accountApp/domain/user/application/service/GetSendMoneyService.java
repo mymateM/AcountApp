@@ -48,7 +48,8 @@ public class GetSendMoneyService implements GetSendMoneyUseCase {
     log.info("[GetSendMoneyService] householdId : {}", household.getHouseholdId());
     int householdTotalExpense = getHouseholdTotalExpensePort.getHouseholdTotalExpense(
         household.getHouseholdId(),
-        pastNearSettlementDate);
+        pastNearSettlementDate.atStartOfDay().minusMonths(1),
+        pastNearSettlementDate.atStartOfDay());
 
 
 

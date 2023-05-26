@@ -60,7 +60,7 @@ public class ExpenseQueryRepository {
   }
 
 
-  public Integer getHouseholdTotalExpense(Long householdId, LocalDate date) {
+  public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 
     return queryFactory
         .select(
@@ -70,7 +70,7 @@ public class ExpenseQueryRepository {
         .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
         .where(
             eqHouseholdId(householdId),
-            betweenDate(date.atStartOfDay())
+            betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
         )
         .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
         .fetchOne();
