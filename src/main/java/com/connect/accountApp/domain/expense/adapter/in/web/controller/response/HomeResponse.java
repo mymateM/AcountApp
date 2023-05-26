@@ -55,18 +55,19 @@ public class HomeResponse {
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   private class Household {
     private Long household_id;
-    private LocalDate household_settlement_date;
+    private int household_by_now_budget_ratio;
     private int household_settlement_d_day;
     private int household_by_previous_expense;
-    private int household_by_now_budget_ratio;
+    private int household_by_now_expense;
     private int household_now_expense_diff;
     private Boolean household_budget_over_warn;
 
     public Household(HouseholdNowCommand command) {
       this.household_id = command.getHouseholdId();
+      this.household_by_now_budget_ratio = command.getHouseholdByNowBudgetRatio();
       this.household_settlement_d_day = command.getHouseholdSettlementDDay();
       this.household_by_previous_expense = command.getHouseholdByPreviousExpense();
-      this.household_by_now_budget_ratio = command.getHouseholdByNowExpense();
+      this.household_by_now_expense = command.getHouseholdByNowExpense();
       this.household_now_expense_diff = command.getHouseholdNowExpenseDiff();
       this.household_budget_over_warn = command.isHouseholdBudgetOverWarn();
     }

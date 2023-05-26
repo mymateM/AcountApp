@@ -14,6 +14,7 @@ public class HouseholdNowCommand {
 
 
   private Long householdId;
+  private int householdByNowBudgetRatio;
   private int householdSettlementDDay;
   private int householdBudget;
   private int householdByPreviousExpense;
@@ -24,6 +25,8 @@ public class HouseholdNowCommand {
 
   public HouseholdNowCommand(Household household, LocalDate pastNearSettlementDate, int householdByNowExpense, int householdByPreviousExpense) {
     this.householdId = household.getHouseholdId();
+    this.householdByNowBudgetRatio = calHouseholdByNowBudgetRatio(household.getHouseholdBudget(),
+        householdByNowExpense);
     this.householdSettlementDDay = calHouseholdSettlementDDay(pastNearSettlementDate);
     this.householdBudget = household.getHouseholdBudget();
     this.householdByPreviousExpense = householdByPreviousExpense;
@@ -33,6 +36,10 @@ public class HouseholdNowCommand {
         pastNearSettlementDate, householdByNowExpense);
   }
 
+  private int calHouseholdByNowBudgetRatio(int householdBudget, int householdByNowExpense) {
+    return Double.valueOf((double)(householdByNowExpense) / (double) (householdBudget) * 100.0).intValue();
+
+  }
   private int calHouseholdSettlementDDay(LocalDate settlementDate) {
     return dayDiff(LocalDate.now(), settlementDate.plusMonths(1));
   }
