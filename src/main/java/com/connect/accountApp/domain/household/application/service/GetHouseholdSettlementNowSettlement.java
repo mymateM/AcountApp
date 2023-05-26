@@ -32,31 +32,75 @@ public class GetHouseholdSettlementNowSettlement implements GetHouseholdSettleme
   @Override
   public HomeCommand getHouseholdSettlement(Long userId) {
 
-    // 사용자 구하기
     User user = getUserPort.getUser(userId);
-
-    // 집 정보 구하기
     Household household = getHouseholdPort.getHousehold(user.getHousehold().getHouseholdId());
 
-
-
-
-    LocalDate householdSettlementDate = household.getHouseholdSettlementDate();
-    LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(), householdSettlementDate);
-
-    // user가 쓴 것이 없음
-
-    List<TotalExpenseCommand> totalExpenseList =
-        getTotalExpensePort.getTotalExpense(household.getHouseholdId(), pastNearSettlementDate, LocalDateTime.now());
-
+    LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(), household.getHouseholdSettlementDate());
+    List<TotalExpenseCommand> totalExpenseList = getTotalExpensePort.getTotalExpense(household.getHouseholdId(), pastNearSettlementDate, LocalDateTime.now());
     List<User> householdUsers = findHouseholdUserListPort.findHouseholdUserList(household);
+    List<TotalExpenseCommand> totalExpenseCommands = setDefaultTotalExpenseCommands(householdUsers);
+    updateTotalExpense(totalExpenseList, totalExpenseCommands);
 
-    List<TotalExpenseCommand> totalExpenseCommands = householdUsers.stream()
-        .map(
-            householdUser -> new TotalExpenseCommand(householdUser.getUserId(),
-                householdUser.getUserName(), 0, householdUser.getUserRatio())
-        ).toList();
 
+    MembersNowCommand membersNowCommand = createMembersNowCommand(userId, household, totalExpenseCommands);
+
+    HouseholdNowCommand householdNowCommand = new HouseholdNowCommand(household,
+        pastNearSettlementDate.toLocalDate(), getHouseholdNowTotalExpense(pastNearSettlementDate,
+        household.getHouseholdId()), getHouseholdPreviousTotalExpense(pastNearSettlementDate,
+        household.getHouseholdId()));
+
+    return new HomeCommand(membersNowCommand, householdNowCommand);
+  }
+
+  /**
+   * 가까운 정산일 부터 현재까지 쓴 돈을 반환하는 함수
+   * @param pastNearSettlementDate : 가까운 정산일
+   * @param householdId : 가구 아이디
+   * @return int 가까운 정산일 부터 현재까지 쓴 돈
+   */
+  private int getHouseholdNowTotalExpense(LocalDateTime pastNearSettlementDate, Long householdId) {
+    LocalDateTime nowStartTime = pastNearSettlementDate.toLocalDate().atStartOfDay();
+    LocalDateTime nowEndTime = LocalDate.now().atStartOfDay().plusDays(1).minusSeconds(1);
+
+    return getHouseholdTotalExpensePort.getHouseholdTotalExpense(householdId, nowStartTime, nowEndTime);
+  }
+
+  /**
+   * 저번달 정산일 부터 지금으로부터 한달 전까지의 쓴 돈을 반환하는 함수
+   * @param pastNearSettlementDate : 가까운 정산일
+   * @param householdId : 가구 아이디
+   * @return int 저번달 정산일 부터 지금으로부터 한달 전까지의 쓴 돈
+   */
+  private int getHouseholdPreviousTotalExpense(LocalDateTime pastNearSettlementDate, Long householdId) {
+    LocalDateTime previousStartTime = pastNearSettlementDate.toLocalDate().atStartOfDay().minusMonths(1);
+    LocalDateTime previousEndTime = LocalDate.now().atStartOfDay().plusDays(1).minusSeconds(1).minusMonths(1);
+
+    return getHouseholdTotalExpensePort.getHouseholdTotalExpense(householdId, previousStartTime, previousEndTime);
+  }
+
+  /**
+   * MembersNowCommand 생성 함수
+   * @param userId 사용자 아이디
+   * @param household 가구 아이디
+   * @param totalExpenseCommands 값이 설정된 totalExpenseCommand 리스트
+   * @return MembersNowCommand
+   */
+  private MembersNowCommand createMembersNowCommand(Long userId, Household household,
+      List<TotalExpenseCommand> totalExpenseCommands) {
+    List<MemberNowCommand> commands = totalExpenseCommands.stream().map(
+        command -> new MemberNowCommand(command, household.getHouseholdBudget())).toList();
+
+    MembersNowCommand membersNowCommand = new MembersNowCommand(userId, commands);
+    return membersNowCommand;
+  }
+
+  /**
+   * TotalExpenseCommand 의 값에서 totalExpense 를 업데이트 함
+   * @param totalExpenseList 실제 쿼리를 날려 totalExpense 값을 모아둔 리스트
+   * @param totalExpenseCommands totalExpense 의 값이 모두 0으로 설정된 리스트
+   */
+  private void updateTotalExpense(List<TotalExpenseCommand> totalExpenseList,
+      List<TotalExpenseCommand> totalExpenseCommands) {
     totalExpenseCommands
             .forEach(
                 totalExpenseCommand -> {
@@ -69,35 +113,29 @@ public class GetHouseholdSettlementNowSettlement implements GetHouseholdSettleme
                   );
                 }
             );
-
-    List<MemberNowCommand> commands = totalExpenseCommands.stream().map(
-        command -> new MemberNowCommand(command, household.getHouseholdBudget())).toList();
-
-
-    MembersNowCommand membersNowCommand = new MembersNowCommand(userId, commands);
-
-    // 현재
-    LocalDateTime nowStartTime = pastNearSettlementDate.toLocalDate().atStartOfDay();
-    LocalDateTime nowEndTime = LocalDate.now().atStartOfDay().plusDays(1).minusSeconds(1);
-
-    // 과거
-    LocalDateTime previousStartTime = nowStartTime.minusMonths(1);
-    LocalDateTime previousEndTime = nowEndTime.minusMonths(1);
-
-    // 현재 총 가격
-    int nowTotalExpense = getHouseholdTotalExpensePort.getHouseholdTotalExpense(
-        household.getHouseholdId(), nowStartTime, nowEndTime);
-
-    int previousTotalExpense = getHouseholdTotalExpensePort.getHouseholdTotalExpense(
-        household.getHouseholdId(),
-        previousStartTime, previousEndTime);
-
-    HouseholdNowCommand householdNowCommand = new HouseholdNowCommand(household,
-        pastNearSettlementDate.toLocalDate(), nowTotalExpense, previousTotalExpense);
-
-    return new HomeCommand(membersNowCommand, householdNowCommand);
   }
 
+  /**
+   * User 객체를 사용해, TotalExpenseCommand 의 기본값을 설정하는 함수
+   * @param householdUsers
+   * @return List<TotalExpenseCommand> : TotalExpenseCommand 리스트 객체
+   */
+  private List<TotalExpenseCommand> setDefaultTotalExpenseCommands(List<User> householdUsers) {
+    List<TotalExpenseCommand> totalExpenseCommands = householdUsers.stream()
+        .map(
+            householdUser -> new TotalExpenseCommand(householdUser.getUserId(),
+                householdUser.getUserName(), 0, householdUser.getUserRatio())
+        ).toList();
+    return totalExpenseCommands;
+  }
+
+
+  /**
+   * 현재 날짜에서 가장 가까운 정산일을 가져오는 함수
+   * @param date
+   * @param householdSettlementDate
+   * @return LocalDateTime : 현재와 가장 가까운 정산일
+   */
   private LocalDateTime getPastNearSettlementDate(LocalDate date, LocalDate householdSettlementDate) {
 
     if (date.getDayOfMonth() >= householdSettlementDate.getDayOfMonth()) {
