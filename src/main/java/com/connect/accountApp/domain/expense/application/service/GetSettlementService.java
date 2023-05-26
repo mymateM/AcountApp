@@ -9,6 +9,7 @@ import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,10 @@ public class GetSettlementService implements GetSettlementUseCase {
     LocalDate householdSettlementDate = household.getHouseholdSettlementDate();
 
     //TODO : 날짜에 맞추기
-    LocalDate pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(), householdSettlementDate);
+    LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(), householdSettlementDate);
 
     List<TotalExpenseCommand> totalExpenseList = getTotalExpensePort.getTotalExpense(
-        household.getHouseholdId(), pastNearSettlementDate);
+        household.getHouseholdId(), pastNearSettlementDate.plusDays(1).minusSeconds(1), pastNearSettlementDate);
 
 
    return new SettlementCommand(household.getHouseholdSettlementDate(), totalExpenseList);
@@ -46,16 +47,16 @@ public class GetSettlementService implements GetSettlementUseCase {
    * @param date
    * @return 주어진 일자와 가장 가까운 정산일 (LocalDate)
    */
-  private LocalDate getPastNearSettlementDate(LocalDate date, LocalDate householdSettlementDate) {
+  private LocalDateTime getPastNearSettlementDate(LocalDate date, LocalDate householdSettlementDate) {
 
     if (date.getDayOfMonth() >= householdSettlementDate.getDayOfMonth()) {
-      return LocalDate.of(date.getYear(), date.getMonth(), householdSettlementDate.getDayOfMonth());
+      return LocalDate.of(date.getYear(), date.getMonth(), householdSettlementDate.getDayOfMonth()).atStartOfDay();
     } else {
       // TODO : 30, 31 고려
       if(householdSettlementDate.getDayOfMonth()==31) {
-        return LocalDate.of(date.minusMonths(1).getYear(), date.minusMonths(1).getMonth(), householdSettlementDate.getDayOfMonth()-1);
+        return LocalDate.of(date.minusMonths(1).getYear(), date.minusMonths(1).getMonth(), householdSettlementDate.getDayOfMonth()-1).atStartOfDay();
       }
-      return LocalDate.of(date.minusMonths(1).getYear(), date.minusMonths(1).getMonth(), householdSettlementDate.getDayOfMonth());
+      return LocalDate.of(date.minusMonths(1).getYear(), date.minusMonths(1).getMonth(), householdSettlementDate.getDayOfMonth()).atStartOfDay();
     }
 
   }

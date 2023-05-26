@@ -5,6 +5,7 @@ import com.connect.accountApp.domain.expense.application.port.out.GetTotalExpens
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
 import com.connect.accountApp.domain.user.application.port.out.GetUserSendMoneyPort;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,11 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   private final ExpenseQueryRepository expenseQueryRepository;
 
   @Override
-  public List<TotalExpenseCommand> getTotalExpense(Long householdId, LocalDate date) {
+  public List<TotalExpenseCommand> getTotalExpense(Long householdId, LocalDateTime startTime,
+      LocalDateTime endTime) {
 
     List<TotalExpenseCommand> totalExpenseQuery = expenseQueryRepository.getTotalExpenseQuery(
-        householdId, date);
+        householdId, startTime, endTime);
     return totalExpenseQuery;
   }
 
