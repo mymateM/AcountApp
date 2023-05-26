@@ -22,27 +22,39 @@ public class HouseholdNowCommand {
   private boolean householdBudgetOverWarn;
 
 
-  public HouseholdNowCommand(Household household, LocalDate settlementDate, int householdByNowExpense, int householdByPreviousExpense) {
+  public HouseholdNowCommand(Household household, LocalDate pastNearSettlementDate, int householdByNowExpense, int householdByPreviousExpense) {
     this.householdId = household.getHouseholdId();
-    this.householdSettlementDDay = calHouseholdSettlementDDay(settlementDate);
+    this.householdSettlementDDay = calHouseholdSettlementDDay(pastNearSettlementDate);
     this.householdBudget = household.getHouseholdBudget();
     this.householdByPreviousExpense = householdByPreviousExpense;
     this.householdByNowExpense = householdByNowExpense;
     this.householdNowExpenseDiff = calHouseholdNowExpenseDiff();
-    this.householdBudgetOverWarn = isHouseholdBudgetOverWarn();
+    this.householdBudgetOverWarn = isHouseholdBudgetOverWarn(household.getHouseholdBudget(),
+        pastNearSettlementDate, householdByNowExpense);
   }
 
   private int calHouseholdSettlementDDay(LocalDate settlementDate) {
-    return Long.valueOf(DAYS.between(LocalDate.now(), settlementDate.plusMonths(1))).intValue();
+    return dayDiff(LocalDate.now(), settlementDate.plusMonths(1));
   }
 
   private int calHouseholdNowExpenseDiff() {
     return (this.householdByNowExpense - this.householdByPreviousExpense);
   }
 
-  // TODO: 기준 정하기
-  private boolean isHouseholdBudgetOverWarn() {
-    return true;
+  private boolean isHouseholdBudgetOverWarn(int budget, LocalDate pastNearSettlementDate, int householdByNowExpense) {
+
+    int passDay = dayDiff(pastNearSettlementDate, LocalDate.now());
+    int settlementDayDiff = dayDiff(pastNearSettlementDate, pastNearSettlementDate.plusMonths(1));
+    int standard = (budget / settlementDayDiff) * passDay;
+    System.out.println("standard" + standard);
+    System.out.println("householdByNowExpense" + householdByNowExpense);
+
+    return standard <= householdByNowExpense;
+  }
+
+
+  private int dayDiff(LocalDate startDate, LocalDate endDate) {
+    return Long.valueOf(DAYS.between(startDate, endDate)).intValue();
   }
 
 }

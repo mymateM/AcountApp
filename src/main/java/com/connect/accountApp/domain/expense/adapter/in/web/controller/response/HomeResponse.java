@@ -64,14 +64,13 @@ public class HomeResponse {
 
     public Household(HouseholdNowCommand command) {
       this.household_id = command.getHouseholdId();
-      this.household_settlement_date = command.getSettlementDate();
       this.household_settlement_d_day = command.getHouseholdSettlementDDay();
       this.household_by_previous_expense = command.getHouseholdByPreviousExpense();
       this.household_by_now_budget_ratio = command.getHouseholdByNowExpense();
       this.household_now_expense_diff = command.getHouseholdNowExpenseDiff();
-      // TODO 수정
-      this.household_budget_over_warn = true;
+      this.household_budget_over_warn = command.isHouseholdBudgetOverWarn();
     }
+
   }
 
 
