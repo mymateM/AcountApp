@@ -1,7 +1,8 @@
 package com.connect.accountApp.domain.expense.application.port.in.command;
 
-import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
-import java.time.LocalDate;
+import static java.time.temporal.ChronoUnit.DAYS;
+
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,28 +17,21 @@ public class MemberNowCommand {
   private Double userByNowBudgetRatio; // 지금까지 쓴 값이 멤버에게 주어진 예산의 할댱량의 몇퍼 ?
   private int userRatio;
 
-  private UserTitle userTitle;
+  private String userTitleName;
+  private String userTitleImg;
+  private int userTitleDays;
 
-  public MemberNowCommand(TotalExpenseCommand command, int householdBudget) {
+  public MemberNowCommand(TotalExpenseWithTitleCommand command, int householdBudget) {
     this.userId = command.getUserId();
     this.userName = command.getUserName();
     this.userByNowBudgetRatio = calUserByNowBudgetRatio(command.getUserTotalExpense(),
         householdBudget, command.getUserRatio());
     this.userRatio = command.getUserRatio();
 
-    this.userTitle = userTitle;
-  }
+    this.userTitleName = command.getUserTitleName();
+    this.userTitleImg = command.getUserTitleImgUrl();
+    this.userTitleDays = getUserTitleDays(command.getCreatedAt());
 
-  @Getter
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
-  private class UserTitle {
-    private String userTitleName;
-    private LocalDate userTitleCreatedAt;
-
-    public UserTitle(UserTitle title) {
-      this.userTitleName = userTitleName;
-      this.userTitleCreatedAt = userTitleCreatedAt;
-    }
   }
 
   private Double calUserByNowBudgetRatio(int userTotalExpense, int householdBudget, int userRatio) {
@@ -45,5 +39,8 @@ public class MemberNowCommand {
     return (userTotalExpense / userRatioExpense) * 100.0; // TODO: 예산보다 더 썼다면?
   }
 
+  private int getUserTitleDays(LocalDateTime createdAt) {
+    return Long.valueOf(DAYS.between(createdAt, LocalDateTime.now())).intValue();
+  }
 
 }

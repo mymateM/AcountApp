@@ -3,7 +3,6 @@ package com.connect.accountApp.domain.expense.adapter.in.web.controller.response
 import com.connect.accountApp.domain.expense.application.port.in.command.HomeCommand;
 import com.connect.accountApp.domain.expense.application.port.in.command.MemberNowCommand;
 import com.connect.accountApp.domain.household.application.port.in.command.HouseholdNowCommand;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -39,15 +38,17 @@ public class HomeResponse {
     private int user_by_now_budget_ratio;
     private int user_ratio;
     private String user_title_name;
-    private String user_title_days;
+    private String user_image_url;
+    private int user_title_days;
 
     public User(MemberNowCommand command) {
       this.user_id = command.getUserId();
       this.user_name = command.getUserName();
       this.user_by_now_budget_ratio = command.getUserByNowBudgetRatio().intValue();
       this.user_ratio = command.getUserRatio();
-//      this.user_title_name;
-//      this.user_title_days = user_title_days;
+      this.user_title_name = command.getUserTitleName();
+      this.user_image_url = command.getUserTitleImg();
+      this.user_title_days = command.getUserTitleDays();
     }
   }
 

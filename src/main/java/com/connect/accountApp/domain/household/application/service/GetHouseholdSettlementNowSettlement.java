@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.household.application.service;
 import com.connect.accountApp.domain.expense.application.port.in.command.HomeCommand;
 import com.connect.accountApp.domain.expense.application.port.in.command.MemberNowCommand;
 import com.connect.accountApp.domain.expense.application.port.in.command.MembersNowCommand;
+import com.connect.accountApp.domain.expense.application.port.in.command.TotalExpenseWithTitleCommand;
 import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTotalExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.GetTotalExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
@@ -10,6 +11,8 @@ import com.connect.accountApp.domain.household.adapter.out.persistence.GetHouseh
 import com.connect.accountApp.domain.household.application.port.in.GetHouseholdSettlementUseCase;
 import com.connect.accountApp.domain.household.application.port.in.command.HouseholdNowCommand;
 import com.connect.accountApp.domain.household.domain.model.Household;
+import com.connect.accountApp.domain.titleuser.application.port.out.FindUserTitlePort;
+import com.connect.accountApp.domain.titleuser.application.port.out.command.UserTitleCommand;
 import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
@@ -28,6 +31,7 @@ public class GetHouseholdSettlementNowSettlement implements GetHouseholdSettleme
   private final GetTotalExpensePort getTotalExpensePort;
   private final GetHouseholdTotalExpensePort getHouseholdTotalExpensePort;
   private final FindHouseholdUserListPort findHouseholdUserListPort;
+  private final FindUserTitlePort findUserTitlePort;
 
   @Override
   public HomeCommand getHouseholdSettlement(Long userId) {
@@ -41,8 +45,11 @@ public class GetHouseholdSettlementNowSettlement implements GetHouseholdSettleme
     List<TotalExpenseCommand> totalExpenseCommands = setDefaultTotalExpenseCommands(householdUsers);
     updateTotalExpense(totalExpenseList, totalExpenseCommands);
 
+    //TODO title이 없을 때 처리
+    List<TotalExpenseWithTitleCommand> totalExpenseWithTitleCommands = getTotalExpenseWithTitleCommands(
+        totalExpenseCommands);
 
-    MembersNowCommand membersNowCommand = createMembersNowCommand(userId, household, totalExpenseCommands);
+    MembersNowCommand membersNowCommand = createMembersNowCommand(userId, household, totalExpenseWithTitleCommands);
 
     HouseholdNowCommand householdNowCommand = new HouseholdNowCommand(household,
         pastNearSettlementDate.toLocalDate(), getHouseholdNowTotalExpense(pastNearSettlementDate,
@@ -50,6 +57,26 @@ public class GetHouseholdSettlementNowSettlement implements GetHouseholdSettleme
         household.getHouseholdId()));
 
     return new HomeCommand(membersNowCommand, householdNowCommand);
+  }
+
+  /**
+   * title 할당
+   * @param totalExpenseCommands
+   * @return
+   */
+  private List<TotalExpenseWithTitleCommand> getTotalExpenseWithTitleCommands(
+      List<TotalExpenseCommand> totalExpenseCommands) {
+    List<TotalExpenseWithTitleCommand> totalExpenseWithTitleCommands = totalExpenseCommands.stream()
+        .map(
+            command -> {
+              UserTitleCommand userTitleCommand = findUserTitlePort.findUserTitle(
+                  command.getUserId());
+
+              return new TotalExpenseWithTitleCommand(command, userTitleCommand.getCreatedAt(),
+                  userTitleCommand.getTitleName(), userTitleCommand.getTitleImg());
+            }
+        ).toList();
+    return totalExpenseWithTitleCommands;
   }
 
   /**
@@ -86,7 +113,7 @@ public class GetHouseholdSettlementNowSettlement implements GetHouseholdSettleme
    * @return MembersNowCommand
    */
   private MembersNowCommand createMembersNowCommand(Long userId, Household household,
-      List<TotalExpenseCommand> totalExpenseCommands) {
+      List<TotalExpenseWithTitleCommand> totalExpenseCommands) {
     List<MemberNowCommand> commands = totalExpenseCommands.stream().map(
         command -> new MemberNowCommand(command, household.getHouseholdBudget())).toList();
 
