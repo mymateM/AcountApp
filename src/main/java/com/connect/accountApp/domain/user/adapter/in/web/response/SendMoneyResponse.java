@@ -33,12 +33,19 @@ public class SendMoneyResponse {
 
     private Long user_id;
     private String user_name;
+    private Boolean is_send;
     private int user_settlement;
+
 
     public User(UserCommand command) {
       this.user_id = command.getUserId();
       this.user_name = command.getUserName();
-      this.user_settlement = command.getUserSettlement();
+      this.is_send = isSend(command.getUserSettlement());
+      this.user_settlement = Math.abs(command.getUserSettlement());
+    }
+
+    private Boolean isSend(int userSettlement) {
+      return userSettlement > 0;
     }
   }
 
@@ -57,12 +64,11 @@ public class SendMoneyResponse {
       this.userId = command.getUserId();
       this.user_name = command.getUserName();
       this.user_ratio = command.getUserRatio();
-      this.user_settlement_ratio = command.getUserSettlementRatio();
+      this.user_settlement_ratio = Math.abs(command.getUserSettlementRatio());
       this.user_account_bank = command.getUserAccountBank();
       this.user_account = command.getUserAccount();
     }
   }
-
 }
 
 

@@ -1,7 +1,7 @@
 package com.connect.accountApp.domain.user.adapter.in.web;
 
 import com.connect.accountApp.domain.user.adapter.in.web.response.SendMoneyResponse;
-import com.connect.accountApp.domain.user.application.port.in.GetSendMoneyUseCase;
+import com.connect.accountApp.domain.user.application.port.in.GetSettlementRoommatesUseCase;
 import com.connect.accountApp.domain.user.application.port.in.command.SendMoneyCommand;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class GetSendMoneyController {
+public class GetSettlementRoommatesController {
 
-  private final GetSendMoneyUseCase getSendMoneyUseCase;
+  private final GetSettlementRoommatesUseCase getSettlementRoommatesUseCase;
 
-  @GetMapping("/send-money/{userId}")
-  public ResponseEntity getSendMoney(@PathVariable Long userId) {
+  @GetMapping("/settlement/roommate/{userId}")
+  public ResponseEntity getSettlementRoommates(@PathVariable Long userId) {
 
-    SendMoneyCommand sendMoney = getSendMoneyUseCase.getSendMoney(userId);
+    SendMoneyCommand sendMoney = getSettlementRoommatesUseCase.getSendMoney(userId);
 
     SendMoneyResponse response = new SendMoneyResponse(sendMoney);
 

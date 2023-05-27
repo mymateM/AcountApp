@@ -4,7 +4,7 @@ import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTo
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
 import com.connect.accountApp.domain.household.application.port.out.GetHouseholdPort;
 import com.connect.accountApp.domain.household.domain.model.Household;
-import com.connect.accountApp.domain.user.application.port.in.GetSendMoneyUseCase;
+import com.connect.accountApp.domain.user.application.port.in.GetSettlementRoommatesUseCase;
 import com.connect.accountApp.domain.user.application.port.in.command.SendMoneyCommand;
 import com.connect.accountApp.domain.user.application.port.out.GetRoommateSendMoneyPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GetSendMoneyService implements GetSendMoneyUseCase {
+public class GetSettlementRoommatesService implements GetSettlementRoommatesUseCase {
 
   private final GetUserSendMoneyPort getUserSendMoneyPort;
   private final GetRoommateSendMoneyPort getRoommateSendMoneyPort;
