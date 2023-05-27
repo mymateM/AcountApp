@@ -25,12 +25,9 @@ public class SendMoneyCommand {
       int householdTotalExpense) {
     this.yearMonth = yearMonth;
     this.user = new UserCommand(userCommand, householdTotalExpense);
-    log.info("[SendMoneyConstructor] roommateCommands.size() : {}", roommateCommands.size());
     roommateCommands.forEach(
         command -> roommates.add(new RoommateCommand(command, user.getUserSettlement()))
     );
-
-    log.info("[SendMoneyConstructor] this.roommates.size() : {}", this.roommates.size());
   }
 
 }
