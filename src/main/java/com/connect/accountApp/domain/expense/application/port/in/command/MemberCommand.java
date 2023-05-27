@@ -13,6 +13,7 @@ public class MemberCommand {
   private int userTotalExpense;
   private int userRatioExpense;
   private int userSettlement;
+  private int userRatio;
 
 
   public MemberCommand(Long userId, String userName, int userTotalExpense, int userRatioExpense,
@@ -24,4 +25,12 @@ public class MemberCommand {
     this.userSettlement = userSettlement;
   }
 
+  public MemberCommand(Long userId, String userName, int userTotalExpense, int userRatioExpense, int userSettlement, int userRatio) {
+    this.userId = userId;
+    this.userName = userName;
+    this.userTotalExpense = userTotalExpense;
+    this.userRatioExpense = userRatioExpense;
+    this.userSettlement = userSettlement;
+    this.userRatio = userRatio;
+  }
 }
