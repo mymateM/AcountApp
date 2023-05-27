@@ -4,7 +4,7 @@ import com.connect.accountApp.domain.expense.application.port.in.GetSettlementUs
 import com.connect.accountApp.domain.expense.application.port.in.command.SettlementCommand;
 import com.connect.accountApp.domain.expense.application.port.out.GetTotalExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
-import com.connect.accountApp.domain.household.adapter.out.persistence.GetHouseholdPort;
+import com.connect.accountApp.domain.household.application.port.out.GetHouseholdPort;
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
