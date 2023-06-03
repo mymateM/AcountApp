@@ -1,7 +1,10 @@
 package com.connect.accountApp.domain.notification.adapter.in.web.dto;
 
 import com.connect.accountApp.domain.notification.application.port.in.command.ActivityNotificationsCommand;
+import com.connect.accountApp.global.utils.DateTimeUtils;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,7 +26,7 @@ public class GetActivityNotificationResponse {
 
     private String noti_category;
     private String noti_img_url;
-    private LocalDateTime noti_created_at;
+    private String noti_created_at;
     private String noti_content;
     private boolean noti_is_read;
     private String noti_sender;
@@ -33,11 +36,12 @@ public class GetActivityNotificationResponse {
     public NotificationActivity(ActivityNotificationsCommand command) {
       this.noti_category = command.getNotiCategory().getTitle();
       this.noti_img_url = command.getNotiCategory().getImgUrl();
-      this.noti_created_at = command.getNotiCreatedAt();
+      this.noti_created_at = DateTimeUtils.timesAgo(command.getNotiCreatedAt());
       this.noti_content = command.getNotiContent();
       this.noti_is_read = command.isNotiIsRead();
       this.noti_sender = command.getNotiSender();
     }
+
   }
 
 }
