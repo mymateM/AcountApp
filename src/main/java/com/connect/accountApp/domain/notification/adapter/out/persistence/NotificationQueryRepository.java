@@ -40,30 +40,13 @@ public class NotificationQueryRepository {
             eqUserId(userId),
             notInNotiCategory(NotiCategory.ALARM_EXPENSE) // 지출이 아닌 것
         )
+        .orderBy(userNotificationJpaEntity.notificationJpaEntity.notiCreatedAt.desc())
         .fetch();
   }
 
 
   public List<FindExpenseNotificationCommand> findExpenseNotifications(Long userId) {
 
-    int size = jpaQueryFactory
-        .select(Projections.constructor(FindExpenseNotificationCommand.class,
-            userNotificationJpaEntity.notificationJpaEntity.expenseJpaEntity.expenseCategory.as("category"), // 카테고리
-            userNotificationJpaEntity.notificationJpaEntity.notiCreatedAt.as("createdAt"),
-            userNotificationJpaEntity.notificationJpaEntity.notiIsRead,
-            userNotificationJpaEntity.notificationJpaEntity.expenseJpaEntity.expenseAmount,
-            userNotificationJpaEntity.notificationJpaEntity.senderName
-        ))
-        .from(userNotificationJpaEntity)
-        .join(userNotificationJpaEntity.notificationJpaEntity, notificationJpaEntity)
-        .join(notificationJpaEntity.expenseJpaEntity, expenseJpaEntity)
-        .where(
-            eqUserId(userId),
-            eqNotiCategory(NotiCategory.ALARM_EXPENSE)
-        )
-        .fetch().size();
-
-    log.info("size : {}", size);
     return jpaQueryFactory
         .select(Projections.constructor(FindExpenseNotificationCommand.class,
             expenseJpaEntity.expenseCategory.as("category"), // 카테고리
@@ -79,6 +62,7 @@ public class NotificationQueryRepository {
             eqUserId(userId),
             eqNotiCategory(NotiCategory.ALARM_EXPENSE)
         )
+        .orderBy(userNotificationJpaEntity.notificationJpaEntity.notiCreatedAt.desc())
         .fetch();
   }
 
