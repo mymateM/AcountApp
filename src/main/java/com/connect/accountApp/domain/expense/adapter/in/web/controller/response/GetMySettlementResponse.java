@@ -18,7 +18,7 @@ public class GetMySettlementResponse {
 
   public GetMySettlementResponse(MySettlementCommand command) {
     this.expense_total = command.getHouseholdTotalExpense();
-    this.year_month = command.getYearDate();
+    this.year_month = command.getYearDate().plusMonths(1);
     this.user = new User(command.getUser());
   }
 

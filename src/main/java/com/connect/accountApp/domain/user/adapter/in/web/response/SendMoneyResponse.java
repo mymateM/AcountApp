@@ -19,7 +19,7 @@ public class SendMoneyResponse {
   private List<Roommate> room_mates = new ArrayList<>();
 
   public SendMoneyResponse(SendMoneyCommand command) {
-    this.year_month = command.getYearMonth();
+    this.year_month = command.getYearMonth().plusMonths(1);
     this.user = new User(command.getUser());
     //TODO: 나머지 map 사용하여 매핑
     this.room_mates =  command.getRoommates().stream()
