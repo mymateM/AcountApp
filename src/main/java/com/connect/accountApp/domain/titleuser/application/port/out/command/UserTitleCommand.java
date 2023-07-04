@@ -1,5 +1,6 @@
 package com.connect.accountApp.domain.titleuser.application.port.out.command;
 
+import com.connect.accountApp.domain.title.domain.model.Title;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,9 +14,9 @@ public class UserTitleCommand {
   private String titleImg;
   private String titleName;
 
-  public UserTitleCommand(LocalDateTime createdAt, String titleImg, String titleName) {
+  public UserTitleCommand(LocalDateTime createdAt, Title title) {
     this.createdAt = createdAt;
-    this.titleImg = titleImg;
-    this.titleName = titleName;
+    this.titleImg = title.getTitleImage();
+    this.titleName = title.getTitleName();
   }
 }

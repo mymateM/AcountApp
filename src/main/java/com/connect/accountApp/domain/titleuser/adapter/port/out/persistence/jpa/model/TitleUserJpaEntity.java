@@ -1,6 +1,6 @@
 package com.connect.accountApp.domain.titleuser.adapter.port.out.persistence.jpa.model;
 
-import com.connect.accountApp.domain.title.adapter.out.persistence.jpa.model.TitleJpaEntity;
+import com.connect.accountApp.domain.title.domain.model.Title;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +20,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "titleuser")
+@Table(name = "title_user")
 public class TitleUserJpaEntity {
 
   @Id
@@ -31,20 +31,17 @@ public class TitleUserJpaEntity {
   @JoinColumn(name = "user_id")
   private UserJpaEntity userJpaEntity;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "title_id")
-  private TitleJpaEntity titleJpaEntity;
+  private Title title;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
 
   @Builder
   public TitleUserJpaEntity(Long titleUserId,
-      UserJpaEntity userJpaEntity,
-      TitleJpaEntity titleJpaEntity, LocalDateTime createdAt) {
+      UserJpaEntity userJpaEntity, Title title, LocalDateTime createdAt) {
     this.titleUserId = titleUserId;
     this.userJpaEntity = userJpaEntity;
-    this.titleJpaEntity = titleJpaEntity;
+    this.title = title;
     this.createdAt = createdAt;
   }
 }
