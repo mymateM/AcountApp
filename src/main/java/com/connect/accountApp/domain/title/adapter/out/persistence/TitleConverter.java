@@ -2,7 +2,6 @@ package com.connect.accountApp.domain.title.adapter.out.persistence;
 
 import com.connect.accountApp.domain.title.domain.model.Title;
 import com.connect.accountApp.domain.title.exception.TitleNotFoundException;
-import com.connect.accountApp.global.error.exception.BusinessException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.Arrays;
