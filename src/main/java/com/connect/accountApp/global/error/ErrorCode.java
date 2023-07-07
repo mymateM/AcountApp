@@ -18,7 +18,10 @@ public enum ErrorCode {
   USER_NOT_FOUND(404, "S001", "존재하지 않는 사용자입니다."),
 
   // Household
-  HOUSEHOLD_NOT_FOUND(404, "H001", "존재하지 않는 가구입니다.");
+  HOUSEHOLD_NOT_FOUND(404, "H001", "존재하지 않는 가구입니다."),
+
+  // Title
+  TITLE_NOT_FOUND(404, "T001", "존재하지 않는 타이틀입니다.");
 
 
   private int status;

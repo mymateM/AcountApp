@@ -1,22 +1,21 @@
 package com.connect.accountApp.domain.title.domain.model;
 
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Title {
+public enum Title {
 
-  private Long titleId;
-  private String titleName;
-  private String titleImg;
+  NO_SPEND(101, "무소비", "image.jpg"),
+  GOOD_MANAGEMENT(102, "우리집 관리 왕", "image.jpg"),
+  OVER_SPEND(103, "빨간 불! 지출 위험", "image.jpg");
 
-  @Builder
-  public Title(Long titleId, String titleName, String titleImg) {
-    this.titleId = titleId;
+  private final Integer titleCode;
+  private final String titleName;
+  private final String titleImage;
+
+  Title(int titleCode, String titleName, String titleImage) {
+    this.titleCode = titleCode;
     this.titleName = titleName;
-    this.titleImg = titleImg;
+    this.titleImage = titleImage;
   }
 }
