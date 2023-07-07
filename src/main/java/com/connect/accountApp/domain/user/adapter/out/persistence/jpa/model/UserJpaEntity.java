@@ -1,7 +1,10 @@
 package com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model;
 
 import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
+import com.connect.accountApp.domain.user.domain.model.Bank;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +27,9 @@ public class UserJpaEntity {
   private String userName;
   private String userImgUrl;
   private String userAccount;
-  private String userAccountBank;
+
+  @Enumerated(EnumType.STRING)
+  private Bank userAccountBank;
   private boolean userAccept;
   private int userRatio;
 
@@ -35,7 +40,7 @@ public class UserJpaEntity {
 
   @Builder
   public UserJpaEntity(Long userId, String userName, String userImgUrl, String userAccount,
-      String userAccountBank, boolean userAccept, int userRatio,
+      Bank userAccountBank, boolean userAccept, int userRatio,
       HouseHoldJpaEntity houseHoldJpaEntity) {
     this.userId = userId;
     this.userName = userName;

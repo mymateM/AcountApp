@@ -15,7 +15,7 @@ public class User {
   private String userImgUrl;
 
   private String userAccount;
-  private String userAccountBank;
+  private Bank userAccountBank;
 
   private boolean userAccept;
   private int userRatio;
@@ -24,7 +24,7 @@ public class User {
 
   @Builder
   public User(Long userId, String userName, String userImgUrl, String userAccount,
-      String userAccountBank, boolean userAccept, int userRatio,
+      Bank userAccountBank, boolean userAccept, int userRatio,
       Household household) {
     this.userId = userId;
     this.userName = userName;
