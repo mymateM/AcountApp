@@ -27,7 +27,7 @@ public class ExpenseQueryRepository {
     return queryFactory
         .select(Projections.constructor(TotalExpenseCommand.class,
             userJpaEntity.userId,
-            userJpaEntity.userName,
+            userJpaEntity.userNickname.as("userName"),
             expenseJpaEntity.expenseAmount.sum().as("userTotalExpense"),
             userJpaEntity.userRatio
         ))
@@ -46,7 +46,7 @@ public class ExpenseQueryRepository {
     return queryFactory
         .select(Projections.constructor(TotalExpenseCommand.class,
             userJpaEntity.userId,
-            userJpaEntity.userName,
+            userJpaEntity.userNickname.as("userName"),
             expenseJpaEntity.expenseAmount.sum().as("userTotalExpense"),
             userJpaEntity.userRatio
         ))

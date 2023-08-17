@@ -24,7 +24,9 @@ public class UserJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long userId;
-  private String userName;
+  private String userEmail;
+  private String userPassword;
+  private String userNickname;
   private String userImgUrl;
   private String userAccount;
 
@@ -39,11 +41,13 @@ public class UserJpaEntity {
 
 
   @Builder
-  public UserJpaEntity(Long userId, String userName, String userImgUrl, String userAccount,
+  public UserJpaEntity(Long userId, String userEmail, String userPassword, String userNickname, String userImgUrl, String userAccount,
       Bank userAccountBank, boolean userAccept, int userRatio,
       HouseHoldJpaEntity houseHoldJpaEntity) {
     this.userId = userId;
-    this.userName = userName;
+    this.userEmail = userEmail;
+    this.userPassword = userPassword;
+    this.userNickname = userNickname;
     this.userImgUrl = userImgUrl;
     this.userAccount = userAccount;
     this.userAccountBank = userAccountBank;

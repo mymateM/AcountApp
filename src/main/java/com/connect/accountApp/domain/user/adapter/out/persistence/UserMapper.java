@@ -15,7 +15,9 @@ public class UserMapper {
   public UserJpaEntity mapToJpaEntity(User user) {
     return UserJpaEntity.builder()
         .userId(user.getUserId())
-        .userName(user.getUserName())
+        .userEmail(user.getUserEmail())
+        .userPassword(user.getUserPassword())
+        .userNickname(user.getUserNickname())
         .userImgUrl(user.getUserImgUrl())
         .userAccount(user.getUserAccount())
         .userAccountBank(user.getUserAccountBank())
@@ -28,7 +30,9 @@ public class UserMapper {
   public User mapToDomainEntity(UserJpaEntity userJpaEntity) {
     return User.builder()
         .userId(userJpaEntity.getUserId())
-        .userName(userJpaEntity.getUserName())
+        .userEmail(userJpaEntity.getUserEmail())
+        .userPassword(userJpaEntity.getUserPassword())
+        .userNickname(userJpaEntity.getUserNickname())
         .userImgUrl(userJpaEntity.getUserImgUrl())
         .userAccount(userJpaEntity.getUserAccount())
         .userAccountBank(userJpaEntity.getUserAccountBank())

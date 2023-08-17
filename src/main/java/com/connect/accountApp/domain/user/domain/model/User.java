@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 public class User {
 
   private Long userId;
-  private String userName;
+  private String userEmail;
+  private String userPassword;
+  private String userNickname;
   private String userImgUrl;
 
   private String userAccount;
@@ -23,11 +25,13 @@ public class User {
   private Household household;
 
   @Builder
-  public User(Long userId, String userName, String userImgUrl, String userAccount,
+  public User(Long userId, String userEmail, String userPassword, String userNickname, String userImgUrl, String userAccount,
       Bank userAccountBank, boolean userAccept, int userRatio,
       Household household) {
     this.userId = userId;
-    this.userName = userName;
+    this.userEmail = userEmail;
+    this.userPassword = userPassword;
+    this.userNickname = userNickname;
     this.userImgUrl = userImgUrl;
     this.userAccount = userAccount;
     this.userAccountBank = userAccountBank;

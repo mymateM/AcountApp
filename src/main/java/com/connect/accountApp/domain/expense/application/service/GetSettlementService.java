@@ -75,7 +75,7 @@ public class GetSettlementService implements GetSettlementUseCase {
     List<TotalExpenseCommand> totalExpenseCommands = householdUsers.stream()
         .map(
             householdUser -> new TotalExpenseCommand(householdUser.getUserId(),
-                householdUser.getUserName(), 0, householdUser.getUserRatio())
+                householdUser.getUserNickname(), 0, householdUser.getUserRatio())
         ).toList();
     return totalExpenseCommands;
   }

@@ -23,7 +23,7 @@ public class UserQueryRepository {
     return jpaQueryFactory
         .select(Projections.constructor(RoommateSendMoneyCommand.class,
             userJpaEntity.userId,
-            userJpaEntity.userName,
+            userJpaEntity.userNickname.as("userName"),
             userJpaEntity.userRatio,
             userJpaEntity.userAccountBank,
             userJpaEntity.userAccount
