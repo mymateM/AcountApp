@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model;
 
 import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
 import com.connect.accountApp.domain.user.domain.model.Bank;
+import com.connect.accountApp.domain.user.domain.model.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,6 +32,9 @@ public class UserJpaEntity {
   private String userAccount;
 
   @Enumerated(EnumType.STRING)
+  private Role role;
+
+  @Enumerated(EnumType.STRING)
   private Bank userAccountBank;
   private boolean userAccept;
   private int userRatio;
@@ -41,14 +45,16 @@ public class UserJpaEntity {
 
 
   @Builder
-  public UserJpaEntity(Long userId, String userEmail, String userPassword, String userNickname, String userImgUrl, String userAccount,
-      Bank userAccountBank, boolean userAccept, int userRatio,
+  public UserJpaEntity(Long userId, String userEmail, String userPassword,
+      String userNickname, String userImgUrl, Role role,
+      String userAccount, Bank userAccountBank, boolean userAccept, int userRatio,
       HouseHoldJpaEntity houseHoldJpaEntity) {
     this.userId = userId;
     this.userEmail = userEmail;
     this.userPassword = userPassword;
     this.userNickname = userNickname;
     this.userImgUrl = userImgUrl;
+    this.role = role;
     this.userAccount = userAccount;
     this.userAccountBank = userAccountBank;
     this.userAccept = userAccept;

@@ -24,15 +24,19 @@ public class User {
 
   private Household household;
 
+  private Role role;
+
   @Builder
-  public User(Long userId, String userEmail, String userPassword, String userNickname, String userImgUrl, String userAccount,
-      Bank userAccountBank, boolean userAccept, int userRatio,
+  public User(Long userId, String userEmail, String userPassword,
+      String userNickname, String userImgUrl, Role role,
+      String userAccount, Bank userAccountBank, boolean userAccept, int userRatio,
       Household household) {
     this.userId = userId;
     this.userEmail = userEmail;
     this.userPassword = userPassword;
     this.userNickname = userNickname;
     this.userImgUrl = userImgUrl;
+    this.role = role;
     this.userAccount = userAccount;
     this.userAccountBank = userAccountBank;
     this.userAccept = userAccept;
