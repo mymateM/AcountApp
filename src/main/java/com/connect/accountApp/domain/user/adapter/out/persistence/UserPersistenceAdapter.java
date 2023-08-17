@@ -3,7 +3,7 @@ package com.connect.accountApp.domain.user.adapter.out.persistence;
 import com.connect.accountApp.domain.household.adapter.out.persistence.HouseholdMapper;
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
-import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserQueryRepository;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.UserQueryRepository;
 import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
 import com.connect.accountApp.domain.user.application.port.out.GetRoommateSendMoneyPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;

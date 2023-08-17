@@ -1,4 +1,4 @@
-package com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model;
+package com.connect.accountApp.domain.user.adapter.out.persistence.jpa;
 
 import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 
