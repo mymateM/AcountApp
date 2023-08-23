@@ -7,6 +7,7 @@ import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.UserQueryR
 import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
 import com.connect.accountApp.domain.user.application.port.out.GetRoommateSendMoneyPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
+import com.connect.accountApp.domain.user.application.port.out.SaveUserPort;
 import com.connect.accountApp.domain.user.application.port.out.command.RoommateSendMoneyCommand;
 import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.domain.user.exception.UserNotFoundException;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoneyPort,
-    FindHouseholdUserListPort {
+    FindHouseholdUserListPort, SaveUserPort {
 
   private final UserJpaRepository userJpaRepository;
   private final UserQueryRepository userQueryRepository;
@@ -48,5 +49,11 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
 
     return userJpaEntities.stream()
         .map(userMapper::mapToDomainEntity).toList();
+  }
+
+  @Override
+  public void save(User user) {
+    UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
+    userJpaRepository.save(userJpaEntity);
   }
 }
