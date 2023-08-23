@@ -28,7 +28,7 @@ public class ApplicationConfig {
 
       return org.springframework.security.core.userdetails.User.builder()
         .username(user.getUserEmail())
-        .password(new BCryptPasswordEncoder().encode(user.getUserPassword()))
+        .password(passwordEncoder().encode(user.getUserPassword()))
         .authorities(new SimpleGrantedAuthority(user.getRole().name()))
         .build();
     };
