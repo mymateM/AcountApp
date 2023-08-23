@@ -17,13 +17,12 @@ import org.springframework.stereotype.Service;
 public class RegisterService implements RegisterUseCase {
 
   private final PasswordEncoder passwordEncoder;
-
   private final JwtService jwtService;
-
   private final SaveUserPort saveUserPort;
 
   @Override
   public AuthenticationResponse register(RegisterRequest request) {
+
     User user = User.builder()
         .userNickname(request.getNickname())
         .userEmail(request.getEmail())
