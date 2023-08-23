@@ -1,6 +1,7 @@
 package com.connect.accountApp.global.config;
 
-import com.connect.accountApp.domain.user.adapter.out.persistence.UserJpaRepository;
+import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
+import com.connect.accountApp.domain.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,9 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,12 +18,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-  private final UserJpaRepository userJpaRepository;
+  private final GetUserPort findUserPort;
 
   @Bean
   public UserDetailsService userDetailsService() {
-    return username -> (UserDetails) userJpaRepository.findByUserEmail(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+    return  username -> {
+      User user = findUserPort.findUser(username);
+
+      return org.springframework.security.core.userdetails.User.builder()
+        .username(user.getUserEmail())
+        .password(new BCryptPasswordEncoder().encode(user.getUserPassword()))
+        .authorities(new SimpleGrantedAuthority(user.getRole().name()))
+        .build();
+    };
+
   }
 
   @Bean
