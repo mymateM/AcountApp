@@ -19,9 +19,7 @@ public class AuthenticationController {
   private final AuthenticationUseCase authenticationUseCase;
 
   @PostMapping("/authenticate")
-  public ResponseEntity authenticate(
-      @RequestBody AuthenticationRequest request
-      ) {
+  public ResponseEntity authenticate(@RequestBody AuthenticationRequest request) {
     AuthenticationResponse response = authenticationUseCase.authenticate(request);
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
   }

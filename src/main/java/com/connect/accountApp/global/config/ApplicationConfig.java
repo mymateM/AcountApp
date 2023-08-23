@@ -27,10 +27,10 @@ public class ApplicationConfig {
       User user = findUserPort.findUser(username);
 
       return org.springframework.security.core.userdetails.User.builder()
-        .username(user.getUserEmail())
-        .password(passwordEncoder().encode(user.getUserPassword()))
-        .authorities(new SimpleGrantedAuthority(user.getRole().name()))
-        .build();
+          .username(user.getUserEmail())
+          .password(user.getUserPassword())
+          .authorities(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+          .build();
     };
 
   }
