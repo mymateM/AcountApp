@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PracticeResponse {
 
-  private Integer inner;
+  private String inner;
 
-  public PracticeResponse(Integer inner) {
+  public PracticeResponse(String inner) {
     this.inner = inner;
   }
 }
