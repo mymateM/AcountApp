@@ -37,6 +37,16 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
   }
 
   @Override
+  public User findUser(String userEmail) {
+    UserJpaEntity userJpaEntity = userJpaRepository.findByUserEmail(userEmail)
+        .orElseThrow(
+            () -> new UserNotFoundException("[userEmail] : " + userEmail + " 사용자가 존재하지 않습니다."));
+
+    User user = userMapper.mapToDomainEntity(userJpaEntity);
+    return user;
+  }
+
+  @Override
   public List<RoommateSendMoneyCommand> getRoommateSendMoney(Long householdId, Long userId) {
     return userQueryRepository.getRoommateSendMoney(householdId, userId);
   }
