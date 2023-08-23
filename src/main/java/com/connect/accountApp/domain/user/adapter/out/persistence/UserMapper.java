@@ -23,7 +23,7 @@ public class UserMapper {
         .userAccountBank(user.getUserAccountBank())
         .userAccept(user.isUserAccept())
         .userRatio(user.getUserRatio())
-        .houseHoldJpaEntity(householdMapper.mapToJpaEntity(user.getHousehold()))
+//        .houseHoldJpaEntity(householdMapper.mapToJpaEntity(user.getHousehold())) //todo 0823
         .build();
   }
 
