@@ -30,12 +30,17 @@ public class RegisterService implements RegisterUseCase {
         .role(Role.USER)
         .build();
 
-    saveUserPort.save(user);
 
     String accessToken = jwtService.generateAccessToken(createUserDetails(user)); // UserDetail 객체가 들어가야함
+    String refreshToken = jwtService.generateRefreshToken(createUserDetails(user));
+
+
+
+    saveUserPort.save(user);
 
     return AuthenticationResponse.builder()
         .accessToken(accessToken)
+        .refreshToken(refreshToken)
         .build();
   }
 
