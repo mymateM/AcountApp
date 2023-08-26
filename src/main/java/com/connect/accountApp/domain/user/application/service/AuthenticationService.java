@@ -29,10 +29,10 @@ public class AuthenticationService implements AuthenticationUseCase {
 
     User user = findUserPort.findUser(request.getEmail());
 
-    String jwtToken = jwtService.generateToken(createUserDetails(user)); // UserDetail 객체가 들어가야함
+    String accessToken = jwtService.generateAccessToken(createUserDetails(user)); // UserDetail 객체가 들어가야함
 
     return AuthenticationResponse.builder()
-        .token(jwtToken)
+        .accessToken(accessToken)
         .build();
   }
 
