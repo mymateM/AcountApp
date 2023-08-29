@@ -35,7 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
-application-local.yml
 application-localdb.yml
 import.sql
 application-devdb.yml
+application-loc.yml
+application-token.yml
