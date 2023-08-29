@@ -3,8 +3,9 @@ spring:
     group:
       local:
         - localdb
+        - jwt
       dev:
         - devdb
-    active: dev
+    active: local
   pid:
     file: /home/ubuntu/app/step2/accountApp.pid

@@ -10,16 +10,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtService {
 
-  private static final String SECRET_KEY = "8f0bd83363c7a8a609eaf046b324283236616a9b8373085999b4b1ba2ce3c993315e6281dc53cf9d12a112909a944a065d6244a2efbdeeac11d3f97ed43b1f55";
+  @Value("${application.security.jwt.secret-key}")
+  private String secretKey;
 
-  public static final long ACCESS_TOKEN_VALIDITY = 1000 * 60 * 60 * 2; // 2시간
-  public static final long REFRESH_TOKEN_VALIDITY = 1000 * 60 * 60 * 24 * 7 * 2; // 2주
+  @Value("${application.security.jwt.expiration}")
+  public long accessTokenExpiration;
+  @Value("${application.security.jwt.expiration.refresh-token.expiration}")
+  public long refreshTokenExpiration;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -41,11 +45,11 @@ public class JwtService {
   }
 
   public String generateRefreshToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-    return generateToken(extraClaims, userDetails, REFRESH_TOKEN_VALIDITY);
+    return generateToken(extraClaims, userDetails, accessTokenExpiration);
   }
 
   public String generateAccessToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-    return generateToken(extraClaims, userDetails, ACCESS_TOKEN_VALIDITY);
+    return generateToken(extraClaims, userDetails, refreshTokenExpiration);
   }
 
   public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration ) {
@@ -82,7 +86,7 @@ public class JwtService {
 
 
   private Key getSignInKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+    byte[] keyBytes = Decoders.BASE64.decode(secretKey);
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
