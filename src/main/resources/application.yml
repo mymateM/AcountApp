@@ -1,11 +1,12 @@
 spring:
   profiles:
     group:
-      local:
+      loc:
         - localdb
-        - jwt
+        - token
       dev:
         - devdb
-    active: local
+        - tokendev
+    active: dev
   pid:
     file: /home/ubuntu/app/step2/accountApp.pid
