@@ -9,4 +9,4 @@ spring:
         - tokendev
     active: dev
   pid:
-    file: /home/ubuntu/app/step2/accountApp.pid
+    file: /home/ubuntu/app/step2/mymate-app-service.pid
