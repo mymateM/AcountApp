@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOSITORY=/home/ubuntu/app/step2
-PROJECT_NAME=accountApp
+PROJECT_NAME=mymate-app-service #해당 위치에 properties에 작성한 프로젝트명과 동일하게 작성합니다.
 
 echo "> Build 파일 복사"
 cp $REPOSITORY/zip/*.jar $REPOSITORY/
@@ -11,8 +11,7 @@ CURRENT_PID=$(pgrep -f $PROJECT_NAME)
 
 echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
 
-if [ -z "$CURRENT_PID" ]
- then
+if [ -z "$CURRENT_PID" ]; then
   echo "> 현재 구동 중인 애플리케이션이 없으므로 종료하지 않습니다"
 else
   echo "> kill -15 $CURRENT_PID"
@@ -29,6 +28,6 @@ chmod +x $JAR_NAME
 
 echo "> $JAR_NAME 실행"
 nohup java -jar \
-  -Dspring.config.location=classpath:/application.yml,/home/ubuntu/app/application-devdb.yml \
+  -Dspring.config.location=classpath:/application.yml,/home/ubuntu/app/application-devdb.yml,/home/ubuntu/app/application-tokendb.yml \
   -Dspring.profile.active=dev \
   $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
