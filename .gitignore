@@ -40,3 +40,6 @@ import.sql
 application-devdb.yml
 application-loc.yml
 application-token.yml
+application-fcm-loc.yml
+application-fcm-dev.yml
+fcm-mymate-firebase-adminsdk-zjwbt-aa9e97d875.json

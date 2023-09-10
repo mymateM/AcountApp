@@ -39,6 +39,8 @@ public class UserJpaEntity {
   private boolean userAccept;
   private int userRatio;
 
+  private String deviceToken;
+
   @ManyToOne
   @JoinColumn(name = "household_id")
   private HouseHoldJpaEntity houseHoldJpaEntity;
@@ -48,7 +50,7 @@ public class UserJpaEntity {
   public UserJpaEntity(Long userId, String userEmail, String userPassword,
       String userNickname, String userImgUrl, Role role,
       String userAccount, Bank userAccountBank, boolean userAccept, int userRatio,
-      HouseHoldJpaEntity houseHoldJpaEntity) {
+      HouseHoldJpaEntity houseHoldJpaEntity, String deviceToken) {
     this.userId = userId;
     this.userEmail = userEmail;
     this.userPassword = userPassword;
@@ -60,5 +62,6 @@ public class UserJpaEntity {
     this.userAccept = userAccept;
     this.userRatio = userRatio;
     this.houseHoldJpaEntity = houseHoldJpaEntity;
+    this.deviceToken = deviceToken;
   }
 }
