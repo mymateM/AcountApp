@@ -26,11 +26,13 @@ public class User {
 
   private Role role;
 
+  private String deviceToken;
+
   @Builder
   public User(Long userId, String userEmail, String userPassword,
       String userNickname, String userImgUrl, Role role,
       String userAccount, Bank userAccountBank, boolean userAccept, int userRatio,
-      Household household) {
+      Household household, String deviceToken) {
     this.userId = userId;
     this.userEmail = userEmail;
     this.userPassword = userPassword;
@@ -42,5 +44,6 @@ public class User {
     this.userAccept = userAccept;
     this.userRatio = userRatio;
     this.household = household;
+    this.deviceToken = deviceToken;
   }
 }

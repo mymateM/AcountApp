@@ -24,6 +24,7 @@ public class UserMapper {
         .userAccept(user.isUserAccept())
         .userRatio(user.getUserRatio())
         .role(user.getRole())
+        .deviceToken(user.getDeviceToken())
 //        .houseHoldJpaEntity(householdMapper.mapToJpaEntity(user.getHousehold())) //todo 0823
         .build();
   }
@@ -40,6 +41,7 @@ public class UserMapper {
         .userAccept(userJpaEntity.isUserAccept())
         .userRatio(userJpaEntity.getUserRatio())
         .role(userJpaEntity.getRole())
+        .deviceToken(userJpaEntity.getDeviceToken())
         //.household(householdMapper.mapToDomainEntity(userJpaEntity.getHouseHoldJpaEntity()))
         .build();
   }
