@@ -46,4 +46,8 @@ public class User {
     this.household = household;
     this.deviceToken = deviceToken;
   }
+
+  public void changeDeviceToken(String deviceToken) {
+    this.deviceToken = deviceToken;
+  }
 }
