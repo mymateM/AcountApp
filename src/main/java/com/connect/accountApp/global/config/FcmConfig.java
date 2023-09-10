@@ -7,11 +7,14 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
 public class FcmConfig {
+
+  @Bean
   FirebaseMessaging firebaseMessaging() throws IOException {
     // ec2 배포시 FileInputStream은 기존의 절대 경로를 사용하기 때문에 문제 발생 -> ClassPathResource 사용
     ClassPathResource resource = new ClassPathResource(
