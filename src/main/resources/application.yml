@@ -4,9 +4,11 @@ spring:
       loc:
         - localdb
         - token
+        - fcm-loc
       dev:
         - devdb
         - tokendev
+        - fcm-dev
     active: dev
   pid:
     file: /home/ubuntu/app/step2/accountApp.pid
