@@ -47,6 +47,11 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
   }
 
   @Override
+  public Boolean userExist(String email) {
+    return userJpaRepository.existsByUserEmail(email);
+  }
+
+  @Override
   public List<RoommateSendMoneyCommand> getRoommateSendMoney(Long householdId, Long userId) {
     return userQueryRepository.getRoommateSendMoney(householdId, userId);
   }
