@@ -28,7 +28,7 @@ public class RegisterService implements RegisterUseCase {
 
     checkUserEmailDuplicate(request.getEmail());
 
-    User defaultUser = createDefaultUser(request.getNickname(), request.getEmail(), request.getPassword());
+    User defaultUser = createDefaultUser(request.getEmail(), request.getPassword());
     UserDetails userDetails = createUserDetails(defaultUser);
 
     String accessToken = jwtService.generateAccessToken(userDetails); // UserDetail 객체가 들어가야함
@@ -53,9 +53,8 @@ public class RegisterService implements RegisterUseCase {
     }
   }
 
-  private User createDefaultUser(String nickname, String userEmail, String userPassword) {
+  private User createDefaultUser(String userEmail, String userPassword) {
     return User.builder()
-        .userNickname(nickname)
         .userEmail(userEmail)
         .userPassword(passwordEncoder.encode(userPassword))
         .role(Role.USER)
