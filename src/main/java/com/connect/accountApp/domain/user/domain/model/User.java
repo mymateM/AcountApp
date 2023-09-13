@@ -59,6 +59,10 @@ public class User {
     setUserImgUrl(userProfileImg);
   }
 
+  public void registerUserToHousehold(Household household) {
+    setHousehold(household);
+  }
+
 
   private void setUserNickname(String userNickname) {
     this.userNickname = userNickname;

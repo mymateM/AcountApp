@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.household.adapter.out.persistence;
 
 import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
 import com.connect.accountApp.domain.household.application.port.out.GetHouseholdPort;
+import com.connect.accountApp.domain.household.application.port.out.SaveHouseholdPort;
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.household.exception.HouseholdNotFoundException;
 import com.connect.accountApp.global.error.ErrorCode;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class HouseholdPersistenceAdapter implements GetHouseholdPort {
+public class HouseholdPersistenceAdapter implements GetHouseholdPort, SaveHouseholdPort {
 
   private final HouseholdJpaRepository householdJpaRepository;
   private final HouseholdMapper householdMapper;
@@ -23,5 +24,12 @@ public class HouseholdPersistenceAdapter implements GetHouseholdPort {
 
     Household household = householdMapper.mapToDomainEntity(houseHoldJpaEntity);
     return household;
+  }
+
+  @Override
+  public Household saveHousehold(Household household) {
+    HouseHoldJpaEntity houseHoldJpaEntity = householdMapper.mapToJpaEntity(household);
+    HouseHoldJpaEntity savedHouseholdJpaEntity = householdJpaRepository.save(houseHoldJpaEntity);
+    return householdMapper.mapToDomainEntity(savedHouseholdJpaEntity);
   }
 }
