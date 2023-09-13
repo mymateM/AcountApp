@@ -3,9 +3,11 @@ package com.connect.accountApp.domain.user.application.service;
 import com.connect.accountApp.domain.user.adapter.in.web.request.RegisterRequest;
 import com.connect.accountApp.domain.user.adapter.in.web.response.AuthenticationResponse;
 import com.connect.accountApp.domain.user.application.port.in.RegisterUseCase;
+import com.connect.accountApp.domain.user.application.port.out.ExistsUserPort;
 import com.connect.accountApp.domain.user.application.port.out.SaveUserPort;
 import com.connect.accountApp.domain.user.domain.model.Role;
 import com.connect.accountApp.domain.user.domain.model.User;
+import com.connect.accountApp.domain.user.exception.DuplicatedUserEmailException;
 import com.connect.accountApp.global.common.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +21,14 @@ public class RegisterService implements RegisterUseCase {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final SaveUserPort saveUserPort;
+  private final ExistsUserPort existsUserPort;
 
   @Override
   public AuthenticationResponse register(RegisterRequest request) {
+
+    if (existsUserPort.existsUserEmail(request.getEmail())) {
+      throw new DuplicatedUserEmailException("[userEmail]" + request.getEmail() + "은 이미 존재합니다.");
+    }
 
     User user = User.builder()
         .userNickname(request.getNickname())
