@@ -4,6 +4,6 @@ import com.connect.accountApp.domain.household.adapter.in.web.request.RegisterHo
 
 public interface RegisterHouseholdUseCase {
 
-  void registerHousehold(String userEmail, RegisterHouseholdRequest request);
+  String registerHousehold(String userEmail, RegisterHouseholdRequest request);
 
 }

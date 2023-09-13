@@ -1,5 +1,6 @@
 package com.connect.accountApp.domain.household.adapter.in.web.controller;
 
+import com.connect.accountApp.domain.household.adapter.in.web.controller.response.RegisterHouseholdResponse;
 import com.connect.accountApp.domain.household.adapter.in.web.request.RegisterHouseholdRequest;
 import com.connect.accountApp.domain.household.application.port.in.RegisterHouseholdUseCase;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
@@ -24,9 +25,10 @@ public class RegisterHouseholdController {
       @RequestBody RegisterHouseholdRequest request) {
 
     String userEmail = userDetails.getUsername();
-    registerHouseholdUseCase.registerHousehold(userEmail, request);
+    String inviteCode = registerHouseholdUseCase.registerHousehold(userEmail, request);
+    RegisterHouseholdResponse response = new RegisterHouseholdResponse(inviteCode);
 
-    return ResponseEntity.ok(SuccessResponse.create201CreatedResponse());
+    return ResponseEntity.ok(SuccessResponse.create201CreatedResponse(response));
   }
 
 
