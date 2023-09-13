@@ -26,29 +26,17 @@ public class RegisterService implements RegisterUseCase {
   @Override
   public AuthenticationResponse register(RegisterRequest request) {
 
-    if (existsUserPort.existsUserEmail(request.getEmail())) {
-      throw new DuplicatedUserEmailException("[userEmail]" + request.getEmail() + "은 이미 존재합니다.");
-    }
+    checkUserEmailDuplicate(request.getEmail());
 
-    User user = User.builder()
-        .userNickname(request.getNickname())
-        .userEmail(request.getEmail())
-        .userPassword(passwordEncoder.encode(request.getPassword()))
-        .role(Role.USER)
-        .build();
+    User defaultUser = createDefaultUser(request.getNickname(), request.getEmail(), request.getPassword());
+    UserDetails userDetails = createUserDetails(defaultUser);
 
+    String accessToken = jwtService.generateAccessToken(userDetails); // UserDetail 객체가 들어가야함
+    String refreshToken = jwtService.generateRefreshToken(userDetails);
 
-    String accessToken = jwtService.generateAccessToken(createUserDetails(user)); // UserDetail 객체가 들어가야함
-    String refreshToken = jwtService.generateRefreshToken(createUserDetails(user));
+    saveUserPort.save(defaultUser);
 
-
-
-    saveUserPort.save(user);
-
-    return AuthenticationResponse.builder()
-        .accessToken(accessToken)
-        .refreshToken(refreshToken)
-        .build();
+    return createAuthenticationResponse(accessToken, refreshToken);
   }
 
   private UserDetails createUserDetails(User user) {
@@ -56,6 +44,28 @@ public class RegisterService implements RegisterUseCase {
         .username(user.getUserEmail())
         .password(passwordEncoder.encode(user.getUserPassword()))
         .roles(Role.USER.name())
+        .build();
+  }
+
+  private void checkUserEmailDuplicate(String userEmail) {
+    if (existsUserPort.existsUserEmail(userEmail)) {
+      throw new DuplicatedUserEmailException("[userEmail] " + userEmail + "은 이미 존재합니다.");
+    }
+  }
+
+  private User createDefaultUser(String nickname, String userEmail, String userPassword) {
+    return User.builder()
+        .userNickname(nickname)
+        .userEmail(userEmail)
+        .userPassword(passwordEncoder.encode(userPassword))
+        .role(Role.USER)
+        .build();
+  }
+
+  private AuthenticationResponse createAuthenticationResponse(String accessToken, String refreshToken) {
+    return AuthenticationResponse.builder()
+        .accessToken(accessToken)
+        .refreshToken(refreshToken)
         .build();
   }
 }
