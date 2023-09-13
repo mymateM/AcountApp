@@ -1,6 +1,7 @@
 package com.connect.accountApp.domain.user.domain.model;
 
 import com.connect.accountApp.domain.household.domain.model.Household;
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +49,50 @@ public class User {
   }
 
   public void changeDeviceToken(String deviceToken) {
+    setDeviceToken(deviceToken);
+  }
+
+  public void UpdateUserAtOnBoarding(String userNickname, String bankName, String account, String userProfileImg) {
+    setUserNickname(userNickname);
+    setUserAccountBank(Bank.valueOf(bankName));
+    setUserAccount(account);
+    setUserImgUrl(userProfileImg);
+  }
+
+
+  private void setUserNickname(String userNickname) {
+    this.userNickname = userNickname;
+  }
+
+  private void setUserImgUrl(String userImgUrl) {
+    this.userImgUrl = userImgUrl;
+  }
+
+  private void setUserAccount(String userAccount) {
+    this.userAccount = userAccount;
+  }
+
+  private void setUserAccountBank(Bank userAccountBank) {
+    this.userAccountBank = userAccountBank;
+  }
+
+  private void setUserAccept(boolean userAccept) {
+    this.userAccept = userAccept;
+  }
+
+  private void setUserRatio(int userRatio) {
+    this.userRatio = userRatio;
+  }
+
+  private void setHousehold(Household household) {
+    this.household = household;
+  }
+
+  private void setRole(Role role) {
+    this.role = role;
+  }
+
+  private void setDeviceToken(String deviceToken) {
     this.deviceToken = deviceToken;
   }
 }
