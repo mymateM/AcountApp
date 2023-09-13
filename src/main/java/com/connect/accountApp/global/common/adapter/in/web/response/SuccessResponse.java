@@ -17,7 +17,10 @@ public class SuccessResponse<T> {
 
 
   public static <T> SuccessResponse create200SuccessResponse(T data) {
-
     return new SuccessResponse(SUCCESS_MESSAGE, 200, data);
+  }
+
+  public static <T> SuccessResponse create200SuccessResponse() {
+    return new SuccessResponse(SUCCESS_MESSAGE, 200, null);
   }
 }
