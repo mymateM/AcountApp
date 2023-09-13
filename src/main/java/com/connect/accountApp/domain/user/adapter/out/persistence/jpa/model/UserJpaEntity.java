@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model;
 import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
 import com.connect.accountApp.domain.user.domain.model.Bank;
 import com.connect.accountApp.domain.user.domain.model.Role;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,6 +26,8 @@ public class UserJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long userId;
+
+  @Column(unique = true)
   private String userEmail;
   private String userPassword;
   private String userNickname;
