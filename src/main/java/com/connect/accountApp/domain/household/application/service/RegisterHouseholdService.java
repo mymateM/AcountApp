@@ -26,9 +26,11 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
     Household savedHousehold = saveHouseholdPort.saveHousehold(defaultHousehold);
 
     User user = getUserPort.findUser(userEmail);
-    user.registerUserToHousehold(savedHousehold);
+    registerUserToHousehold(user, savedHousehold);
 
-    saveUserPort.save(user);
+//    createInviteCodeOfHousehold(savedHousehold);
+
+
   }
 
   private Household createDefaultHouseholdByRequest(RegisterHouseholdRequest request) {
@@ -48,7 +50,12 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
         .householdBudgetAllowanceRatio(settlementAllowanceRatio)
         .householdAccept(false)
         .build();
+  }
 
+
+  private void registerUserToHousehold(User user, Household household) {
+    user.registerUserToHousehold(household);
+    saveUserPort.save(user);
   }
 
 
