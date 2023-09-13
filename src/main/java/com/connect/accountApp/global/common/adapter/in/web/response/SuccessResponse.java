@@ -25,7 +25,7 @@ public class SuccessResponse<T> {
     return new SuccessResponse(SUCCESS_MESSAGE, 200, null);
   }
 
-  public static <T> SuccessResponse create201CreatedResponse() {
-    return new SuccessResponse(CREATED_MESSAGE, 200, null);
+  public static <T> SuccessResponse create201CreatedResponse(T data) {
+    return new SuccessResponse(CREATED_MESSAGE, 200, data);
   }
 }
