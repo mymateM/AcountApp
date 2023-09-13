@@ -25,14 +25,14 @@ public class HouseholdNowCommand {
 
   public HouseholdNowCommand(Household household, LocalDate pastNearSettlementDate, int householdByNowExpense, int householdByPreviousExpense) {
     this.householdId = household.getHouseholdId();
-    this.householdByNowBudgetRatio = calHouseholdByNowBudgetRatio(household.getHouseholdBudget(),
+    this.householdByNowBudgetRatio = calHouseholdByNowBudgetRatio(household.getHouseholdBudget().intValue(),
         householdByNowExpense);
     this.householdSettlementDDay = calHouseholdSettlementDDay(pastNearSettlementDate);
-    this.householdBudget = household.getHouseholdBudget();
+    this.householdBudget = household.getHouseholdBudget().intValue();
     this.householdByPreviousExpense = householdByPreviousExpense;
     this.householdByNowExpense = householdByNowExpense;
     this.householdNowExpenseDiff = calHouseholdNowExpenseDiff();
-    this.householdBudgetOverWarn = isHouseholdBudgetOverWarn(household.getHouseholdBudget(),
+    this.householdBudgetOverWarn = isHouseholdBudgetOverWarn(household.getHouseholdBudget().intValue(),
         pastNearSettlementDate, householdByNowExpense);
   }
 
