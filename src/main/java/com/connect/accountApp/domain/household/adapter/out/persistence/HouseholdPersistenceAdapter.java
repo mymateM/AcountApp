@@ -27,9 +27,9 @@ public class HouseholdPersistenceAdapter implements GetHouseholdPort, SaveHouseh
   }
 
   @Override
-  public void saveHousehold(Household household) {
-
+  public Household saveHousehold(Household household) {
     HouseHoldJpaEntity houseHoldJpaEntity = householdMapper.mapToJpaEntity(household);
-    householdJpaRepository.save(houseHoldJpaEntity);
+    HouseHoldJpaEntity savedHouseholdJpaEntity = householdJpaRepository.save(houseHoldJpaEntity);
+    return householdMapper.mapToDomainEntity(savedHouseholdJpaEntity);
   }
 }

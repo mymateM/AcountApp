@@ -5,6 +5,7 @@ import com.connect.accountApp.domain.household.application.port.in.RegisterHouse
 import com.connect.accountApp.domain.household.application.port.out.SaveHouseholdPort;
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
+import com.connect.accountApp.domain.user.application.port.out.SaveUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +16,19 @@ import org.springframework.stereotype.Service;
 public class RegisterHouseholdService implements RegisterHouseholdUseCase {
 
   private final SaveHouseholdPort saveHouseholdPort;
+  private final GetUserPort getUserPort;
+  private final SaveUserPort saveUserPort;
 
   @Override
   public void registerHousehold(String userEmail, RegisterHouseholdRequest request) {
 
     Household defaultHousehold = createDefaultHouseholdByRequest(request);
+    Household savedHousehold = saveHouseholdPort.saveHousehold(defaultHousehold);
 
-    saveHouseholdPort.saveHousehold(defaultHousehold);
+    User user = getUserPort.findUser(userEmail);
+    user.registerUserToHousehold(savedHousehold);
 
+    saveUserPort.save(user);
   }
 
   private Household createDefaultHouseholdByRequest(RegisterHouseholdRequest request) {
