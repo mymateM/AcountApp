@@ -17,6 +17,7 @@ public class HouseholdMapper {
         .householdAccept(houseHoldJpaEntity.isHouseholdAccept())
         .createdAt(houseHoldJpaEntity.getCreatedAt())
         .householdSettlementDayOfMonth(houseHoldJpaEntity.getHouseholdSettlementDayOfMonth())
+        .inviteCode(houseHoldJpaEntity.getInviteCode())
         .build();
   }
 
@@ -30,6 +31,7 @@ public class HouseholdMapper {
         .householdAccept(household.isHouseholdAccept())
         .createdAt(household.getCreatedAt())
         .householdSettlementDayOfMonth(household.getHouseholdSettlementDayOfMonth())
+        .inviteCode(household.getInviteCode())
         .build();
   }
 }

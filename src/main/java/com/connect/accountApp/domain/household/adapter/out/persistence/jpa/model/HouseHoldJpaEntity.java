@@ -33,9 +33,12 @@ public class HouseHoldJpaEntity {
   private LocalDateTime createdAt;
   private Integer householdSettlementDayOfMonth;
 
+  private String inviteCode;
+
   @Builder
   public HouseHoldJpaEntity(Long householdId, String householdName, LocalDate householdSettlementDate, BigDecimal householdBudget,
-      Integer householdBudgetAllowanceRatio, boolean householdAccept, LocalDateTime createdAt, Integer householdSettlementDayOfMonth) {
+      Integer householdBudgetAllowanceRatio, boolean householdAccept, LocalDateTime createdAt, Integer householdSettlementDayOfMonth,
+      String inviteCode) {
     this.householdId = householdId;
     this.householdName = householdName;
     this.householdSettlementDate = householdSettlementDate;
@@ -44,5 +47,6 @@ public class HouseHoldJpaEntity {
     this.householdAccept = householdAccept;
     this.createdAt = createdAt;
     this.householdSettlementDayOfMonth = householdSettlementDayOfMonth;
+    this.inviteCode = inviteCode;
   }
 }

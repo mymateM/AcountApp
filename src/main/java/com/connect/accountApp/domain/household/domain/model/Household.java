@@ -21,10 +21,13 @@ public class Household {
   private LocalDateTime createdAt;
   private Integer householdSettlementDayOfMonth;
 
+  private String inviteCode;
+
 
   @Builder
   public Household(Long householdId, String householdName, LocalDate householdSettlementDate, BigDecimal householdBudget,
-      Integer householdBudgetAllowanceRatio, boolean householdAccept, LocalDateTime createdAt, Integer householdSettlementDayOfMonth) {
+      Integer householdBudgetAllowanceRatio, boolean householdAccept, LocalDateTime createdAt, Integer householdSettlementDayOfMonth,
+      String inviteCode) {
     this.householdId = householdId;
     this.householdName = householdName;
     this.householdSettlementDate = householdSettlementDate;
@@ -33,5 +36,10 @@ public class Household {
     this.householdAccept = householdAccept;
     this.createdAt = createdAt;
     this.householdSettlementDayOfMonth = householdSettlementDayOfMonth;
+    this.inviteCode = inviteCode;
+  }
+
+  public void setInviteCode(String inviteCode) {
+    this.inviteCode = inviteCode;
   }
 }
