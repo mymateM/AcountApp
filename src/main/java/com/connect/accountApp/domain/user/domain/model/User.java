@@ -1,7 +1,6 @@
 package com.connect.accountApp.domain.user.domain.model;
 
 import com.connect.accountApp.domain.household.domain.model.Household;
-import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,6 +62,9 @@ public class User {
     setHousehold(household);
   }
 
+  public void updateUserSettlementRatio(int userRatio) {
+    setUserRatio(userRatio);
+  }
 
   private void setUserNickname(String userNickname) {
     this.userNickname = userNickname;
