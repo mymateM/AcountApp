@@ -27,6 +27,17 @@ public class HouseholdPersistenceAdapter implements GetHouseholdPort, SaveHouseh
   }
 
   @Override
+  public Household findHousehold(String inviteCode) {
+
+    HouseHoldJpaEntity houseHoldJpaEntity = householdJpaRepository.findByInviteCode(inviteCode)
+        .orElseThrow(() -> new HouseholdNotFoundException("초대코드가 : " + inviteCode + "인 가구가 없습니다.",
+            ErrorCode.HOUSEHOLD_NOT_FOUND));
+
+    Household household = householdMapper.mapToDomainEntity(houseHoldJpaEntity);
+    return household;
+  }
+
+  @Override
   public Household saveHousehold(Household household) {
     HouseHoldJpaEntity houseHoldJpaEntity = householdMapper.mapToJpaEntity(household);
     HouseHoldJpaEntity savedHouseholdJpaEntity = householdJpaRepository.save(houseHoldJpaEntity);
