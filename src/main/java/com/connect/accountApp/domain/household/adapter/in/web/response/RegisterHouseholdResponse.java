@@ -1,4 +1,4 @@
-package com.connect.accountApp.domain.household.adapter.in.web.controller.response;
+package com.connect.accountApp.domain.household.adapter.in.web.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

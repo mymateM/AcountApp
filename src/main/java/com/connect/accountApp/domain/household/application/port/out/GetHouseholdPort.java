@@ -6,4 +6,5 @@ public interface GetHouseholdPort {
 
   Household getHousehold(Long householdId);
 
+  Household findHousehold(String inviteCode);
 }

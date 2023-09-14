@@ -1,5 +1,6 @@
 package com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +34,7 @@ public class HouseHoldJpaEntity {
   private LocalDateTime createdAt;
   private Integer householdSettlementDayOfMonth;
 
+  @Column(unique = true)
   private String inviteCode;
 
   @Builder

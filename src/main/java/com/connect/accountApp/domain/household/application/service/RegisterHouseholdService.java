@@ -8,6 +8,7 @@ import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.application.port.out.SaveUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
     return Household.builder()
         .householdName(householdName)
         .householdSettlementDayOfMonth(settlementDayOfMonth)
+        .householdSettlementDate(LocalDateTime.now().toLocalDate())
         .householdBudget(amount)
         .householdBudgetAllowanceRatio(settlementAllowanceRatio)
         .householdAccept(false)
@@ -57,6 +59,7 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
 
   private void registerUserToHousehold(User user, Household household) {
     user.registerUserToHousehold(household);
+    user.updateUserSettlementRatio(100);
     saveUserPort.save(user);
   }
 

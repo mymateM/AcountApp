@@ -6,6 +6,7 @@ import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import com.connect.accountApp.domain.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -58,7 +59,8 @@ public class UserMapper {
   }
 
   private Household getHouseHoldOfUserJpaEntity(HouseHoldJpaEntity houseHoldJpaEntity) {
-    if (houseHoldJpaEntity == null) {
+
+    if (houseHoldJpaEntity == null || houseHoldJpaEntity instanceof HibernateProxy) {
       return null;
     }else {
       return householdMapper.mapToDomainEntity(houseHoldJpaEntity);
