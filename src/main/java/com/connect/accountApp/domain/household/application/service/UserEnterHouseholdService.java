@@ -25,13 +25,6 @@ public class UserEnterHouseholdService implements UserEnterHouseholdUseCase {
   @Override
   public void userEnterHousehold(String userEmail, String householdInviteCode) {
 
-    /*
-    초대 코드를 입력하면,
-  가구에 입력한 사용자가 등록됨
-  비율이 다시 산정됨
-  기존에 있던 사람들에게 알림이 감
-     */
-
     User user = getUserPort.findUser(userEmail);
     Household household = getHouseholdPort.findHousehold(householdInviteCode); //todo 이미 존재하는 사용자면 ㄴㄴ
 
