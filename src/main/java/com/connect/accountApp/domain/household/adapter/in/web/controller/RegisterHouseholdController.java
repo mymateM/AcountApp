@@ -1,6 +1,6 @@
 package com.connect.accountApp.domain.household.adapter.in.web.controller;
 
-import com.connect.accountApp.domain.household.adapter.in.web.controller.response.RegisterHouseholdResponse;
+import com.connect.accountApp.domain.household.adapter.in.web.response.RegisterHouseholdResponse;
 import com.connect.accountApp.domain.household.adapter.in.web.request.RegisterHouseholdRequest;
 import com.connect.accountApp.domain.household.application.port.in.RegisterHouseholdUseCase;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
