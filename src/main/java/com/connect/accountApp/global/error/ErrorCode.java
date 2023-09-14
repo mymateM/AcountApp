@@ -17,6 +17,7 @@ public enum ErrorCode {
   // USER
   USER_NOT_FOUND(404, "U001", "존재하지 않는 사용자입니다."),
   USER_EMAIL_DUPLICATED(400, "U002", "이미 존재하는 사용자 이메일입니다."),
+  USER_EXISTED_HOUSEHOLD_MEMBER(400, "U002", "이미 존재하는 가구원 입니다."),
 
   // Household
   HOUSEHOLD_NOT_FOUND(404, "H001", "존재하지 않는 가구입니다."),
