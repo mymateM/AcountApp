@@ -1,6 +1,6 @@
 package com.connect.accountApp.domain.usernotification.domain.model;
 
-import com.connect.accountApp.domain.notification.domain.model.Notification;
+import com.connect.accountApp.domain.activitynotification.domain.model.Notification;
 import com.connect.accountApp.domain.user.domain.model.User;
 import lombok.AccessLevel;
 import lombok.Builder;
