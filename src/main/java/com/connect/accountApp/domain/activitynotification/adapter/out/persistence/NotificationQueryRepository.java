@@ -1,7 +1,7 @@
 package com.connect.accountApp.domain.activitynotification.adapter.out.persistence;
 
+import static com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.QActivityNotificationJpaEntity.activityNotificationJpaEntity;
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
-import static com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.QNotificationJpaEntity.notificationJpaEntity;
 import static com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.QUserNotificationJpaEntity.userNotificationJpaEntity;
 
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.FindExpenseNotificationCommand;
@@ -26,20 +26,20 @@ public class NotificationQueryRepository {
 
     return jpaQueryFactory
         .select(Projections.constructor(NotificationCommand.class,
-            userNotificationJpaEntity.notificationJpaEntity.activityNotificationId,
-            userNotificationJpaEntity.notificationJpaEntity.createdAt,
-            userNotificationJpaEntity.notificationJpaEntity.activityNotificationCategory,
-            userNotificationJpaEntity.notificationJpaEntity.message,
-            userNotificationJpaEntity.notificationJpaEntity.isRead,
-            userNotificationJpaEntity.notificationJpaEntity.title
+            userNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationId,
+            userNotificationJpaEntity.activityNotificationJpaEntity.createdAt,
+            userNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationCategory,
+            userNotificationJpaEntity.activityNotificationJpaEntity.message,
+            userNotificationJpaEntity.activityNotificationJpaEntity.isRead,
+            userNotificationJpaEntity.activityNotificationJpaEntity.title
         ))
         .from(userNotificationJpaEntity)
-        .join(userNotificationJpaEntity.notificationJpaEntity, notificationJpaEntity)
+        .join(userNotificationJpaEntity.activityNotificationJpaEntity, activityNotificationJpaEntity)
         .where(
             eqUserId(userId),
             notInNotiCategory(NotiCategory.ALARM_EXPENSE) // 지출이 아닌 것
         )
-        .orderBy(userNotificationJpaEntity.notificationJpaEntity.createdAt.desc())
+        .orderBy(userNotificationJpaEntity.activityNotificationJpaEntity.createdAt.desc())
         .fetch();
   }
 
@@ -49,19 +49,19 @@ public class NotificationQueryRepository {
     return jpaQueryFactory
         .select(Projections.constructor(FindExpenseNotificationCommand.class,
             expenseJpaEntity.expenseCategory.as("category"), // 카테고리
-            userNotificationJpaEntity.notificationJpaEntity.createdAt.as("createdAt"),
-            userNotificationJpaEntity.notificationJpaEntity.isRead,
+            userNotificationJpaEntity.activityNotificationJpaEntity.createdAt.as("createdAt"),
+            userNotificationJpaEntity.activityNotificationJpaEntity.isRead,
             expenseJpaEntity.expenseAmount,
-            userNotificationJpaEntity.notificationJpaEntity.title
+            userNotificationJpaEntity.activityNotificationJpaEntity.title
         ))
         .from(userNotificationJpaEntity)
-        .join(userNotificationJpaEntity.notificationJpaEntity, notificationJpaEntity)
+        .join(userNotificationJpaEntity.activityNotificationJpaEntity, activityNotificationJpaEntity)
 //        .join(notificationJpaEntity.expenseJpaEntity, expenseJpaEntity)
         .where(
             eqUserId(userId),
             eqNotiCategory(NotiCategory.ALARM_EXPENSE)
         )
-        .orderBy(userNotificationJpaEntity.notificationJpaEntity.createdAt.desc())
+        .orderBy(userNotificationJpaEntity.activityNotificationJpaEntity.createdAt.desc())
         .fetch();
   }
 
@@ -73,11 +73,11 @@ public class NotificationQueryRepository {
 
   private BooleanExpression notInNotiCategory(NotiCategory notiCategory) {
     log.info("[NotificationQueryRepository] notiCategory : {}", notiCategory);
-    return notiCategory != null ? userNotificationJpaEntity.notificationJpaEntity.activityNotificationCategory.notIn(notiCategory) : null;
+    return notiCategory != null ? userNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationCategory.notIn(notiCategory) : null;
   }
 
   private BooleanExpression eqNotiCategory(NotiCategory notiCategory) {
     log.info("[NotificationQueryRepository] notiCategory : {}", notiCategory);
-    return notiCategory != null ? userNotificationJpaEntity.notificationJpaEntity.activityNotificationCategory.eq(notiCategory) : null;
+    return notiCategory != null ? userNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationCategory.eq(notiCategory) : null;
   }
 }

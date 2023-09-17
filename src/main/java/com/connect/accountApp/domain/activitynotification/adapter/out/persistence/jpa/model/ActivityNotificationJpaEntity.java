@@ -24,7 +24,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notifications")
-public class NotificationJpaEntity {
+public class ActivityNotificationJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long activityNotificationId;
@@ -50,7 +50,7 @@ public class NotificationJpaEntity {
   private UserJpaEntity requesterJpaEntity;
 
   @Builder
-  public NotificationJpaEntity(Long activityNotificationId,
+  public ActivityNotificationJpaEntity(Long activityNotificationId,
       NotiCategory activityNotificationCategory, String title, String message, boolean isRead,
       LocalDateTime createdAt, LocalDateTime modifiedAt,
       BillJpaEntity billJpaEntity,

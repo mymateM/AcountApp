@@ -1,6 +1,6 @@
 package com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model;
 
-import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.NotificationJpaEntity;
+import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.ActivityNotificationJpaEntity;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,14 +29,14 @@ public class UserNotificationJpaEntity {
 
   @ManyToOne
   @JoinColumn(name = "noti_id")
-  private NotificationJpaEntity notificationJpaEntity;
+  private ActivityNotificationJpaEntity activityNotificationJpaEntity;
 
   @Builder
   public UserNotificationJpaEntity(Long userNotiId,
       UserJpaEntity userJpaEntity,
-      NotificationJpaEntity notificationJpaEntity) {
+      ActivityNotificationJpaEntity activityNotificationJpaEntity) {
     this.userNotiId = userNotiId;
     this.userJpaEntity = userJpaEntity;
-    this.notificationJpaEntity = notificationJpaEntity;
+    this.activityNotificationJpaEntity = activityNotificationJpaEntity;
   }
 }

@@ -1,7 +1,6 @@
 package com.connect.accountApp.domain.activitynotification.domain.model;
 
 import com.connect.accountApp.domain.bill.domain.model.Bill;
-import com.connect.accountApp.domain.expense.domain.model.Expense;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -11,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Notification {
+public class ActivityNotification {
 
   private Long activityNotificationId;
   private NotiCategory activityNotificationCategory;
@@ -25,7 +24,7 @@ public class Notification {
 
 
   @Builder
-  public Notification(Long activityNotificationId,
+  public ActivityNotification(Long activityNotificationId,
       NotiCategory activityNotificationCategory, String title, String message,
       Boolean isRead, LocalDateTime createdAt, LocalDateTime modifiedAt,
       Bill bill, User requester) {
