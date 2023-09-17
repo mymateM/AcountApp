@@ -23,8 +23,10 @@ public enum ErrorCode {
   HOUSEHOLD_NOT_FOUND(404, "H001", "존재하지 않는 가구입니다."),
 
   // Title
-  TITLE_NOT_FOUND(404, "T001", "존재하지 않는 타이틀입니다.");
+  TITLE_NOT_FOUND(404, "T001", "존재하지 않는 타이틀입니다."),
 
+  // ActivityNotification
+  ACTIVITY_NOTIFICATION_NOT_FOUND(404, "AN001", "존재하지 않는 활동 알림입니다.");
 
   private int status;
   private final String code;

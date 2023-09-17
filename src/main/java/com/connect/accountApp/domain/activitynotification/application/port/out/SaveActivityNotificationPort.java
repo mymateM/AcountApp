@@ -4,6 +4,6 @@ import com.connect.accountApp.domain.activitynotification.domain.model.ActivityN
 
 public interface SaveActivityNotificationPort {
 
-  void saveActivityNotification(ActivityNotification activityNotification);
+  Long saveActivityNotification(ActivityNotification activityNotification);
 
 }
