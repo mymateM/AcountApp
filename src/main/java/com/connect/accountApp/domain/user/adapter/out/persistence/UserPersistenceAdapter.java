@@ -63,6 +63,15 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
   }
 
   @Override
+  public List<User> findHouseholdMembers(Long householdId) {
+
+    List<UserJpaEntity> householdJpaMember = userQueryRepository.getHouseholdMember(householdId);
+
+    return householdJpaMember.stream()
+        .map(userMapper::mapToDomainEntity).toList();
+  }
+
+  @Override
   public void save(User user) {
     UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
     userJpaRepository.save(userJpaEntity);

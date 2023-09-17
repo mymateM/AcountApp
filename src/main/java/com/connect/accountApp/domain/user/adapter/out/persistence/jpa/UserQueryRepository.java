@@ -1,7 +1,9 @@
 package com.connect.accountApp.domain.user.adapter.out.persistence.jpa;
 
+import static com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.QHouseHoldJpaEntity.houseHoldJpaEntity;
 import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import com.connect.accountApp.domain.user.application.port.out.command.RoommateSendMoneyCommand;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -32,6 +34,20 @@ public class UserQueryRepository {
         .where(
             eqHouseholdId(householdId),
             notInUserId(userId)
+        )
+        .fetch();
+
+  }
+
+  public List<UserJpaEntity> getHouseholdMember(Long householdId) {
+
+    return jpaQueryFactory
+        .select(userJpaEntity)
+        .from(userJpaEntity)
+        .join(userJpaEntity.houseHoldJpaEntity, houseHoldJpaEntity)
+        .fetchJoin()
+        .where(
+            eqHouseholdId(householdId)
         )
         .fetch();
 

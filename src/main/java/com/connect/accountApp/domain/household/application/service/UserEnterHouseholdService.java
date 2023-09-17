@@ -39,7 +39,7 @@ public class UserEnterHouseholdService implements AcceptingInvitiation {
 
   private void reCalculateHouseholdMembersSettlementRatio(Household household) {
     
-    List<User> householdMembers = householdUserListPort.findHouseholdUserList(household);
+    List<User> householdMembers = householdUserListPort.findHouseholdMembers(household.getHouseholdId());
 
     int settlementRatio = 100 / (householdMembers.size());
     householdMembers.forEach(member -> updateUserSettlementRatio(member, settlementRatio));
