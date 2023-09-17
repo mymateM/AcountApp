@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_notification")
-public class UserNotificationJpaEntity {
+public class UserActivityNotificationJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long userNotiId;
@@ -32,7 +32,7 @@ public class UserNotificationJpaEntity {
   private ActivityNotificationJpaEntity activityNotificationJpaEntity;
 
   @Builder
-  public UserNotificationJpaEntity(Long userNotiId,
+  public UserActivityNotificationJpaEntity(Long userNotiId,
       UserJpaEntity userJpaEntity,
       ActivityNotificationJpaEntity activityNotificationJpaEntity) {
     this.userNotiId = userNotiId;

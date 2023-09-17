@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserNotification {
+public class UserActivityNotification {
 
   private Long userNotiId;
   private User user;
   private ActivityNotification activityNotification;
 
   @Builder
-  public UserNotification(Long userNotiId, User user,
+  public UserActivityNotification(Long userNotiId, User user,
       ActivityNotification activityNotification) {
     this.userNotiId = userNotiId;
     this.user = user;
