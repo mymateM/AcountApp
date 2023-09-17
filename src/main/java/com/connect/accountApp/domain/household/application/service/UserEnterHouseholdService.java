@@ -1,6 +1,6 @@
 package com.connect.accountApp.domain.household.application.service;
 
-import com.connect.accountApp.domain.household.application.port.in.UserEnterHouseholdUseCase;
+import com.connect.accountApp.domain.household.application.port.in.AcceptingInvitiation;
 import com.connect.accountApp.domain.household.application.port.out.GetHouseholdPort;
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserEnterHouseholdService implements UserEnterHouseholdUseCase {
+public class UserEnterHouseholdService implements AcceptingInvitiation {
 
   private final GetUserPort getUserPort;
   private final GetHouseholdPort getHouseholdPort;
