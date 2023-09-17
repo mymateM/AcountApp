@@ -16,6 +16,7 @@ public class ActivityNotificationMapper {
 
   public ActivityNotification mapToDomainEntity(ActivityNotificationJpaEntity activityNotificationJpaEntity) {
     return ActivityNotification.builder()
+        .activityNotificationId(activityNotificationJpaEntity.getActivityNotificationId())
         .activityNotificationCategory(activityNotificationJpaEntity.getActivityNotificationCategory())
         .title(activityNotificationJpaEntity.getTitle())
         .message(activityNotificationJpaEntity.getMessage())
@@ -29,6 +30,7 @@ public class ActivityNotificationMapper {
 
   public ActivityNotificationJpaEntity mapToJpaEntity(ActivityNotification activityNotification) {
     return ActivityNotificationJpaEntity.builder()
+        .activityNotificationId(activityNotification.getActivityNotificationId())
         .activityNotificationCategory(activityNotification.getActivityNotificationCategory())
         .title(activityNotification.getTitle())
         .message(activityNotification.getMessage())
