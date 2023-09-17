@@ -1,8 +1,8 @@
 package com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model;
 
-import com.connect.accountApp.domain.bill.adapter.out.persistence.jpa.model.BillJpaEntity;
-import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.ExpenseJpaEntity;
 import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
+import com.connect.accountApp.domain.bill.adapter.out.persistence.jpa.model.BillJpaEntity;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,6 +17,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Entity
@@ -25,37 +27,42 @@ import lombok.NoArgsConstructor;
 public class NotificationJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long notiId;
+  private Long activityNotificationId;
 
   @Enumerated(EnumType.STRING)
-  private NotiCategory notiCategory;
-  private String notiContent;
-  private boolean notiIsRead;
-  private LocalDateTime notiCreatedAt;
+  private NotiCategory activityNotificationCategory;
 
-  @OneToOne
-  @JoinColumn(name = "expense_id")
-  private ExpenseJpaEntity expenseJpaEntity;
+  private String title;
+  private String message;
+  private boolean isRead;
+
+  @CreationTimestamp
+  private LocalDateTime createdAt;
+  @UpdateTimestamp
+  private LocalDateTime modifiedAt;
 
   @OneToOne
   @JoinColumn(name = "bill_id")
   private BillJpaEntity billJpaEntity;
 
-  private String senderName;
+  @OneToOne
+  @JoinColumn(name = "user_id")
+  private UserJpaEntity requesterJpaEntity;
 
   @Builder
-  public NotificationJpaEntity(Long notiId,
-      NotiCategory notiCategory, String notiContent, boolean notiIsRead, LocalDateTime notiCreatedAt,
-      ExpenseJpaEntity expenseJpaEntity,
+  public NotificationJpaEntity(Long activityNotificationId,
+      NotiCategory activityNotificationCategory, String title, String message, boolean isRead,
+      LocalDateTime createdAt, LocalDateTime modifiedAt,
       BillJpaEntity billJpaEntity,
-      String senderName) {
-    this.notiId = notiId;
-    this.notiCategory = notiCategory;
-    this.notiContent = notiContent;
-    this.notiIsRead = notiIsRead;
-    this.notiCreatedAt = notiCreatedAt;
-    this.expenseJpaEntity = expenseJpaEntity;
+      UserJpaEntity requesterJpaEntity) {
+    this.activityNotificationId = activityNotificationId;
+    this.activityNotificationCategory = activityNotificationCategory;
+    this.title = title;
+    this.message = message;
+    this.isRead = isRead;
+    this.createdAt = createdAt;
+    this.modifiedAt = modifiedAt;
     this.billJpaEntity = billJpaEntity;
-    this.senderName = senderName;
+    this.requesterJpaEntity = requesterJpaEntity;
   }
 }
