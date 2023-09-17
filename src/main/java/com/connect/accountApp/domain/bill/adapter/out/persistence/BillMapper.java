@@ -4,7 +4,6 @@ import com.connect.accountApp.domain.bill.adapter.out.persistence.jpa.model.Bill
 import com.connect.accountApp.domain.bill.domain.model.Bill;
 import com.connect.accountApp.domain.household.adapter.out.persistence.HouseholdMapper;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.proxy.HibernateProxy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,11 +14,6 @@ public class BillMapper {
 
 
   public Bill mapToDomainEntity(BillJpaEntity billJpaEntity) {
-
-    if (billJpaEntity == null || billJpaEntity instanceof HibernateProxy) {
-      return null;
-    }
-
     return Bill.builder()
         .billId(billJpaEntity.getBillId())
         .billDate(billJpaEntity.getBillDate())
@@ -30,11 +24,6 @@ public class BillMapper {
   }
 
   public BillJpaEntity mapToJpaEntity(Bill bill) {
-
-    if (bill == null) {
-      return null;
-    }
-
     return BillJpaEntity.builder()
         .billId(bill.getBillId())
         .billDate(bill.getBillDate())

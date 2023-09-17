@@ -1,6 +1,6 @@
 package com.connect.accountApp.domain.household.application.service;
 
-import com.connect.accountApp.domain.household.application.port.in.AcceptingInvitiation;
+import com.connect.accountApp.domain.household.application.port.in.UserEnterHouseholdUseCase;
 import com.connect.accountApp.domain.household.application.port.out.GetHouseholdPort;
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserEnterHouseholdService implements AcceptingInvitiation {
+public class UserEnterHouseholdService implements UserEnterHouseholdUseCase {
 
   private final GetUserPort getUserPort;
   private final GetHouseholdPort getHouseholdPort;
@@ -39,7 +39,7 @@ public class UserEnterHouseholdService implements AcceptingInvitiation {
 
   private void reCalculateHouseholdMembersSettlementRatio(Household household) {
     
-    List<User> householdMembers = householdUserListPort.findHouseholdMembers(household.getHouseholdId());
+    List<User> householdMembers = householdUserListPort.findHouseholdUserList(household);
 
     int settlementRatio = 100 / (householdMembers.size());
     householdMembers.forEach(member -> updateUserSettlementRatio(member, settlementRatio));

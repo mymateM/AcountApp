@@ -8,6 +8,4 @@ public interface FindHouseholdUserListPort {
 
   List<User> findHouseholdUserList(Household household);
 
-  List<User> findHouseholdMembers(Long householdId);
-
 }
