@@ -6,4 +6,6 @@ public interface GetUserPort {
   User getUser(Long userId);
 
   User findUser(String email);
+
+  User findUserWithHousehold(String email);
 }
