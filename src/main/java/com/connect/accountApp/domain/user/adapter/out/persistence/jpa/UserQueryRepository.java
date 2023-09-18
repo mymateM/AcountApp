@@ -53,14 +53,35 @@ public class UserQueryRepository {
 
   }
 
+  public UserJpaEntity findUserJpaEntityWithHouseholdByEmail(String userEmail) {
+
+    return jpaQueryFactory
+        .select(userJpaEntity)
+        .from(userJpaEntity)
+        .join(userJpaEntity.houseHoldJpaEntity, houseHoldJpaEntity)
+        .fetchJoin()
+        .where(
+            eqUserEmail(userEmail)
+        )
+        .fetchOne();
+
+  }
+
+
+
   private BooleanExpression eqHouseholdId(Long householdId) {
-    log.info("getRoommateSendMoney => householdId : {}", householdId);
+    log.info("UserQueryRepository => householdId : {}", householdId);
     return householdId != null ? userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId) : null;
   }
 
   private BooleanExpression notInUserId(Long userId) {
-    log.info("getRoommateSendMoney => userId : {}", userId);
+    log.info("UserQueryRepository => userId : {}", userId);
     return userId != null ? userJpaEntity.userId.notIn(userId) : null;
+  }
+
+  private BooleanExpression eqUserEmail(String userEmail) {
+    log.info("UserQueryRepository => userEmail : {}", userEmail);
+    return userEmail != null ? userJpaEntity.userEmail.eq(userEmail) : null;
   }
 
 }

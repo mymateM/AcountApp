@@ -1,8 +1,10 @@
 package com.connect.accountApp.domain.expense.adapter.out.persistence;
 
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
+import static com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.QHouseHoldJpaEntity.houseHoldJpaEntity;
 import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 
+import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -62,18 +64,43 @@ public class ExpenseQueryRepository {
 
   public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 
+//    Integer householdTotalExpense = queryFactory
+//        .select(
+//            expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense")
+//        )
+//        .from(expenseJpaEntity)
+//        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
+//        .where(
+//            eqHouseholdId(householdId),
+//            betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
+//        )
+//        .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
+//        .fetchOne();
+    return 1;
+  }
+
+  public List<DailyTotalExpensesCommand> getDailyTotalExpenseOfHousehold(Long householdId, LocalDate date) {
+
+    LocalDateTime startOfMonth = date.atStartOfDay();
+    LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1L);
+
     return queryFactory
         .select(
-            expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense")
+            Projections.constructor(DailyTotalExpensesCommand.class,
+                expenseJpaEntity.expenseDate.dayOfMonth().as("expenseDayOfMonth"),
+                expenseJpaEntity.expenseAmount.sum().as("dailyTotalExpense")
+                )
+
         )
         .from(expenseJpaEntity)
         .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
+        .join(userJpaEntity.houseHoldJpaEntity, houseHoldJpaEntity)
         .where(
             eqHouseholdId(householdId),
-            betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
+            betweenDate(startOfMonth, endOfMonth)
         )
-        .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
-        .fetchOne();
+        .groupBy(expenseJpaEntity.expenseDate.dayOfMonth())
+        .fetch();
   }
 
   private BooleanExpression eqHouseholdId(Long householdId) {
