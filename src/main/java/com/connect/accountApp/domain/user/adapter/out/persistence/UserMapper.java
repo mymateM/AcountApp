@@ -1,9 +1,12 @@
 package com.connect.accountApp.domain.user.adapter.out.persistence;
 
 import com.connect.accountApp.domain.household.adapter.out.persistence.HouseholdMapper;
+import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
+import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import com.connect.accountApp.domain.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,6 +16,7 @@ public class UserMapper {
   private final HouseholdMapper householdMapper;
 
   public UserJpaEntity mapToJpaEntity(User user) {
+
     return UserJpaEntity.builder()
         .userId(user.getUserId())
         .userEmail(user.getUserEmail())
@@ -25,7 +29,7 @@ public class UserMapper {
         .userRatio(user.getUserRatio())
         .role(user.getRole())
         .deviceToken(user.getDeviceToken())
-//        .houseHoldJpaEntity(householdMapper.mapToJpaEntity(user.getHousehold())) //todo 0823
+        .houseHoldJpaEntity(getHouseHoldJpaEntityOfUser(user.getHousehold()))
         .build();
   }
 
@@ -42,7 +46,24 @@ public class UserMapper {
         .userRatio(userJpaEntity.getUserRatio())
         .role(userJpaEntity.getRole())
         .deviceToken(userJpaEntity.getDeviceToken())
-        //.household(householdMapper.mapToDomainEntity(userJpaEntity.getHouseHoldJpaEntity()))
+        .household(getHouseHoldOfUserJpaEntity(userJpaEntity.getHouseHoldJpaEntity()))
         .build();
+  }
+
+  private HouseHoldJpaEntity getHouseHoldJpaEntityOfUser(Household household) {
+    if (household == null) {
+      return null;
+    }else {
+      return householdMapper.mapToJpaEntity(household);
+    }
+  }
+
+  private Household getHouseHoldOfUserJpaEntity(HouseHoldJpaEntity houseHoldJpaEntity) {
+
+    if (houseHoldJpaEntity == null || houseHoldJpaEntity instanceof HibernateProxy) {
+      return null;
+    }else {
+      return householdMapper.mapToDomainEntity(houseHoldJpaEntity);
+    }
   }
 }

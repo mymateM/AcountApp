@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.household.adapter.out.persistence.Household
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.UserQueryRepository;
+import com.connect.accountApp.domain.user.application.port.out.ExistsUserPort;
 import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
 import com.connect.accountApp.domain.user.application.port.out.GetRoommateSendMoneyPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoneyPort,
-    FindHouseholdUserListPort, SaveUserPort {
+    FindHouseholdUserListPort, SaveUserPort, ExistsUserPort {
 
   private final UserJpaRepository userJpaRepository;
   private final UserQueryRepository userQueryRepository;
@@ -50,6 +51,13 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
   public Boolean userExist(String email) {
     return userJpaRepository.existsByUserEmail(email);
   }
+      
+  public User findUserWithHousehold(String userEmail) {
+
+    UserJpaEntity userJpaEntity = userQueryRepository.findUserJpaEntityWithHouseholdByEmail(userEmail);
+
+    return userMapper.mapToDomainEntity(userJpaEntity);
+  }
 
   @Override
   public List<RoommateSendMoneyCommand> getRoommateSendMoney(Long householdId, Long userId) {
@@ -67,8 +75,22 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
   }
 
   @Override
+  public List<User> findHouseholdMembers(Long householdId) {
+
+    List<UserJpaEntity> householdJpaMember = userQueryRepository.getHouseholdMember(householdId);
+
+    return householdJpaMember.stream()
+        .map(userMapper::mapToDomainEntity).toList();
+  }
+
+  @Override
   public void save(User user) {
     UserJpaEntity userJpaEntity = userMapper.mapToJpaEntity(user);
     userJpaRepository.save(userJpaEntity);
+  }
+
+  @Override
+  public Boolean existsUserEmail(String userEmail) {
+    return userJpaRepository.existsByUserEmail(userEmail);
   }
 }

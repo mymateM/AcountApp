@@ -46,4 +46,59 @@ public class User {
     this.household = household;
     this.deviceToken = deviceToken;
   }
+
+  public void changeDeviceToken(String deviceToken) {
+    setDeviceToken(deviceToken);
+  }
+
+  public void UpdateUserAtOnBoarding(String userNickname, String bankName, String account, String userProfileImg) {
+    setUserNickname(userNickname);
+    setUserAccountBank(Bank.valueOf(bankName));
+    setUserAccount(account);
+    setUserImgUrl(userProfileImg);
+  }
+
+  public void registerUserToHousehold(Household household) {
+    setHousehold(household);
+  }
+
+  public void updateUserSettlementRatio(int userRatio) {
+    setUserRatio(userRatio);
+  }
+
+  private void setUserNickname(String userNickname) {
+    this.userNickname = userNickname;
+  }
+
+  private void setUserImgUrl(String userImgUrl) {
+    this.userImgUrl = userImgUrl;
+  }
+
+  private void setUserAccount(String userAccount) {
+    this.userAccount = userAccount;
+  }
+
+  private void setUserAccountBank(Bank userAccountBank) {
+    this.userAccountBank = userAccountBank;
+  }
+
+  private void setUserAccept(boolean userAccept) {
+    this.userAccept = userAccept;
+  }
+
+  private void setUserRatio(int userRatio) {
+    this.userRatio = userRatio;
+  }
+
+  private void setHousehold(Household household) {
+    this.household = household;
+  }
+
+  private void setRole(Role role) {
+    this.role = role;
+  }
+
+  private void setDeviceToken(String deviceToken) {
+    this.deviceToken = deviceToken;
+  }
 }

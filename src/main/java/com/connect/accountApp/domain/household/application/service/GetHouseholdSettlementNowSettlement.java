@@ -115,7 +115,7 @@ public class GetHouseholdSettlementNowSettlement implements GetHouseholdSettleme
   private MembersNowCommand createMembersNowCommand(Long userId, Household household,
       List<TotalExpenseWithTitleCommand> totalExpenseCommands) {
     List<MemberNowCommand> commands = totalExpenseCommands.stream().map(
-        command -> new MemberNowCommand(command, household.getHouseholdBudget())).toList();
+        command -> new MemberNowCommand(command, household.getHouseholdBudget().intValue())).toList();
 
     MembersNowCommand membersNowCommand = new MembersNowCommand(userId, commands);
     return membersNowCommand;

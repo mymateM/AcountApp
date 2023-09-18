@@ -1,7 +1,9 @@
 package com.connect.accountApp.domain.expense.adapter.out.persistence;
 
+import com.connect.accountApp.domain.expense.application.port.out.FindDailyTotalExpensesPort;
 import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTotalExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.GetTotalExpensePort;
+import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
 import com.connect.accountApp.domain.user.application.port.out.GetUserSendMoneyPort;
 import java.time.LocalDate;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSendMoneyPort,
-    GetHouseholdTotalExpensePort {
+    GetHouseholdTotalExpensePort, FindDailyTotalExpensesPort {
 
   private final ExpenseQueryRepository expenseQueryRepository;
 
@@ -34,5 +36,11 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   @Override
   public int getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
     return expenseQueryRepository.getHouseholdTotalExpense(householdId, startTime, endTime);
+  }
+
+  @Override
+  public List<DailyTotalExpensesCommand> FindDailyTotalExpenses(Long householdId, LocalDate date) {
+
+    return expenseQueryRepository.getDailyTotalExpenseOfHousehold(householdId, date);
   }
 }
