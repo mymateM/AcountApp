@@ -68,18 +68,18 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
 
 
   public String getGoogleSocialEmail(String socialAuthAccessToken) {
-    String kakaoAuthenticationRequest = "https://kapi.kakao.com/v2/user/me";
+    String googleAuthenticationRequest =
+        "https://oauth2.googleapis.com/tokeninfo?id_token=" + socialAuthAccessToken;
 
-    String id = "";
+    String email = "";
     String result = "";
     try {
-      URL kakaoAuthenticationUrl = new URL(kakaoAuthenticationRequest);
+      URL kakaoAuthenticationUrl = new URL(googleAuthenticationRequest);
       URLConnection urlConnection = kakaoAuthenticationUrl.openConnection();
       HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
 
-      httpURLConnection.setRequestMethod("POST");
+      httpURLConnection.setRequestMethod("GET");
       httpURLConnection.setDoOutput(true);
-      httpURLConnection.setRequestProperty("Authorization", "Bearer " + socialAuthAccessToken);
 
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
       String line = "";
@@ -91,8 +91,7 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       JsonParser parser = new JsonParser();
       JsonElement element = parser.parse(result);
 
-      id += element.getAsJsonObject().get("id");
-      System.out.println("id : " + id);
+      email += element.getAsJsonObject().get("email");
 
     } catch (MalformedURLException e) {
       e.printStackTrace();
@@ -100,7 +99,7 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       e.printStackTrace();
     }
 
-    return id + "@kakao";
+    return email;
   }
 
 }
