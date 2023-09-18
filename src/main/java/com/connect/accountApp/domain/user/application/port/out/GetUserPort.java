@@ -7,5 +7,8 @@ public interface GetUserPort {
 
   User findUser(String email);
 
+  Boolean userExist(String email);
+
   User findUserWithHousehold(String email);
+
 }
