@@ -9,6 +9,7 @@ import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.settlement.application.port.out.SaveSettlementPort;
 import com.connect.accountApp.settlement.domain.model.Settlement;
+import com.connect.accountApp.settlement.exception.ExpenseDelegateNotFound;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,22 @@ public class RegisterExpenseService implements RegisterExpenseUseCase {
     User expenseDelegate = getUserPort.findUser(expenseDelegateUserEmail);
     List<User> settlementSubjects = request.getSettlementSubjectIds().stream().map(getUserPort::getUser).toList();
 
+    validateDelegateExistInSubjects(expenseDelegate, settlementSubjects);
+
     Expense expense = createAndSaveExpense(request);
     createAndSaveSettlementsOfSubjects(settlementSubjects, expense, expenseDelegate);
 
     return expense.getExpenseId();
+  }
+
+
+  private void validateDelegateExistInSubjects(User expenseDelegate, List<User> settlementSubjects) {
+    boolean existExistSubjects = settlementSubjects.stream()
+        .anyMatch(user -> Objects.equals(user.getUserId(), expenseDelegate.getUserId()));
+
+    if (!existExistSubjects)
+      throw new ExpenseDelegateNotFound("실제 지출 등록한 사람의 id : " + expenseDelegate.getUserId() +
+          "가 settlementSubjects : " + settlementSubjects + "에 존재하지 않습니다.");
   }
 
   private void createAndSaveSettlementsOfSubjects(List<User> settlementSubjects, Expense expense, User expenseDelegate) {
