@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class SuccessResponse<T> {
 
-  public static final String SUCCESS_MESSAGE = "Success";
+  public static final String SUCCESS_MESSAGE = "Ok";
   public static final String CREATED_MESSAGE = "Created";
 
   private String message;
@@ -26,6 +26,6 @@ public class SuccessResponse<T> {
   }
 
   public static <T> SuccessResponse create201CreatedResponse(T data) {
-    return new SuccessResponse(CREATED_MESSAGE, 200, data);
+    return new SuccessResponse(CREATED_MESSAGE, 201, data);
   }
 }

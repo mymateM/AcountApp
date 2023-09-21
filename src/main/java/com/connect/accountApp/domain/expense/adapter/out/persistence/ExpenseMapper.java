@@ -10,16 +10,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ExpenseMapper {
 
-  private final UserMapper userMapper;
-
   public Expense mapToDomainEntity(ExpenseJpaEntity expenseJpaEntity) {
     return Expense.builder()
         .expenseId(expenseJpaEntity.getExpenseId())
         .expenseAmount(expenseJpaEntity.getExpenseAmount())
         .expenseDate(expenseJpaEntity.getExpenseDate())
-        .expenseContent(expenseJpaEntity.getExpenseContent())
+        .expenseStore(expenseJpaEntity.getExpenseStore())
         .expenseMemo(expenseJpaEntity.getExpenseMemo())
-        .user(userMapper.mapToDomainEntity(expenseJpaEntity.getUserJpaEntity()))
         .expenseCategory(expenseJpaEntity.getExpenseCategory())
         .build();
   }
@@ -29,9 +26,8 @@ public class ExpenseMapper {
         .expenseId(expense.getExpenseId())
         .expenseAmount(expense.getExpenseAmount())
         .expenseDate(expense.getExpenseDate())
-        .expenseContent(expense.getExpenseContent())
+        .expenseStore(expense.getExpenseStore())
         .expenseMemo(expense.getExpenseMemo())
-        .userJpaEntity(userMapper.mapToJpaEntity(expense.getUser()))
         .expenseCategory(expense.getExpenseCategory())
         .build();
 
