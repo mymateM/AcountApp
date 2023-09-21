@@ -29,7 +29,7 @@ public class ExpenseJpaEntity {
   private Long expenseId;
   private BigDecimal expenseAmount;
   private LocalDateTime expenseDate;
-  private String expenseContent;
+  private String expenseStore;
   private String expenseMemo;
 
   @ManyToOne
@@ -41,13 +41,13 @@ public class ExpenseJpaEntity {
 
   @Builder
   public ExpenseJpaEntity(Long expenseId, BigDecimal expenseAmount, LocalDateTime expenseDate,
-      String expenseContent, String expenseMemo,
+      String expenseStore, String expenseMemo,
       UserJpaEntity userJpaEntity,
       ExpenseCategory expenseCategory) {
     this.expenseId = expenseId;
     this.expenseAmount = expenseAmount;
     this.expenseDate = expenseDate;
-    this.expenseContent = expenseContent;
+    this.expenseStore = expenseStore;
     this.expenseMemo = expenseMemo;
     this.userJpaEntity = userJpaEntity;
     this.expenseCategory = expenseCategory;

@@ -15,19 +15,19 @@ public class Expense {
   private Long expenseId;
   private BigDecimal expenseAmount;
   private LocalDateTime expenseDate;
-  private String expenseContent;
+  private String expenseStore;
   private String expenseMemo;
   private User user;
   private ExpenseCategory expenseCategory;
 
   @Builder
   public Expense(Long expenseId, BigDecimal expenseAmount, LocalDateTime expenseDate,
-      String expenseContent, String expenseMemo,
+      String expenseStore, String expenseMemo,
       User user, ExpenseCategory expenseCategory) {
     this.expenseId = expenseId;
     this.expenseAmount = expenseAmount;
     this.expenseDate = expenseDate;
-    this.expenseContent = expenseContent;
+    this.expenseStore = expenseStore;
     this.expenseMemo = expenseMemo;
     this.user = user;
     this.expenseCategory = expenseCategory;
