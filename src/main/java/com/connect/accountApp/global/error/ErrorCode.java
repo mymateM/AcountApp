@@ -26,7 +26,10 @@ public enum ErrorCode {
   TITLE_NOT_FOUND(404, "T001", "존재하지 않는 타이틀입니다."),
 
   // ActivityNotification
-  ACTIVITY_NOTIFICATION_NOT_FOUND(404, "AN001", "존재하지 않는 활동 알림입니다.");
+  ACTIVITY_NOTIFICATION_NOT_FOUND(404, "AN001", "존재하지 않는 활동 알림입니다."),
+
+  // Expense
+  EXPENSE_NOT_FOUND(404, "E001", "존재하지 않는 지출입니다.");
 
   private int status;
   private final String code;
