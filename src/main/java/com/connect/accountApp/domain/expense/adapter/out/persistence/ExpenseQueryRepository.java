@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.expense.adapter.out.persistence;
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
 import static com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.QHouseHoldJpaEntity.houseHoldJpaEntity;
 import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
+import static com.connect.accountApp.settlement.adapter.out.persistence.jpa.model.QSettlementJpaEntity.settlementJpaEntity;
 
 import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
@@ -34,7 +35,7 @@ public class ExpenseQueryRepository {
             userJpaEntity.userRatio
         ))
         .from(expenseJpaEntity)
-        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
+//        .join(expenseJpaEntity., userJpaEntity)
         .where(
             eqHouseholdId(householdId),
             betweenDate(startTime, endTime)
@@ -53,7 +54,7 @@ public class ExpenseQueryRepository {
             userJpaEntity.userRatio
         ))
         .from(expenseJpaEntity)
-        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
+//        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
         .where(
             userJpaEntity.userId.eq(userId),
             betweenDate(date.atStartOfDay())
@@ -81,23 +82,26 @@ public class ExpenseQueryRepository {
 
   public List<DailyTotalExpensesCommand> getDailyTotalExpenseOfHousehold(Long householdId, LocalDate date) {
 
-    LocalDateTime startOfMonth = date.atStartOfDay();
-    LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1L);
+    System.out.println("date = " + date.getMonth());
+    System.out.println("date = " + date.getYear());
 
     return queryFactory
         .select(
             Projections.constructor(DailyTotalExpensesCommand.class,
                 expenseJpaEntity.expenseDate.dayOfMonth().as("expenseDayOfMonth"),
                 expenseJpaEntity.expenseAmount.sum().as("dailyTotalExpense")
-                )
+            )
 
         )
-        .from(expenseJpaEntity)
-        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
+        .from(settlementJpaEntity)
+        .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
+        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
         .join(userJpaEntity.houseHoldJpaEntity, houseHoldJpaEntity)
         .where(
             eqHouseholdId(householdId),
-            betweenDate(startOfMonth, endOfMonth)
+            settlementJpaEntity.isSettlementDelegate.eq(true),
+            expenseJpaEntity.expenseDate.year().eq(date.getYear()),
+            expenseJpaEntity.expenseDate.month().eq(date.getMonthValue())
         )
         .groupBy(expenseJpaEntity.expenseDate.dayOfMonth())
         .fetch();
@@ -111,14 +115,13 @@ public class ExpenseQueryRepository {
   private BooleanExpression betweenDate(LocalDateTime date) {
     log.info("startDate : {}, endDate : {}",date.plusDays(1).minusSeconds(1), date);
     return date != null ? expenseJpaEntity.expenseDate
-        .between(date.minusMonths(1).minusSeconds(1), date) : null;
+        .between(date.toLocalDate(), date.toLocalDate()) : null;
   }
 
   private BooleanExpression betweenDate(LocalDateTime startDate, LocalDateTime endDate) {
     log.info("startDate : {}, endDate : {}",startDate, endDate);
 
-    return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate
-        .between(startDate, endDate) : null;
+    return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate.between(startDate.toLocalDate(), endDate.toLocalDate()) : null;
   }
 
 }
