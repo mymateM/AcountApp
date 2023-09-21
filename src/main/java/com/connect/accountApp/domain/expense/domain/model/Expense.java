@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.expense.domain.model;
 
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,14 +15,14 @@ public class Expense {
 
   private Long expenseId;
   private BigDecimal expenseAmount;
-  private LocalDateTime expenseDate;
+  private LocalDate expenseDate;
   private String expenseStore;
   private String expenseMemo;
   private User user;
   private ExpenseCategory expenseCategory;
 
   @Builder
-  public Expense(Long expenseId, BigDecimal expenseAmount, LocalDateTime expenseDate,
+  public Expense(Long expenseId, BigDecimal expenseAmount, LocalDate expenseDate,
       String expenseStore, String expenseMemo,
       User user, ExpenseCategory expenseCategory) {
     this.expenseId = expenseId;

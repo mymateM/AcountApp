@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class ExpenseJpaEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long expenseId;
   private BigDecimal expenseAmount;
-  private LocalDateTime expenseDate;
+  private LocalDate expenseDate;
   private String expenseStore;
   private String expenseMemo;
 
@@ -40,7 +41,7 @@ public class ExpenseJpaEntity {
   private ExpenseCategory expenseCategory;
 
   @Builder
-  public ExpenseJpaEntity(Long expenseId, BigDecimal expenseAmount, LocalDateTime expenseDate,
+  public ExpenseJpaEntity(Long expenseId, BigDecimal expenseAmount, LocalDate expenseDate,
       String expenseStore, String expenseMemo,
       UserJpaEntity userJpaEntity,
       ExpenseCategory expenseCategory) {
