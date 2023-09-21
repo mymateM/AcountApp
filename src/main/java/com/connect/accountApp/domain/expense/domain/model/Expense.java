@@ -18,7 +18,6 @@ public class Expense {
   private LocalDate expenseDate;
   private String expenseStore;
   private String expenseMemo;
-  private User user;
   private ExpenseCategory expenseCategory;
 
   @Builder
@@ -30,7 +29,6 @@ public class Expense {
     this.expenseDate = expenseDate;
     this.expenseStore = expenseStore;
     this.expenseMemo = expenseMemo;
-    this.user = user;
     this.expenseCategory = expenseCategory;
   }
 }

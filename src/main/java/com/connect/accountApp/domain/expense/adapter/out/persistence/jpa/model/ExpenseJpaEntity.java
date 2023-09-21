@@ -33,10 +33,6 @@ public class ExpenseJpaEntity {
   private String expenseStore;
   private String expenseMemo;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private UserJpaEntity userJpaEntity;
-
   @Enumerated(EnumType.STRING)
   private ExpenseCategory expenseCategory;
 
@@ -50,7 +46,6 @@ public class ExpenseJpaEntity {
     this.expenseDate = expenseDate;
     this.expenseStore = expenseStore;
     this.expenseMemo = expenseMemo;
-    this.userJpaEntity = userJpaEntity;
     this.expenseCategory = expenseCategory;
   }
 }
