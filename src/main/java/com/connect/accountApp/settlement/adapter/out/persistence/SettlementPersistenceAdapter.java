@@ -4,6 +4,7 @@ import com.connect.accountApp.settlement.adapter.out.persistence.jpa.SettlementJ
 import com.connect.accountApp.settlement.adapter.out.persistence.jpa.model.SettlementJpaEntity;
 import com.connect.accountApp.settlement.application.port.out.FindSettlementPort;
 import com.connect.accountApp.settlement.application.port.out.SaveSettlementPort;
+import com.connect.accountApp.settlement.application.port.out.command.ExpenseOfHouseholdCommand;
 import com.connect.accountApp.settlement.domain.model.Settlement;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,5 +31,12 @@ public class SettlementPersistenceAdapter implements SaveSettlementPort, FindSet
       LocalDate endDate) {
 
     return settlementQueryRepository.findUserRealExpense(userEmail, startDate, endDate);
+  }
+
+  @Override
+  public List<ExpenseOfHouseholdCommand> findHouseholdExpenses(Long householdId,
+      LocalDate startDate, LocalDate endDate) {
+
+    return settlementQueryRepository.findExpenseOfHousehold(householdId, startDate, endDate);
   }
 }
