@@ -141,6 +141,7 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       JsonElement element = parser.parse(result);
 
       email += element.getAsJsonObject().get("response").getAsJsonObject().get("email");
+      email = email.substring(1, email.length() - 1);
       System.out.println("email : " + email);
 
     } catch (MalformedURLException e) {
