@@ -114,18 +114,6 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       URLConnection urlConnection = naverAuthenticationUrl.openConnection();
       HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
 
-      /*
-       {
-    "resultcode": "00",
-    "message": "success",
-    "response": {
-        "id": "eNlpQaCgdcGIfnos-htAblT2EZ949-Qf6Ta6xWWNi9E",
-        "nickname": "Europa",
-        "email": "esfjge@naver.com",
-        "name": "정가은"
-    }
-}
-       */
       httpURLConnection.setRequestMethod("GET");
       httpURLConnection.setDoOutput(true);
       httpURLConnection.setRequestProperty("Authorization", "Bearer " + socialAuthAccessToken);
