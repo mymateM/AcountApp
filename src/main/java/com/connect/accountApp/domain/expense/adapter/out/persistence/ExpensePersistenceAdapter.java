@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.expense.adapter.out.persistence;
 
 import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.ExpenseJpaRepository;
 import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.ExpenseJpaEntity;
+import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
 import com.connect.accountApp.domain.expense.application.port.out.FindDailyTotalExpensesPort;
 import com.connect.accountApp.domain.expense.application.port.out.FindExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTotalExpensePort;
@@ -64,6 +65,11 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
     ExpenseJpaEntity expenseJpaEntity = expenseJpaRepository.findById(expenseId)
         .orElseThrow(() -> new ExpenseNotFoundException("존재하지 않는 expenseId " + expenseId + "입니다."));
     return expenseMapper.mapToDomainEntity(expenseJpaEntity);
+  }
+
+  @Override
+  public List<DailyExpenseCommand> findDailyExpenses(Long householdId, LocalDate date) {
+    return expenseQueryRepository.findDailyExpenses(householdId, date);
   }
 
 }

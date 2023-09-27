@@ -5,8 +5,10 @@ import static com.connect.accountApp.domain.household.adapter.out.persistence.jp
 import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 import static com.connect.accountApp.settlement.adapter.out.persistence.jpa.model.QSettlementJpaEntity.settlementJpaEntity;
 
+import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -60,6 +62,36 @@ public class ExpenseQueryRepository {
             betweenDate(date.atStartOfDay())
         )
         .fetchOne();
+  }
+
+  public List<DailyExpenseCommand> findDailyExpenses(Long householdId, LocalDate date) {
+
+    return queryFactory
+        .from(settlementJpaEntity)
+        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
+        .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
+        .where(
+            userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+            settlementJpaEntity.expenseJpaEntity.expenseDate.eq(date)
+        )
+        .transform(GroupBy.groupBy(settlementJpaEntity.expenseJpaEntity.expenseId).list(
+                Projections.constructor(DailyExpenseCommand.class,
+                    settlementJpaEntity.expenseJpaEntity.expenseId,
+                    settlementJpaEntity.expenseJpaEntity.expenseAmount,
+                    settlementJpaEntity.expenseJpaEntity.expenseStore,
+                    settlementJpaEntity.expenseJpaEntity.expenseCategory,
+                    GroupBy.list(
+                        Projections.constructor(
+                            DailyExpenseCommand.SettlementSubjectCommand.class,
+                            userJpaEntity.userId,
+                            userJpaEntity.userNickname,
+                            settlementJpaEntity.isSettlementDelegate.as("isExpenseConsumer"),
+                            userJpaEntity.userImgUrl.as("userProfileImage")
+                        ).as("settlementSubjects")
+                    )
+                )
+            )
+        );
   }
 
 
