@@ -107,13 +107,25 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
   public String getNaverSocialEmail(String socialAuthAccessToken) {
     String naverAuthenticationRequest = "https://openapi.naver.com/v1/nid/me";
 
-    String id = "";
+    String email = "";
     String result = "";
     try {
       URL naverAuthenticationUrl = new URL(naverAuthenticationRequest);
       URLConnection urlConnection = naverAuthenticationUrl.openConnection();
       HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
 
+      /*
+       {
+    "resultcode": "00",
+    "message": "success",
+    "response": {
+        "id": "eNlpQaCgdcGIfnos-htAblT2EZ949-Qf6Ta6xWWNi9E",
+        "nickname": "Europa",
+        "email": "esfjge@naver.com",
+        "name": "정가은"
+    }
+}
+       */
       httpURLConnection.setRequestMethod("GET");
       httpURLConnection.setDoOutput(true);
       httpURLConnection.setRequestProperty("Authorization", "Bearer " + socialAuthAccessToken);
@@ -128,8 +140,8 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       JsonParser parser = new JsonParser();
       JsonElement element = parser.parse(result);
 
-      id += element.getAsJsonObject().get("id");
-      System.out.println("id : " + id);
+      email += element.getAsJsonObject().get("response").getAsJsonObject().get("email");
+      System.out.println("email : " + email);
 
     } catch (MalformedURLException e) {
       e.printStackTrace();
@@ -137,7 +149,7 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       e.printStackTrace();
     }
 
-    return id + "@kakao";
+    return email;
   }
 
 }
