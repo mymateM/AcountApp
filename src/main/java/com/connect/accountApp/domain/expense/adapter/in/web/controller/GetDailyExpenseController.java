@@ -4,6 +4,8 @@ import com.connect.accountApp.domain.expense.adapter.in.web.controller.response.
 import com.connect.accountApp.domain.expense.application.port.in.GetDailyExpenseUseCase;
 import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +26,8 @@ public class GetDailyExpenseController {
 
   @GetMapping("/daily-total/day/{year}/{month}/{dayOfMonth}")
   public ResponseEntity getDailyExpenseOfDay(@AuthenticationPrincipal UserDetails userDetails,
-      @PathVariable("year") int year,
-      @PathVariable("month") int month,
+      @Min(0) @PathVariable("year") int year,
+      @Size(min = 1, max = 12) @PathVariable("month") int month,
       @PathVariable("dayOfMonth") int dayOfMonth) {
 
     String userEmail = userDetails.getUsername();
