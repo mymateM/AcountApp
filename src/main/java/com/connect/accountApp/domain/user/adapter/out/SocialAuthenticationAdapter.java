@@ -25,6 +25,8 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       return getKakaoSocialEmail(socialAuthAccessToken);
     else if (socialAuthType.equals("GOOGLE")) {
       return getGoogleSocialEmail(socialAuthAccessToken);
+    } else if (socialAuthType.equals("NAVER")) {
+      return getNaverSocialEmail(socialAuthAccessToken);
     }
 
     return null;
@@ -92,6 +94,43 @@ public class SocialAuthenticationAdapter implements GetUserSocialEmailPort {
       JsonElement element = parser.parse(result);
 
       email += element.getAsJsonObject().get("email");
+
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return email;
+  }
+
+  public String getNaverSocialEmail(String socialAuthAccessToken) {
+    String naverAuthenticationRequest = "https://openapi.naver.com/v1/nid/me";
+
+    String email = "";
+    String result = "";
+    try {
+      URL naverAuthenticationUrl = new URL(naverAuthenticationRequest);
+      URLConnection urlConnection = naverAuthenticationUrl.openConnection();
+      HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
+
+      httpURLConnection.setRequestMethod("GET");
+      httpURLConnection.setDoOutput(true);
+      httpURLConnection.setRequestProperty("Authorization", "Bearer " + socialAuthAccessToken);
+
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+      String line = "";
+
+      while ((line = bufferedReader.readLine()) != null) {
+        result += line;
+      }
+
+      JsonParser parser = new JsonParser();
+      JsonElement element = parser.parse(result);
+
+      email += element.getAsJsonObject().get("response").getAsJsonObject().get("email");
+      email = email.substring(1, email.length() - 1);
+      System.out.println("email : " + email);
 
     } catch (MalformedURLException e) {
       e.printStackTrace();
