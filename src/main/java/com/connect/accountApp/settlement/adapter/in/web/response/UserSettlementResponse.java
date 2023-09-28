@@ -36,19 +36,6 @@ public class UserSettlementResponse {
     this.user = new User(command.getUserCommand());
   }
 
-  class SettlementDate {
-
-    @JsonProperty("date_start")
-    private LocalDate dateStart;
-    @JsonProperty("date_end")
-    private LocalDate dateEnd;
-
-    public SettlementDate(LocalDate dateStart, LocalDate dateEnd) {
-      this.dateStart = dateStart;
-      this.dateEnd = dateEnd;
-    }
-  }
-
   class User {
 
     @JsonProperty("id")

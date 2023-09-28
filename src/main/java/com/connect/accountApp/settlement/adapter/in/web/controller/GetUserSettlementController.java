@@ -24,13 +24,8 @@ public class GetUserSettlementController {
   @GetMapping("/user")
   public ResponseEntity getUserSettlement(@AuthenticationPrincipal UserDetails userDetails,
       @RequestParam("start_date") LocalDate startDate, @RequestParam("end_date") LocalDate endDate) {
-    System.out.println("------------------");
 
-    System.out.println("userDetails = " + userDetails);
-    System.out.println("startDate = " + startDate);
-    System.out.println("endDate = " + endDate);
     String userEmail = userDetails.getUsername();
-    System.out.println("userEmail = " + userEmail);
     UserSettlementCommand command = getUserSettlementUseCase.getUserSettlement(userEmail, startDate, endDate);
     UserSettlementResponse response = new UserSettlementResponse(command, startDate, endDate);
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
