@@ -1,7 +1,7 @@
 package com.connect.accountApp.settlement.adapter.in.web.response;
 
+import com.connect.accountApp.settlement.application.port.in.command.UserSettlementCommand;
 import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand;
-import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand.UserSettlementCommand;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -34,7 +34,7 @@ public class UserSettlementResponse {
   public UserSettlementResponse(UserSettlementWithHouseholdTotalExpenseCommand command, LocalDate startDate, LocalDate endDate) {
     this.householdExpenseTotal = command.getHouseholdExpenseTotal().setScale(0, RoundingMode.FLOOR);
     this.settlementDate = new SettlementDate(startDate, endDate);
-    this.user = new User(command.getUserCommand());
+    this.user = new User(command.getUserSettlementCommand());
   }
 
   class User {
