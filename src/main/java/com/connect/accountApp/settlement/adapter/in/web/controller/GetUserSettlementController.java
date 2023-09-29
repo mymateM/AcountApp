@@ -3,7 +3,7 @@ package com.connect.accountApp.settlement.adapter.in.web.controller;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import com.connect.accountApp.settlement.adapter.in.web.response.UserSettlementResponse;
 import com.connect.accountApp.settlement.application.port.in.GetUserSettlementUseCase;
-import com.connect.accountApp.settlement.application.port.in.command.UserSettlementCommand;
+import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class GetUserSettlementController {
       @RequestParam("start_date") LocalDate startDate, @RequestParam("end_date") LocalDate endDate) {
 
     String userEmail = userDetails.getUsername();
-    UserSettlementCommand command = getUserSettlementUseCase.getUserSettlement(userEmail, startDate, endDate);
+    UserSettlementWithHouseholdTotalExpenseCommand command = getUserSettlementUseCase.getUserSettlement(userEmail, startDate, endDate);
     UserSettlementResponse response = new UserSettlementResponse(command, startDate, endDate);
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
   }

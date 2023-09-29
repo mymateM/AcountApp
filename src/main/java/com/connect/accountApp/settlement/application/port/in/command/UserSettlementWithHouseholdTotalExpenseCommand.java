@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class UserSettlementCommand {
+public class UserSettlementWithHouseholdTotalExpenseCommand {
 
   private BigDecimal householdExpenseTotal;
   private UserCommand userCommand;
 
-  public UserSettlementCommand(BigDecimal householdExpenseTotal, BigDecimal realExpense, BigDecimal ratioExpense,
+  public UserSettlementWithHouseholdTotalExpenseCommand(BigDecimal householdExpenseTotal, BigDecimal realExpense, BigDecimal ratioExpense,
       User user) {
     this.householdExpenseTotal = householdExpenseTotal;
     this.userCommand = new UserCommand(user.getUserId(), user.getUserNickname(), realExpense, ratioExpense);
@@ -38,6 +38,14 @@ public class UserSettlementCommand {
       this.ratioExpense = ratioExpense;
       this.isSettlementSender = realExpense.compareTo(ratioExpense) < 0; // realExpense < ratioExpense : 보내는 사람
       this.settlementAmount = realExpense.subtract(ratioExpense).abs();
+    }
+
+    public UserCommand(Long id, String name, Boolean isSettlementSender,
+        BigDecimal settlementAmount) {
+      this.id = id;
+      this.name = name;
+      this.isSettlementSender = isSettlementSender;
+      this.settlementAmount = settlementAmount;
     }
   }
 
