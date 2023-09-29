@@ -7,9 +7,9 @@ import com.connect.accountApp.domain.expense.application.port.out.SaveExpensePor
 import com.connect.accountApp.domain.expense.domain.model.Expense;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
-import com.connect.accountApp.settlement.application.port.out.SaveSettlementPort;
-import com.connect.accountApp.settlement.domain.model.Settlement;
-import com.connect.accountApp.settlement.exception.ExpenseDelegateNotFound;
+import com.connect.accountApp.domain.settlement.application.port.out.SaveSettlementPort;
+import com.connect.accountApp.domain.settlement.domain.model.Settlement;
+import com.connect.accountApp.domain.settlement.exception.ExpenseDelegateNotFound;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

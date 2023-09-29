@@ -51,7 +51,7 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
         .householdSettlementDate(LocalDateTime.now().toLocalDate())
         .householdBudget(amount)
         .householdBudgetAllowanceRatio(settlementAllowanceRatio)
-        .householdAccept(false)
+        .settlementWillBeUpdated(false)
         .inviteCode(inviteCode)
         .build();
   }
