@@ -51,4 +51,19 @@ public class Household {
   private void setHouseholdSettlementDayOfMonth(Integer householdSettlementDayOfMonth) {
     this.householdSettlementDayOfMonth = householdSettlementDayOfMonth;
   }
+
+  public void updateHouseholdBudget(BigDecimal householdBudget) {
+    setHouseholdBudget(householdBudget);
+  }
+
+  private void setHouseholdBudget(BigDecimal householdBudget) {
+    this.householdBudget = householdBudget;
+  }
+
+  public void setSettlementWillBeUpdatedToTrue() {
+    setSettlementWillBeUpdated(true);
+  }
+  public void setSettlementWillBeUpdated(boolean settlementWillBeUpdated) {
+    this.settlementWillBeUpdated = settlementWillBeUpdated;
+  }
 }
