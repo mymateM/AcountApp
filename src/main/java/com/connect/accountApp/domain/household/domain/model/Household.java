@@ -17,23 +17,24 @@ public class Household {
   private LocalDate householdSettlementDate;
   private BigDecimal householdBudget;
   private Integer householdBudgetAllowanceRatio;
-  private boolean householdAccept;
+  private boolean settlementWillBeUpdated;
   private LocalDateTime createdAt;
   private Integer householdSettlementDayOfMonth;
+
 
   private String inviteCode;
 
 
   @Builder
   public Household(Long householdId, String householdName, LocalDate householdSettlementDate, BigDecimal householdBudget,
-      Integer householdBudgetAllowanceRatio, boolean householdAccept, LocalDateTime createdAt, Integer householdSettlementDayOfMonth,
+      Integer householdBudgetAllowanceRatio, boolean settlementWillBeUpdated, LocalDateTime createdAt, Integer householdSettlementDayOfMonth,
       String inviteCode) {
     this.householdId = householdId;
     this.householdName = householdName;
     this.householdSettlementDate = householdSettlementDate;
     this.householdBudget = householdBudget;
     this.householdBudgetAllowanceRatio = householdBudgetAllowanceRatio;
-    this.householdAccept = householdAccept;
+    this.settlementWillBeUpdated = settlementWillBeUpdated;
     this.createdAt = createdAt;
     this.householdSettlementDayOfMonth = householdSettlementDayOfMonth;
     this.inviteCode = inviteCode;
@@ -41,5 +42,13 @@ public class Household {
 
   public void setInviteCode(String inviteCode) {
     this.inviteCode = inviteCode;
+  }
+
+  public void updateHouseholdSettlementDayOfMonth(Integer householdSettlementDayOfMonth) {
+    setHouseholdSettlementDayOfMonth(householdSettlementDayOfMonth);
+  }
+
+  private void setHouseholdSettlementDayOfMonth(Integer householdSettlementDayOfMonth) {
+    this.householdSettlementDayOfMonth = householdSettlementDayOfMonth;
   }
 }
