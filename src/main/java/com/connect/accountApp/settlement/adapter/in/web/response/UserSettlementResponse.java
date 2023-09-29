@@ -1,9 +1,10 @@
 package com.connect.accountApp.settlement.adapter.in.web.response;
 
 import com.connect.accountApp.settlement.application.port.in.command.UserSettlementCommand;
-import com.connect.accountApp.settlement.application.port.in.command.UserSettlementCommand.UserCommand;
+import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,23 +31,10 @@ public class UserSettlementResponse {
     this.user = user;
   }
 
-  public UserSettlementResponse(UserSettlementCommand command, LocalDate startDate, LocalDate endDate) {
-    this.householdExpenseTotal = command.getHouseholdExpenseTotal();
+  public UserSettlementResponse(UserSettlementWithHouseholdTotalExpenseCommand command, LocalDate startDate, LocalDate endDate) {
+    this.householdExpenseTotal = command.getHouseholdExpenseTotal().setScale(0, RoundingMode.FLOOR);
     this.settlementDate = new SettlementDate(startDate, endDate);
-    this.user = new User(command.getUserCommand());
-  }
-
-  class SettlementDate {
-
-    @JsonProperty("date_start")
-    private LocalDate dateStart;
-    @JsonProperty("date_end")
-    private LocalDate dateEnd;
-
-    public SettlementDate(LocalDate dateStart, LocalDate dateEnd) {
-      this.dateStart = dateStart;
-      this.dateEnd = dateEnd;
-    }
+    this.user = new User(command.getUserSettlementCommand());
   }
 
   class User {
@@ -64,13 +52,13 @@ public class UserSettlementResponse {
     @JsonProperty("settlement_amount")
     private BigDecimal settlementAmount;
 
-    public User(UserCommand command) {
+    public User(UserSettlementCommand command) {
       this.id = command.getId();
       this.name = command.getName();
-      this.realExpense = command.getRealExpense();
-      this.ratioExpense = command.getRatioExpense();
+      this.realExpense = command.getRealExpense().setScale(0, RoundingMode.FLOOR);
+      this.ratioExpense = command.getRatioExpense().setScale(0, RoundingMode.FLOOR);
       this.isSettlementSender = command.getIsSettlementSender();
-      this.settlementAmount = command.getSettlementAmount();
+      this.settlementAmount = command.getSettlementAmount().setScale(0, RoundingMode.FLOOR);
     }
   }
 

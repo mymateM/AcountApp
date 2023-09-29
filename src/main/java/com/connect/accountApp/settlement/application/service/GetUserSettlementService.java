@@ -3,12 +3,11 @@ package com.connect.accountApp.settlement.application.service;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.settlement.application.port.in.GetUserSettlementUseCase;
-import com.connect.accountApp.settlement.application.port.in.command.UserSettlementCommand;
+import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand;
 import com.connect.accountApp.settlement.application.port.out.FindSettlementPort;
 import com.connect.accountApp.settlement.application.port.out.command.ExpenseOfHouseholdCommand;
 import com.connect.accountApp.settlement.application.port.out.command.ExpenseOfHouseholdCommand.ExpenseRatioOfUser;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
   private final FindSettlementPort findSettlementPort;
 
   @Override
-  public UserSettlementCommand getUserSettlement(String userEmail, LocalDate startDate, LocalDate endDate) {
+  public UserSettlementWithHouseholdTotalExpenseCommand getUserSettlement(String userEmail, LocalDate startDate, LocalDate endDate) {
 
     User user = getUserPort.findUserWithHousehold(userEmail);
 
@@ -36,7 +35,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
 
     BigDecimal householdTotalExpense = getHouseholdTotalExpense(expenseOfHouseholdCommands);
 
-    return new UserSettlementCommand(householdTotalExpense, userRealTotalExpense, userRatioExpense, user);
+    return new UserSettlementWithHouseholdTotalExpenseCommand(householdTotalExpense, userRealTotalExpense, userRatioExpense, user);
   }
 
   /**
@@ -48,7 +47,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
    */
   private BigDecimal getUserTotalRealExpense(String userEmail, LocalDate from, LocalDate to) {
     List<BigDecimal> userRealExpenses = findSettlementPort.findUserRealExpense(userEmail, from, to);
-    return userRealExpenses.stream().reduce(BigDecimal.ZERO, BigDecimal::add).setScale(0, RoundingMode.FLOOR);
+    return userRealExpenses.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
   /**
@@ -75,7 +74,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
   private BigDecimal getHouseholdTotalExpense(List<ExpenseOfHouseholdCommand> expenseOfHouseholdCommands) {
     return expenseOfHouseholdCommands.stream()
         .map(ExpenseOfHouseholdCommand::getExpenseAmount)
-        .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(0, RoundingMode.FLOOR);
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
   /**
@@ -94,7 +93,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
 
               return expenseOfHouseholdCommand.getExpenseAmount().multiply(userRealRatio);
             }
-        ).reduce(BigDecimal.ZERO, BigDecimal::add).setScale(0, RoundingMode.FLOOR);
+        ).reduce(BigDecimal.ZERO, BigDecimal::add);
 
   }
 

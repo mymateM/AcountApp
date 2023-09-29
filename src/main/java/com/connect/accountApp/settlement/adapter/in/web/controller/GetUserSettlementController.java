@@ -3,7 +3,7 @@ package com.connect.accountApp.settlement.adapter.in.web.controller;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import com.connect.accountApp.settlement.adapter.in.web.response.UserSettlementResponse;
 import com.connect.accountApp.settlement.application.port.in.GetUserSettlementUseCase;
-import com.connect.accountApp.settlement.application.port.in.command.UserSettlementCommand;
+import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +24,9 @@ public class GetUserSettlementController {
   @GetMapping("/user")
   public ResponseEntity getUserSettlement(@AuthenticationPrincipal UserDetails userDetails,
       @RequestParam("start_date") LocalDate startDate, @RequestParam("end_date") LocalDate endDate) {
-    System.out.println("------------------");
 
-    System.out.println("userDetails = " + userDetails);
-    System.out.println("startDate = " + startDate);
-    System.out.println("endDate = " + endDate);
     String userEmail = userDetails.getUsername();
-    System.out.println("userEmail = " + userEmail);
-    UserSettlementCommand command = getUserSettlementUseCase.getUserSettlement(userEmail, startDate, endDate);
+    UserSettlementWithHouseholdTotalExpenseCommand command = getUserSettlementUseCase.getUserSettlement(userEmail, startDate, endDate);
     UserSettlementResponse response = new UserSettlementResponse(command, startDate, endDate);
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
   }
