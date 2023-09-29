@@ -29,20 +29,24 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
   private final FindHouseholdUserListPort findHouseholdUserListPort;
   private final FindSettlementPort findSettlementPort;
 
-  private Map<Long, BigDecimal> creditorMap = new LinkedHashMap<>();
-  private Map<Long, BigDecimal> debtorMap = new LinkedHashMap<>();
-
-  private List<SettlementCommand> settlements = new ArrayList<>();
+//  private Map<Long, BigDecimal> creditorMap = new LinkedHashMap<>();
+//  private Map<Long, BigDecimal> debtorMap = new LinkedHashMap<>();
+//
+//  private List<SettlementCommand> settlements = new ArrayList<>();
 
 
 
   @Override
   public HouseholdSettlementCommand getRoommateSettlement(String userEmail, LocalDate startDate, LocalDate endDate) {
 
+    Map<Long, BigDecimal> creditorMap = new LinkedHashMap<>();
+    Map<Long, BigDecimal> debtorMap = new LinkedHashMap<>();
+    List<SettlementCommand> settlements = new ArrayList<>();
+
     User user = getUserPort.findUserWithHousehold(userEmail);
     BigDecimal userSettlement = getUserSettlement(user, startDate, endDate);
 
-    addSettlementToMap(userSettlement, user);
+    addSettlementToMap(userSettlement, user, creditorMap, debtorMap);
 
     List<User> householdMembers = findHouseholdUserListPort.findHouseholdMembers(user.getHousehold().getHouseholdId());
     List<User> householdMembersWithoutUser = householdMembers.stream().filter(
@@ -51,7 +55,7 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
     householdMembersWithoutUser.forEach(
         householdMember -> {
           BigDecimal settlement = getUserSettlement(householdMember, startDate, endDate);
-          addSettlementToMap(settlement, householdMember);
+          addSettlementToMap(settlement, householdMember, creditorMap, debtorMap);
         }
     );
 
@@ -59,26 +63,19 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
     List<Long> keySetAsc = sortMap(debtorMap);
 
     // 1. 먼저 같은 얘들은 빼기
-    findEqualSettlement(keySetDesc, keySetAsc);
+    findEqualSettlement(keySetDesc, keySetAsc, creditorMap, debtorMap, settlements);
 
     //2. 제일 큰 얘들부터 비교해가며 빼주기
 
     for (int i = 0; i < keySetDesc.size(); i++) {
       Long key = keySetDesc.get(i);
       BigDecimal creditorSettlement = creditorMap.get(key);
-      System.out.println("creditorSettlement = " + creditorSettlement);
-      System.out.println("++++keySetDesc = " + keySetDesc);
-      System.out.println("++++keySetAsc = " + keySetAsc);
-
-      System.out.println("key = " + key);
 
 
 
       for (int j = 0; j < keySetAsc.size(); j++) {
         Long key2 = keySetAsc.get(j);
-        System.out.println("key2 = " + key2);
         BigDecimal debtorSettlement = debtorMap.get(key2);
-        System.out.println("debtorSettlement = " + debtorSettlement);
         if (creditorSettlement.compareTo(debtorSettlement) < 0) { // 채권자가 받을 돈이 채무자가 줄 돈보다 작다면
           settlements.add(new SettlementCommand(key2, key, creditorSettlement));
           debtorMap.replace(key2 ,debtorMap.get(key2).subtract(creditorSettlement));
@@ -98,23 +95,12 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
     }
 
-
-    settlements.forEach(
-        settlement -> {
-          System.out.println("=======================================");
-          System.out.println("getGiverId = " + settlement.getGiverId());
-          System.out.println("getSenderId = " + settlement.getSenderId());
-          System.out.println("getSettlementAmount = " + settlement.getSettlementAmount());
-        }
-    );
-
     List<SettlementCommand> filteredSettlements = settlements.stream()
         .filter(settlement -> {
           return settlement.getGiverId().equals(user.getUserId()) || settlement.getSenderId()
               .equals(user.getUserId());
         }).toList();
 
-    System.out.println("+++++++++++++++++++++++++++++++++++++");
 
     boolean isSender;
 
@@ -124,8 +110,6 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
       isSender = false;
     }
 
-
-
     List<RoommateSettlementCommand> RoommateSettlementCommands;
     BigDecimal totalAmount = filteredSettlements.stream().map(SettlementCommand::getSettlementAmount)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -134,23 +118,6 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
         user.getUserNickname(), true, totalAmount);
 
     RoommateSettlementCommands = getRoommateSettlementCommands(filteredSettlements, isSender);
-
-    for (RoommateSettlementCommand command : RoommateSettlementCommands) {
-      System.out.println("command.getName() = " + command.getName());
-      System.out.println("command.getId() = " + command.getId());
-      System.out.println("command.getSettlementAmount() = " + command.getSettlementAmount());
-      System.out.println("command.getAccountBank() = " + command.getAccountBank());
-      System.out.println("command.getAccountNumber() = " + command.getAccountNumber());
-    }
-
-    System.out.println("userSettlementCommand.getName() = "
-        + userSettlementCommand.getName());
-    System.out.println("userSettlementCommand.getId() = "
-        + userSettlementCommand.getId());
-    System.out.println("userSettlementCommand.getIsSender() = "
-        + userSettlementCommand.getIsSettlementSender());
-    System.out.println("userSettlementCommand.getSettlementAmount() = "
-        + userSettlementCommand.getSettlementAmount());
 
     return new HouseholdSettlementCommand(userSettlementCommand, RoommateSettlementCommands);
   }
@@ -197,7 +164,9 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
   }
 
-  private void findEqualSettlement(List<Long> keySetDesc, List<Long> keySetAsc)  {
+  private void findEqualSettlement(List<Long> keySetDesc, List<Long> keySetAsc,
+      Map<Long, BigDecimal> creditorMap, Map<Long, BigDecimal> debtorMap,
+      List<SettlementCommand> settlements)  {
     for (Long key : keySetDesc) {
       BigDecimal bigDecimal = creditorMap.get(key);
       for (Long key2 : keySetAsc) {
@@ -212,7 +181,7 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
     }
   }
 
-  private void addSettlementToMap(BigDecimal userSettlement, User user) {
+  private void addSettlementToMap(BigDecimal userSettlement, User user, Map<Long, BigDecimal> creditorMap, Map<Long, BigDecimal> debtorMap) {
     if (userSettlement.compareTo(BigDecimal.ZERO) < 0) {
       debtorMap.put(user.getUserId(), userSettlement.abs());
     } else if (userSettlement.compareTo(BigDecimal.ZERO) > 0) {
@@ -230,13 +199,6 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
         return map.get(o2).compareTo(map.get(o1)); //todo : bigdecimal compareTo 정리
       }
     });
-
-    System.out.println("keySetDesc = " + keySetDesc);
-
-    for (Long key : keySetDesc) {
-      System.out.print("Key : " + key);
-      System.out.println(", Val : " + map.get(key));
-    }
 
     return keySetDesc;
   }
