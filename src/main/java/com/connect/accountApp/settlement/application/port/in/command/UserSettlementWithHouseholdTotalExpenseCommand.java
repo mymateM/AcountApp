@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 public class UserSettlementWithHouseholdTotalExpenseCommand {
 
   private BigDecimal householdExpenseTotal;
-  private UserCommand userCommand;
+  private UserSettlementCommand userSettlementCommand;
 
   public UserSettlementWithHouseholdTotalExpenseCommand(BigDecimal householdExpenseTotal, BigDecimal realExpense, BigDecimal ratioExpense,
       User user) {
     this.householdExpenseTotal = householdExpenseTotal;
-    this.userCommand = new UserCommand(user.getUserId(), user.getUserNickname(), realExpense, ratioExpense);
+    this.userSettlementCommand = new UserSettlementCommand(user.getUserId(), user.getUserNickname(), realExpense, ratioExpense);
   }
 
   @Getter
   @NoArgsConstructor(access = PROTECTED)
-  public class UserCommand {
+  public class UserSettlementCommand {
 
     private Long id;
     private String name;
@@ -31,7 +31,7 @@ public class UserSettlementWithHouseholdTotalExpenseCommand {
     private Boolean isSettlementSender;
     private BigDecimal settlementAmount;
 
-    public UserCommand(Long id, String name, BigDecimal realExpense, BigDecimal ratioExpense) {
+    public UserSettlementCommand(Long id, String name, BigDecimal realExpense, BigDecimal ratioExpense) {
       this.id = id;
       this.name = name;
       this.realExpense = realExpense;
@@ -40,7 +40,7 @@ public class UserSettlementWithHouseholdTotalExpenseCommand {
       this.settlementAmount = realExpense.subtract(ratioExpense).abs();
     }
 
-    public UserCommand(Long id, String name, Boolean isSettlementSender,
+    public UserSettlementCommand(Long id, String name, Boolean isSettlementSender,
         BigDecimal settlementAmount) {
       this.id = id;
       this.name = name;

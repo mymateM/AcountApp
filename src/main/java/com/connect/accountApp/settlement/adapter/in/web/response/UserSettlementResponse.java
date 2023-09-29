@@ -1,7 +1,7 @@
 package com.connect.accountApp.settlement.adapter.in.web.response;
 
 import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand;
-import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand.UserCommand;
+import com.connect.accountApp.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand.UserSettlementCommand;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -52,7 +52,7 @@ public class UserSettlementResponse {
     @JsonProperty("settlement_amount")
     private BigDecimal settlementAmount;
 
-    public User(UserCommand command) {
+    public User(UserSettlementCommand command) {
       this.id = command.getId();
       this.name = command.getName();
       this.realExpense = command.getRealExpense().setScale(0, RoundingMode.FLOOR);
