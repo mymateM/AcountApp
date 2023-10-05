@@ -59,7 +59,13 @@ public class FcmNotificationService implements FcmNotificationUseCase {
     User user = getUserPort.findUserWithHousehold(userEmail);
     List<User> householdMembers = findHouseholdUserListPort.findHouseholdMembers(user.getHousehold().getHouseholdId());
 
-    householdMembers.forEach(householdMember -> sendMessage(user, notification));
+    householdMembers.forEach(householdMember -> sendMessage(householdMember, notification));
+  }
+
+  @Override
+  public void sendNotificationHouseholdMember(Notification notification, Long householdId) {
+    List<User> householdMembers = findHouseholdUserListPort.findHouseholdMembers(householdId);
+    householdMembers.forEach(householdMember -> sendMessage(householdMember, notification));
   }
 
   private String sendMessage(User user, Notification notification) {

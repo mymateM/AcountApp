@@ -1,5 +1,9 @@
 package com.connect.accountApp.domain.household.application.service;
 
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
+
 import com.connect.accountApp.domain.household.adapter.in.web.request.RegisterHouseholdRequest;
 import com.connect.accountApp.domain.household.application.port.in.RegisterHouseholdUseCase;
 import com.connect.accountApp.domain.household.application.port.out.SaveHouseholdPort;
@@ -7,10 +11,17 @@ import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.application.port.out.SaveUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
+import com.connect.accountApp.global.common.domain.NotifySettlementJob;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.Trigger;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,11 +38,45 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
     Household defaultHousehold = createDefaultHouseholdByRequest(request);
     Household savedHousehold = saveHouseholdPort.saveHousehold(defaultHousehold);
 
+    createSettlementNotificationScheduler(request.getHouseholdSettlementDayOfMonth(), savedHousehold.getHouseholdId());
+
     User user = getUserPort.findUser(userEmail);
     registerUserToHousehold(user, savedHousehold);
 
     return savedHousehold.getInviteCode();
   }
+
+  private void createSettlementNotificationScheduler(int settlementDayOfMonth, Long householdId) {
+    try {
+      SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+      Scheduler scheduler = schedulerFactory.getScheduler();
+
+      JobDetail job = getJobDetail(householdId);
+      Trigger trigger = getTrigger(settlementDayOfMonth);
+
+      scheduler.scheduleJob(job, trigger);
+      scheduler.start();
+    } catch (SchedulerException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private Trigger getTrigger(int settlementDayOfMonth) {
+    return newTrigger()
+        .withIdentity("testTrigger", "testGroup")
+        .startNow()
+        .withSchedule(cronSchedule("0 0 10 " + settlementDayOfMonth + " 1/1 ? *"))
+        .build();
+  }
+
+  private JobDetail getJobDetail(Long householdId) {
+    return newJob(NotifySettlementJob.class)
+        .withIdentity("notifySettlement", "notifyGroup")
+        .withDescription("정산일을 알리는 역할")
+        .usingJobData("householdId", householdId)
+        .build();
+  }
+
 
   private Household createDefaultHouseholdByRequest(RegisterHouseholdRequest request) {
 
