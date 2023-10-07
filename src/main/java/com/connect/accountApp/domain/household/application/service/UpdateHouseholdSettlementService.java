@@ -32,18 +32,19 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
     household.setSettlementWillBeUpdatedToTrue();
     saveHouseholdPort.saveHousehold(household);
 
-    ActivityNotification activityNotification = createUpdateSettlementDateNotification(budgetAmount);
+    ActivityNotification activityNotification = createUpdateSettlementDateNotification(budgetAmount, user);
     saveActivityNotificationPort.saveActivityNotification(activityNotification);
 
     return household.getHouseholdBudget();
   }
 
-  private ActivityNotification createUpdateSettlementDateNotification(BigDecimal newHouseholdBudget) {
+  private ActivityNotification createUpdateSettlementDateNotification(BigDecimal newHouseholdBudget, User user) {
     return ActivityNotification.builder()
         .activityNotificationCategory(UPDATE_SETTLEMENT_DATE)
         .title(UPDATE_SETTLEMENT_DATE.getTitle())
         .message("다음 정산 때 예산이 " + newHouseholdBudget.setScale(0, FLOOR) + "원으로 바뀔 예정이에요!")
         .isRead(false)
+        .requester(user)
         .build();
   }
 
