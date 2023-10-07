@@ -7,9 +7,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public class NotifySettlementJob extends QuartzJobBean {
 

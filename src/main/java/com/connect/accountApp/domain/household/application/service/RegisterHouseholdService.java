@@ -86,7 +86,7 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
 
   private Trigger getTrigger(int settlementDayOfMonth) {
     return newTrigger()
-        .withIdentity("testTrigger", "testGroup")
+        .withIdentity("notifySettlementTrigger", "notifyTriggerGroup")
         .startNow()
         .withSchedule(cronSchedule("0 0 10 " + settlementDayOfMonth + " 1/1 ? *"))
         .build();
