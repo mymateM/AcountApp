@@ -14,14 +14,18 @@ import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.global.common.domain.NotifySettlementJob;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +35,8 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
   private final SaveHouseholdPort saveHouseholdPort;
   private final GetUserPort getUserPort;
   private final SaveUserPort saveUserPort;
+
+  private final ApplicationContext applicationContext;
 
   @Override
   public String registerHousehold(String userEmail, RegisterHouseholdRequest request) {
@@ -70,11 +76,20 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
   }
 
   private JobDetail getJobDetail(Long householdId) {
+    JobDataMap jobDataMap = getJobDataMap(householdId);
     return newJob(NotifySettlementJob.class)
         .withIdentity("notifySettlement", "notifyGroup")
         .withDescription("정산일을 알리는 역할")
-        .usingJobData("householdId", householdId)
+        .usingJobData(jobDataMap)
         .build();
+  }
+
+  private JobDataMap getJobDataMap(Long householdId) {
+    Map<String, Object> map = new LinkedHashMap<>();
+    map.put("applicationContext", applicationContext);
+    map.put("householdId", householdId);
+
+    return new JobDataMap(map);
   }
 
 
