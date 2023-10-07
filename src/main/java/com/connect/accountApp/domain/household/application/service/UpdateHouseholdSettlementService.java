@@ -1,6 +1,6 @@
 package com.connect.accountApp.domain.household.application.service;
 
-import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.UPDATE_SETTLEMENT_DATE;
+import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.UPDATE_BUDGET;
 import static java.math.RoundingMode.FLOOR;
 
 import com.connect.accountApp.domain.activitynotification.application.port.out.SaveActivityNotificationPort;
@@ -40,8 +40,8 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
 
   private ActivityNotification createUpdateSettlementDateNotification(BigDecimal newHouseholdBudget, User user) {
     return ActivityNotification.builder()
-        .activityNotificationCategory(UPDATE_SETTLEMENT_DATE)
-        .title(UPDATE_SETTLEMENT_DATE.getTitle())
+        .activityNotificationCategory(UPDATE_BUDGET)
+        .title(UPDATE_BUDGET.getTitle())
         .message("다음 정산 때 예산이 " + newHouseholdBudget.setScale(0, FLOOR) + "원으로 바뀔 예정이에요!")
         .isRead(false)
         .requester(user)
