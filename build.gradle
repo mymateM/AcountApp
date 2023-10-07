@@ -49,7 +49,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	//Quartz
-	implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.2'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-quartz
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-quartz', version: '3.1.4'
+
 }
 
 

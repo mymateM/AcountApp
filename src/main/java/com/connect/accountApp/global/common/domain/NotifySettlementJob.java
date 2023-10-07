@@ -2,17 +2,21 @@ package com.connect.accountApp.global.common.domain;
 
 import com.connect.accountApp.global.common.application.port.out.FcmNotificationUseCase;
 import com.google.firebase.messaging.Notification;
-import org.quartz.Job;
+import lombok.RequiredArgsConstructor;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
-public class NotifySettlementJob implements Job {
+@Component
+@RequiredArgsConstructor
+public class NotifySettlementJob extends QuartzJobBean {
 
-  private FcmNotificationUseCase fcmNotificationUseCase;
+  private final FcmNotificationUseCase fcmNotificationUseCase;
 
   @Override
-  public void execute(JobExecutionContext context) throws JobExecutionException {
+  public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
     Notification notification = Notification.builder()
         .setTitle("정산 디데이")
