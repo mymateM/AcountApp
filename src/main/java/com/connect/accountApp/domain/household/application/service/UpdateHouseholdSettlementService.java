@@ -1,5 +1,10 @@
 package com.connect.accountApp.domain.household.application.service;
 
+import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.UPDATE_SETTLEMENT_DATE;
+import static java.math.RoundingMode.FLOOR;
+
+import com.connect.accountApp.domain.activitynotification.application.port.out.SaveActivityNotificationPort;
+import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
 import com.connect.accountApp.domain.household.application.port.in.UpdateHouseholdSettlementUseCase;
 import com.connect.accountApp.domain.household.application.port.out.SaveHouseholdPort;
 import com.connect.accountApp.domain.household.domain.model.Household;
@@ -15,6 +20,7 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
 
   private final SaveHouseholdPort saveHouseholdPort;
   private final GetUserPort getUserPort;
+  private final SaveActivityNotificationPort saveActivityNotificationPort;
 
   @Override
   public BigDecimal updateHouseholdSettlement(String userEmail, BigDecimal budgetAmount) {
@@ -26,6 +32,19 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
     household.setSettlementWillBeUpdatedToTrue();
     saveHouseholdPort.saveHousehold(household);
 
+    ActivityNotification activityNotification = createUpdateSettlementDateNotification(budgetAmount);
+    saveActivityNotificationPort.saveActivityNotification(activityNotification);
+
     return household.getHouseholdBudget();
   }
+
+  private ActivityNotification createUpdateSettlementDateNotification(BigDecimal newHouseholdBudget) {
+    return ActivityNotification.builder()
+        .activityNotificationCategory(UPDATE_SETTLEMENT_DATE)
+        .title(UPDATE_SETTLEMENT_DATE.getTitle())
+        .message("다음 정산 때 예산이 " + newHouseholdBudget.setScale(0, FLOOR) + "원으로 바뀔 예정이에요!")
+        .isRead(false)
+        .build();
+  }
+
 }
