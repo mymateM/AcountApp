@@ -1,13 +1,12 @@
 package com.connect.accountApp.domain.household.application.service;
 
-import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.REQUEST_SETTLEMENT;
+import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.SETTLEMENT_DAY;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 import com.connect.accountApp.domain.activitynotification.application.port.out.SaveActivityNotificationPort;
 import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
-import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
 import com.connect.accountApp.domain.household.adapter.in.web.request.RegisterHouseholdRequest;
 import com.connect.accountApp.domain.household.application.port.in.RegisterHouseholdUseCase;
 import com.connect.accountApp.domain.household.application.port.out.SaveHouseholdPort;
@@ -49,24 +48,25 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
     Household defaultHousehold = createDefaultHouseholdByRequest(request);
     Household savedHousehold = saveHouseholdPort.saveHousehold(defaultHousehold);
 
-    ActivityNotification activityNotification = createActivityNotification();
-    saveActivityNotificationPort.saveActivityNotification(activityNotification);
-    createSettlementNotificationScheduler(request.getHouseholdSettlementDayOfMonth(), savedHousehold.getHouseholdId());
-
     User user = getUserPort.findUser(userEmail);
     registerUserToHousehold(user, savedHousehold);
+
+    ActivityNotification activityNotification = creatSettlementDayNotification(user);
+    saveActivityNotificationPort.saveActivityNotification(activityNotification);
+    createSettlementNotificationScheduler(request.getHouseholdSettlementDayOfMonth(), savedHousehold.getHouseholdId());
 
     return savedHousehold.getInviteCode();
   }
 
-  private ActivityNotification createActivityNotification() {
-    ActivityNotification activityNotification = ActivityNotification.builder()
-        .activityNotificationCategory(REQUEST_SETTLEMENT)
-        .title(REQUEST_SETTLEMENT.getTitle())
+  private ActivityNotification creatSettlementDayNotification(User user) {
+    return ActivityNotification.builder()
+        .activityNotificationCategory(SETTLEMENT_DAY)
+        .title(SETTLEMENT_DAY.getTitle())
         .message("정산 일이 다가왔어요! 정산을 하러 가볼까요?")
         .isRead(false)
+        .requester(user)
         .build();
-    return activityNotification;
+
   }
 
   private void createSettlementNotificationScheduler(int settlementDayOfMonth, Long householdId) {
