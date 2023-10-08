@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.activitynotification.adapter.out.persisten
 
 import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.ActivityNotificationJpaRepository;
 import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.ActivityNotificationJpaEntity;
+import com.connect.accountApp.domain.activitynotification.application.port.in.command.ActivityNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.FindActivityNotificationsPort;
 import com.connect.accountApp.domain.activitynotification.application.port.out.FindExpenseNotificationPort;
 import com.connect.accountApp.domain.activitynotification.application.port.out.SaveActivityNotificationPort;
@@ -36,6 +37,11 @@ public class NotificationPersistenceAdapter implements FindActivityNotifications
     );
 
     return activityNotificationMapper.mapToDomainEntity(activityNotificationJpaEntity);
+  }
+
+  @Override
+  public List<ActivityNotificationCommand> findActivityNotifications(String userEmail) {
+    return notificationQueryRepository.findActivityNotifications(userEmail);
   }
 
   @Override
