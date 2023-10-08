@@ -23,8 +23,9 @@ public class BillMapper {
     return Bill.builder()
         .billId(billJpaEntity.getBillId())
         .billDate(billJpaEntity.getBillDate())
-        .billAmount(billJpaEntity.getBillAmount())
+        .billPayment(billJpaEntity.getBillPayment())
         .billImgUrl(billJpaEntity.getBillImgUrl())
+        .billStore(billJpaEntity.getBillStore())
         .household(householdMapper.mapToDomainEntity(billJpaEntity.getHouseHoldJpaEntity()))
         .build();
   }
@@ -38,8 +39,9 @@ public class BillMapper {
     return BillJpaEntity.builder()
         .billId(bill.getBillId())
         .billDate(bill.getBillDate())
-        .billAmount(bill.getBillAmount())
+        .billPayment(bill.getBillPayment())
         .billImgUrl(bill.getBillImgUrl())
+        .billStore(bill.getBillStore())
         .houseHoldJpaEntity(householdMapper.mapToJpaEntity(bill.getHousehold()))
         .build();
   }

@@ -1,5 +1,12 @@
 package com.connect.accountApp.domain.household.application.service;
 
+import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.SETTLEMENT_DAY;
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
+
+import com.connect.accountApp.domain.activitynotification.application.port.out.SaveActivityNotificationPort;
+import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
 import com.connect.accountApp.domain.household.adapter.in.web.request.RegisterHouseholdRequest;
 import com.connect.accountApp.domain.household.application.port.in.RegisterHouseholdUseCase;
 import com.connect.accountApp.domain.household.application.port.out.SaveHouseholdPort;
@@ -7,10 +14,21 @@ import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.application.port.out.SaveUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
+import com.connect.accountApp.global.common.domain.NotifySettlementJob;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SchedulerFactory;
+import org.quartz.Trigger;
+import org.quartz.impl.StdSchedulerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +38,9 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
   private final SaveHouseholdPort saveHouseholdPort;
   private final GetUserPort getUserPort;
   private final SaveUserPort saveUserPort;
+  private final SaveActivityNotificationPort saveActivityNotificationPort;
+
+  private final ApplicationContext applicationContext;
 
   @Override
   public String registerHousehold(String userEmail, RegisterHouseholdRequest request) {
@@ -30,8 +51,64 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
     User user = getUserPort.findUser(userEmail);
     registerUserToHousehold(user, savedHousehold);
 
+    ActivityNotification activityNotification = creatSettlementDayNotification(user);
+    saveActivityNotificationPort.saveActivityNotification(activityNotification);
+    createSettlementNotificationScheduler(request.getHouseholdSettlementDayOfMonth(), savedHousehold.getHouseholdId());
+
     return savedHousehold.getInviteCode();
   }
+
+  private ActivityNotification creatSettlementDayNotification(User user) {
+    return ActivityNotification.builder()
+        .activityNotificationCategory(SETTLEMENT_DAY)
+        .title(SETTLEMENT_DAY.getTitle())
+        .message("정산 일이 다가왔어요! 정산을 하러 가볼까요?")
+        .isRead(false)
+        .requester(user)
+        .build();
+
+  }
+
+  private void createSettlementNotificationScheduler(int settlementDayOfMonth, Long householdId) {
+    try {
+      SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+      Scheduler scheduler = schedulerFactory.getScheduler();
+
+      JobDetail job = getJobDetail(householdId);
+      Trigger trigger = getTrigger(settlementDayOfMonth);
+
+      scheduler.scheduleJob(job, trigger);
+      scheduler.start();
+    } catch (SchedulerException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private Trigger getTrigger(int settlementDayOfMonth) {
+    return newTrigger()
+        .withIdentity("notifySettlementTrigger", "notifyTriggerGroup")
+        .startNow()
+        .withSchedule(cronSchedule("0 0 10 " + settlementDayOfMonth + " 1/1 ? *"))
+        .build();
+  }
+
+  private JobDetail getJobDetail(Long householdId) {
+    JobDataMap jobDataMap = getJobDataMap(householdId);
+    return newJob(NotifySettlementJob.class)
+        .withIdentity("notifySettlement", "notifyGroup")
+        .withDescription("정산일을 알리는 역할")
+        .usingJobData(jobDataMap)
+        .build();
+  }
+
+  private JobDataMap getJobDataMap(Long householdId) {
+    Map<String, Object> map = new LinkedHashMap<>();
+    map.put("applicationContext", applicationContext);
+    map.put("householdId", householdId);
+
+    return new JobDataMap(map);
+  }
+
 
   private Household createDefaultHouseholdByRequest(RegisterHouseholdRequest request) {
 

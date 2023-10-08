@@ -7,6 +7,8 @@ public interface FcmNotificationUseCase {
 
   String sendNotificationByToken(FcmNotificationRequest request);
 
-  void sendNotificationHouseholdMember(Notification request, String userEmail);
+  void sendNotificationHouseholdMember(Notification notification, String userEmail); //todo : userEmail -> household
+
+  void sendNotificationHouseholdMember(Notification notification, Long householdId);
 
 }

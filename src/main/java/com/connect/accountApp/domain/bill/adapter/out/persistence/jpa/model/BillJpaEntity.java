@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,20 +24,22 @@ public class BillJpaEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long billId;
   private LocalDate billDate;
-  private int billAmount;
+  private BigDecimal billPayment;
   private String billImgUrl;
+  private String billStore;
 
   @ManyToOne
   @JoinColumn(name = "household_id")
   private HouseHoldJpaEntity houseHoldJpaEntity;
 
   @Builder
-  public BillJpaEntity(Long billId, LocalDate billDate, int billAmount, String billImgUrl,
-      HouseHoldJpaEntity houseHoldJpaEntity) {
+  public BillJpaEntity(Long billId, LocalDate billDate, BigDecimal billPayment, String billImgUrl,
+      HouseHoldJpaEntity houseHoldJpaEntity, String billStore) {
     this.billId = billId;
     this.billDate = billDate;
-    this.billAmount = billAmount;
+    this.billPayment = billPayment;
     this.billImgUrl = billImgUrl;
     this.houseHoldJpaEntity = houseHoldJpaEntity;
+    this.billStore = billStore;
   }
 }
