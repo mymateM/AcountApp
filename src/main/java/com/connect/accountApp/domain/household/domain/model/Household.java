@@ -63,7 +63,12 @@ public class Household {
   public void setSettlementWillBeUpdatedToTrue() {
     setSettlementWillBeUpdated(true);
   }
-  public void setSettlementWillBeUpdated(boolean settlementWillBeUpdated) {
+
+  public void setSettlementWillBeUpdatedToFalse() {
+    setSettlementWillBeUpdated(false);
+  }
+
+  private void setSettlementWillBeUpdated(boolean settlementWillBeUpdated) {
     this.settlementWillBeUpdated = settlementWillBeUpdated;
   }
 }
