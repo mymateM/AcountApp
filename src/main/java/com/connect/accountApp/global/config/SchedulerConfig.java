@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class SchedulerConfig {
 
   @Bean
-  public SchedulerFactory jpaQueryFactory() {
+  public SchedulerFactory schedulerFactory() {
     return new StdSchedulerFactory();
   }
 
