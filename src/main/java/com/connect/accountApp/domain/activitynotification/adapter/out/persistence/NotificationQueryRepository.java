@@ -4,10 +4,13 @@ import static com.connect.accountApp.domain.activitynotification.adapter.out.per
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
 import static com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.QUserActivityNotificationJpaEntity.userActivityNotificationJpaEntity;
 
+import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.ActivityNotificationJpaEntity;
 import com.connect.accountApp.domain.activitynotification.application.port.in.command.ActivityNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.FindExpenseNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.NotificationCommand;
 import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
+import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.UserActivityNotificationJpaEntity;
+import com.connect.accountApp.domain.usernotification.domain.model.UserActivityNotification;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -71,7 +74,7 @@ public class NotificationQueryRepository {
     return jpaQueryFactory
         .select(Projections.constructor(ActivityNotificationCommand.class,
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationCategory.as("notiCategory"),
-            userActivityNotificationJpaEntity.activityNotificationJpaEntity.isRead,
+            userActivityNotificationJpaEntity.isRead,
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.createdAt,
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity.userNickname.as("trigger")
         ))
@@ -81,6 +84,17 @@ public class NotificationQueryRepository {
         .leftJoin(userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity)
         .where(
             userActivityNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
+        )
+        .fetch();
+  }
+
+  public List<UserActivityNotificationJpaEntity> findActivityNotifications(List<Long> activityNotificationIds) {
+
+    return jpaQueryFactory
+        .select(userActivityNotificationJpaEntity)
+        .from(userActivityNotificationJpaEntity)
+        .where(
+            userActivityNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationId.in(activityNotificationIds)
         )
         .fetch();
   }
