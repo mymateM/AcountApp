@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.activitynotification.application.port.in.c
 
 import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,15 +10,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActivityNotificationCommand {
 
-  private String categoryTitle;
-  private String categoryImageUrl;
+  private NotiCategory notiCategory;
   private Boolean isRead;
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
   private String trigger;
 
-  public ActivityNotificationCommand(NotiCategory notiCategory, Boolean isRead, LocalDate createdAt, String trigger) {
-    this.categoryTitle = notiCategory.getTitle();
-    this.categoryImageUrl = notiCategory.getImgUrl();
+  public ActivityNotificationCommand(NotiCategory notiCategory, Boolean isRead, LocalDateTime createdAt, String trigger) {
+    this.notiCategory = notiCategory;
     this.isRead = isRead;
     this.createdAt = createdAt;
     this.trigger = trigger;

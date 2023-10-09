@@ -9,6 +9,7 @@ import com.connect.accountApp.domain.activitynotification.application.port.in.co
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.FindExpenseNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.NotificationCommand;
 import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -71,18 +72,18 @@ public class NotificationQueryRepository {
 
     return jpaQueryFactory
         .select(Projections.constructor(ActivityNotificationCommand.class,
-            activityNotificationJpaEntity.activityNotificationCategory.as("notiCategory"),
-            activityNotificationJpaEntity.isRead,
-            activityNotificationJpaEntity.createdAt,
-            activityNotificationJpaEntity.requesterJpaEntity.as("trigger")
+            userActivityNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationCategory.as("notiCategory"),
+            userActivityNotificationJpaEntity.activityNotificationJpaEntity.isRead,
+            userActivityNotificationJpaEntity.activityNotificationJpaEntity.createdAt,
+            userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity.userNickname.as("trigger")
         ))
         .from(userActivityNotificationJpaEntity)
-        .join(userActivityNotificationJpaEntity.activityNotificationJpaEntity, activityNotificationJpaEntity)
-        .join(userActivityNotificationJpaEntity.userJpaEntity, userJpaEntity)
+        .join(userActivityNotificationJpaEntity.activityNotificationJpaEntity)
+        .join(userActivityNotificationJpaEntity.userJpaEntity)
+        .leftJoin(userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity)
         .where(
-            userJpaEntity.userEmail.eq(userEmail)
+            userActivityNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
         )
-        .orderBy(userActivityNotificationJpaEntity.activityNotificationJpaEntity.createdAt.desc())
         .fetch();
   }
 

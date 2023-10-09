@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.activitynotification.adapter.in.web.respon
 import com.connect.accountApp.domain.activitynotification.application.port.in.command.ActivityNotificationCommand;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,13 +30,13 @@ public class ActivityNotificationsResponse {
     @JsonProperty("is_read")
     private Boolean isRead;
     @JsonProperty("created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     @JsonProperty("trigger")
     private String trigger;
 
     public ActivityNotificationResponse(ActivityNotificationCommand command) {
-      this.categoryTitle = command.getCategoryTitle();
-      this.categoryImageUrl = command.getCategoryImageUrl();
+      this.categoryTitle = command.getNotiCategory().getTitle();
+      this.categoryImageUrl = command.getNotiCategory().getImgUrl();
       this.isRead = command.getIsRead();
       this.createdAt = command.getCreatedAt();
       this.trigger = command.getTrigger();
