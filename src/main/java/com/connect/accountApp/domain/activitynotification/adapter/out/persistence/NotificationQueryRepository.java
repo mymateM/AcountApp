@@ -2,14 +2,12 @@ package com.connect.accountApp.domain.activitynotification.adapter.out.persisten
 
 import static com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.QActivityNotificationJpaEntity.activityNotificationJpaEntity;
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
-import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 import static com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.QUserActivityNotificationJpaEntity.userActivityNotificationJpaEntity;
 
 import com.connect.accountApp.domain.activitynotification.application.port.in.command.ActivityNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.FindExpenseNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.NotificationCommand;
 import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
-import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.UserActivityNotificationJpaEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -89,17 +87,6 @@ public class NotificationQueryRepository {
         .fetch();
   }
 
-  public List<UserActivityNotificationJpaEntity> findActivityNotifications(List<Long> activityNotificationIds) {
-
-    return jpaQueryFactory
-        .selectFrom(userActivityNotificationJpaEntity)
-        .join(userActivityNotificationJpaEntity.userJpaEntity, userJpaEntity)
-        .fetchJoin()
-        .where(
-            userActivityNotificationJpaEntity.userNotiId.in(activityNotificationIds)
-        )
-        .fetch();
-  }
 
   private BooleanExpression eqUserId(Long userId) {
     log.info("[NotificationQueryRepository] userId : {}", userId);

@@ -82,7 +82,7 @@ public class NotifyAcceptingInvitationService implements NotifyAcceptingInvitati
   private void createAndSaveMembersAcceptInvitingNotification(List<User> users, User invitee) {
 
     Long activityNotificationId = createAndSaveAcceptInvitingNotification(invitee);
-    ActivityNotification activityNotification = findActivityNotificationsPort.findActivityNotification(activityNotificationId);
+    ActivityNotification activityNotification = findActivityNotificationsPort.findUserActivityNotification(activityNotificationId);
 
 
     users.forEach(user -> {
