@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class NotificationPersistenceAdapter implements FindActivityNotificationsPort,
+public class ActivityNotificationPersistenceAdapter implements FindActivityNotificationsPort,
     FindExpenseNotificationPort, SaveActivityNotificationPort {
 
   private final NotificationQueryRepository notificationQueryRepository;

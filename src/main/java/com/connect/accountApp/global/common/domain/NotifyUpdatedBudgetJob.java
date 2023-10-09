@@ -2,7 +2,7 @@ package com.connect.accountApp.global.common.domain;
 
 import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.WILL_UPDATE_BUDGET;
 
-import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.NotificationPersistenceAdapter;
+import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.ActivityNotificationPersistenceAdapter;
 import com.connect.accountApp.domain.activitynotification.application.port.out.SaveActivityNotificationPort;
 import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
 import com.connect.accountApp.domain.household.adapter.out.persistence.HouseholdPersistenceAdapter;
@@ -56,7 +56,7 @@ public class NotifyUpdatedBudgetJob extends QuartzJobBean {
 
   private SaveActivityNotificationPort getNotificationPersistenceAdapter(JobExecutionContext context) {
     ApplicationContext applicationContext = (ApplicationContext) context.getJobDetail().getJobDataMap().get("applicationContext");
-    return applicationContext.getBean(NotificationPersistenceAdapter.class);
+    return applicationContext.getBean(ActivityNotificationPersistenceAdapter.class);
   }
 
   private SaveHouseholdPort getHouseholdPersistenceAdapter(JobExecutionContext context) {
