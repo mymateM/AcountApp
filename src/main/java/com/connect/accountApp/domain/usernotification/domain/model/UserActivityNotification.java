@@ -14,12 +14,14 @@ public class UserActivityNotification {
   private Long userNotiId;
   private User user;
   private ActivityNotification activityNotification;
+  private Boolean isRead;
 
   @Builder
   public UserActivityNotification(Long userNotiId, User user,
-      ActivityNotification activityNotification) {
+      ActivityNotification activityNotification, Boolean isRead) {
     this.userNotiId = userNotiId;
     this.user = user;
     this.activityNotification = activityNotification;
+    this.isRead = isRead;
   }
 }
