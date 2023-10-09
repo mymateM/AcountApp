@@ -31,12 +31,16 @@ public class UserActivityNotificationJpaEntity {
   @JoinColumn(name = "noti_id")
   private ActivityNotificationJpaEntity activityNotificationJpaEntity;
 
+  private Boolean isRead;
+
   @Builder
   public UserActivityNotificationJpaEntity(Long userNotiId,
       UserJpaEntity userJpaEntity,
-      ActivityNotificationJpaEntity activityNotificationJpaEntity) {
+      ActivityNotificationJpaEntity activityNotificationJpaEntity,
+      Boolean isRead) {
     this.userNotiId = userNotiId;
     this.userJpaEntity = userJpaEntity;
     this.activityNotificationJpaEntity = activityNotificationJpaEntity;
+    this.isRead = isRead;
   }
 }

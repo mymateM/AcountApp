@@ -4,7 +4,10 @@ import com.connect.accountApp.domain.activitynotification.adapter.out.persistenc
 import com.connect.accountApp.domain.bill.adapter.out.persistence.BillMapper;
 import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
 import com.connect.accountApp.domain.user.adapter.out.persistence.UserMapper;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
+import com.connect.accountApp.domain.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,7 +27,7 @@ public class ActivityNotificationMapper {
         .createdAt(activityNotificationJpaEntity.getCreatedAt())
         .modifiedAt(activityNotificationJpaEntity.getModifiedAt())
         .bill(billMapper.mapToDomainEntity(activityNotificationJpaEntity.getBillJpaEntity()))
-        .requester(userMapper.mapToDomainEntity(activityNotificationJpaEntity.getRequesterJpaEntity()))
+        .requester(getUser(activityNotificationJpaEntity.getRequesterJpaEntity()))
         .build();
   }
 
@@ -38,8 +41,24 @@ public class ActivityNotificationMapper {
         .createdAt(activityNotification.getCreatedAt())
         .modifiedAt(activityNotification.getModifiedAt())
         .billJpaEntity(billMapper.mapToJpaEntity(activityNotification.getBill()))
-        .requesterJpaEntity(userMapper.mapToJpaEntity(activityNotification.getRequester()))
+        .requesterJpaEntity(getUseJpaEntity(activityNotification.getRequester()))
         .build();
+  }
+
+  private User getUser(UserJpaEntity userJpaEntity) {
+    if (userJpaEntity == null || userJpaEntity instanceof HibernateProxy) {
+      return null;
+    } else {
+      return userMapper.mapToDomainEntity(userJpaEntity);
+    }
+
+  }
+  private UserJpaEntity getUseJpaEntity(User user) {
+    if (user == null) {
+      return null;
+    } else {
+      return userMapper.mapToJpaEntity(user);
+    }
   }
 
 }

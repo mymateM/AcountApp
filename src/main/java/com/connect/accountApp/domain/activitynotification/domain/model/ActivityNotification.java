@@ -39,4 +39,10 @@ public class ActivityNotification {
     this.requester = requester;
   }
 
+  public void changeIsReadToTrue() {
+    setRead(true);
+  }
+  private void setRead(Boolean read) {
+    isRead = read;
+  }
 }

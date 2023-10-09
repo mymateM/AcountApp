@@ -22,6 +22,7 @@ public class UserActivityNotificationMapper {
         .user(userMapper.mapToDomainEntity(userActivityNotificationJpaEntity.getUserJpaEntity()))
         .activityNotification(activityNotificationMapper.mapToDomainEntity(
             userActivityNotificationJpaEntity.getActivityNotificationJpaEntity()))
+        .isRead(userActivityNotificationJpaEntity.getIsRead())
         .build();
   }
 
@@ -31,6 +32,7 @@ public class UserActivityNotificationMapper {
         .userNotiId(userActivityNotification.getUserNotiId())
         .userJpaEntity(userMapper.mapToJpaEntity(userActivityNotification.getUser()))
         .activityNotificationJpaEntity(activityNotificationMapper.mapToJpaEntity(userActivityNotification.getActivityNotification()))
+        .isRead(userActivityNotification.getIsRead())
         .build();
 
 

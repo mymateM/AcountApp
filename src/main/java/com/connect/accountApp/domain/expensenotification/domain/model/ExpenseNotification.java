@@ -28,4 +28,15 @@ public class ExpenseNotification {
     this.expense = expense;
     this.user = user;
   }
+
+  public void changeIsReadToFalse() {
+    setRead(false);
+  }
+
+  public void changeIsReadToTrue() {
+    setRead(true);
+  }
+  private void setRead(Boolean read) {
+    isRead = read;
+  }
 }

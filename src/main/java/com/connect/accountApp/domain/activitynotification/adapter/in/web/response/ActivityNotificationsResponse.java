@@ -23,6 +23,8 @@ public class ActivityNotificationsResponse {
   @NoArgsConstructor
   public class ActivityNotificationResponse {
 
+    @JsonProperty("activity_notification_id")
+    private Long userActivityNotificationId;
     @JsonProperty("category_title")
     private String categoryTitle;
     @JsonProperty("category_image_url")
@@ -35,6 +37,7 @@ public class ActivityNotificationsResponse {
     private String trigger;
 
     public ActivityNotificationResponse(ActivityNotificationCommand command) {
+      this.userActivityNotificationId = command.getUserActivityNotificationId();
       this.categoryTitle = command.getNotiCategory().getTitle();
       this.categoryImageUrl = command.getNotiCategory().getImgUrl();
       this.isRead = command.getIsRead();

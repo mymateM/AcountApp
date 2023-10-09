@@ -70,20 +70,23 @@ public class NotificationQueryRepository {
 
     return jpaQueryFactory
         .select(Projections.constructor(ActivityNotificationCommand.class,
+            userActivityNotificationJpaEntity.userNotiId.as("userActivityNotificationId"),
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationCategory.as("notiCategory"),
-            userActivityNotificationJpaEntity.activityNotificationJpaEntity.isRead,
+            userActivityNotificationJpaEntity.isRead,
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.createdAt,
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity.userNickname.as("trigger")
         ))
         .from(userActivityNotificationJpaEntity)
         .join(userActivityNotificationJpaEntity.activityNotificationJpaEntity)
         .join(userActivityNotificationJpaEntity.userJpaEntity)
-        .leftJoin(userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity)
+        .leftJoin(
+            userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity)
         .where(
             userActivityNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
         )
         .fetch();
   }
+
 
   private BooleanExpression eqUserId(Long userId) {
     log.info("[NotificationQueryRepository] userId : {}", userId);

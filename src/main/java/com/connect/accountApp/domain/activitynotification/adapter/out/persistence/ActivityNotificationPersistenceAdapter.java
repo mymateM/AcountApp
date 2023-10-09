@@ -10,13 +10,15 @@ import com.connect.accountApp.domain.activitynotification.application.port.out.c
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.NotificationCommand;
 import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
 import com.connect.accountApp.domain.activitynotification.exception.ActivityNotificationNotFoundException;
+import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.UserActivityNotificationJpaRepository;
+import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.UserActivityNotificationMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class NotificationPersistenceAdapter implements FindActivityNotificationsPort,
+public class ActivityNotificationPersistenceAdapter implements FindActivityNotificationsPort,
     FindExpenseNotificationPort, SaveActivityNotificationPort {
 
   private final NotificationQueryRepository notificationQueryRepository;
@@ -24,12 +26,12 @@ public class NotificationPersistenceAdapter implements FindActivityNotifications
   private final ActivityNotificationMapper activityNotificationMapper;
 
   @Override
-  public List<NotificationCommand> findActivityNotifications(Long useId) {
-    return notificationQueryRepository.findActivityNotifications(useId);
+  public List<NotificationCommand> findActivityNotifications(Long userId) {
+    return notificationQueryRepository.findActivityNotifications(userId);
   }
 
   @Override
-  public ActivityNotification findActivityNotification(Long activityNotificationId) {
+  public ActivityNotification findUserActivityNotification(Long activityNotificationId) {
     ActivityNotificationJpaEntity activityNotificationJpaEntity = activityNotificationJpaRepository.findById(
         activityNotificationId).orElseThrow(
         () -> new ActivityNotificationNotFoundException(
@@ -44,9 +46,9 @@ public class NotificationPersistenceAdapter implements FindActivityNotifications
     return notificationQueryRepository.findActivityNotifications(userEmail);
   }
 
+
   @Override
   public List<FindExpenseNotificationCommand> findExpenseNotification(Long userId) {
-
     return notificationQueryRepository.findExpenseNotifications(userId);
   }
 
@@ -59,4 +61,5 @@ public class NotificationPersistenceAdapter implements FindActivityNotifications
         .getActivityNotificationId();
 
   }
+
 }

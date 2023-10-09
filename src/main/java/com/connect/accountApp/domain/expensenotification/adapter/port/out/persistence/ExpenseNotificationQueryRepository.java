@@ -3,18 +3,13 @@ package com.connect.accountApp.domain.expensenotification.adapter.port.out.persi
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
 import static com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.QExpenseNotificationJpaEntity.expenseNotificationJpaEntity;
 import static com.connect.accountApp.domain.settlement.adapter.out.persistence.jpa.model.QSettlementJpaEntity.settlementJpaEntity;
-import static com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.QUserActivityNotificationJpaEntity.userActivityNotificationJpaEntity;
-import static com.querydsl.core.group.GroupBy.groupBy;
 
-import com.connect.accountApp.domain.activitynotification.application.port.in.command.ActivityNotificationCommand;
+import com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.ExpenseNotificationJpaEntity;
 import com.connect.accountApp.domain.expensenotification.application.port.in.command.ExpenseNotificationCommand;
 import com.connect.accountApp.domain.expensenotification.application.port.in.command.FindSpenderCommand;
-import com.connect.accountApp.domain.settlement.adapter.out.persistence.jpa.model.QSettlementJpaEntity;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -64,6 +59,17 @@ public class ExpenseNotificationQueryRepository {
             settlementJpaEntity.isSettlementDelegate.isTrue()
         )
         .orderBy()
+        .fetch();
+  }
+
+  public List<ExpenseNotificationJpaEntity> findExpenseNotifications(List<Long> expenseNotificationIds) {
+
+    return jpaQueryFactory
+        .select(expenseNotificationJpaEntity)
+        .from(expenseNotificationJpaEntity)
+        .where(
+            expenseNotificationJpaEntity.id.in(expenseNotificationIds)
+        )
         .fetch();
   }
 

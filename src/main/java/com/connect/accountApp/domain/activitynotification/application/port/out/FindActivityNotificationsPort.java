@@ -9,7 +9,7 @@ public interface FindActivityNotificationsPort {
 
   List<NotificationCommand> findActivityNotifications(Long useId);
 
-  ActivityNotification findActivityNotification(Long activityNotificationId);
+  ActivityNotification findUserActivityNotification(Long activityNotificationId);
 
   List<ActivityNotificationCommand> findActivityNotifications(String userEmail);
 
