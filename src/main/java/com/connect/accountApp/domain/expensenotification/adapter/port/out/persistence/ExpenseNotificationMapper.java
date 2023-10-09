@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.expensenotification.adapter.port.out.persi
 import com.connect.accountApp.domain.expense.adapter.out.persistence.ExpenseMapper;
 import com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.ExpenseNotificationJpaEntity;
 import com.connect.accountApp.domain.expensenotification.domain.model.ExpenseNotification;
+import com.connect.accountApp.domain.user.adapter.out.persistence.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class ExpenseNotificationMapper {
 
   private final ExpenseMapper expenseMapper;
-
+  private final UserMapper userMapper;
 
   public ExpenseNotification mapToDomainEntity(ExpenseNotificationJpaEntity expenseNotificationJpaEntity) {
     return ExpenseNotification.builder()
@@ -19,6 +20,7 @@ public class ExpenseNotificationMapper {
         .isRead(expenseNotificationJpaEntity.getIsRead())
         .createdAt(expenseNotificationJpaEntity.getCreatedAt())
         .expense(expenseMapper.mapToDomainEntity(expenseNotificationJpaEntity.getExpenseJpaEntity()))
+        .user(userMapper.mapToDomainEntity(expenseNotificationJpaEntity.getUserJpaEntity()))
         .build();
   }
 
@@ -28,6 +30,7 @@ public class ExpenseNotificationMapper {
         .isRead(expenseNotification.getIsRead())
         .createdAt(expenseNotification.getCreatedAt())
         .expenseJpaEntity(expenseMapper.mapToJpaEntity(expenseNotification.getExpense()))
+        .userJpaEntity(userMapper.mapToJpaEntity(expenseNotification.getUser()))
         .build();
 
   }

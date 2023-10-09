@@ -1,11 +1,13 @@
 package com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model;
 
 import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.ExpenseJpaEntity;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -30,16 +32,22 @@ public class ExpenseNotificationJpaEntity {
   @CreationTimestamp
   private LocalDateTime createdAt;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "expense_id")
   private ExpenseJpaEntity expenseJpaEntity;
 
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private UserJpaEntity userJpaEntity;
+
   @Builder
   public ExpenseNotificationJpaEntity(Long id, Boolean isRead, LocalDateTime createdAt,
-      ExpenseJpaEntity expenseJpaEntity) {
+      ExpenseJpaEntity expenseJpaEntity, UserJpaEntity userJpaEntity) {
+
     this.id = id;
     this.isRead = isRead;
     this.createdAt = createdAt;
     this.expenseJpaEntity = expenseJpaEntity;
+    this.userJpaEntity = userJpaEntity;
   }
 }
