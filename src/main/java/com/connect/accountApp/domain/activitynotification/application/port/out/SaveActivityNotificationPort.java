@@ -8,6 +8,4 @@ public interface SaveActivityNotificationPort {
 
   Long saveActivityNotification(ActivityNotification activityNotification);
 
-  void saveUserActivityNotifications(List<UserActivityNotification> userActivityNotifications);
-
 }
