@@ -24,4 +24,11 @@ public class UserActivityNotification {
     this.activityNotification = activityNotification;
     this.isRead = isRead;
   }
+
+  public void changeIsReadToTrue() {
+    setRead(true);
+  }
+  private void setRead(Boolean read) {
+    isRead = read;
+  }
 }

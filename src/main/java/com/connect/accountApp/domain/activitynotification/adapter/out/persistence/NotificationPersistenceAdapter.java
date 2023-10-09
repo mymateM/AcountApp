@@ -10,6 +10,10 @@ import com.connect.accountApp.domain.activitynotification.application.port.out.c
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.NotificationCommand;
 import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
 import com.connect.accountApp.domain.activitynotification.exception.ActivityNotificationNotFoundException;
+import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.UserActivityNotificationJpaRepository;
+import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.UserActivityNotificationMapper;
+import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.UserActivityNotificationJpaEntity;
+import com.connect.accountApp.domain.usernotification.domain.model.UserActivityNotification;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,10 +26,12 @@ public class NotificationPersistenceAdapter implements FindActivityNotifications
   private final NotificationQueryRepository notificationQueryRepository;
   private final ActivityNotificationJpaRepository activityNotificationJpaRepository;
   private final ActivityNotificationMapper activityNotificationMapper;
+  private final UserActivityNotificationMapper userActivityNotificationMapper;
+  private final UserActivityNotificationJpaRepository userActivityNotificationJpaRepository;
 
   @Override
-  public List<NotificationCommand> findActivityNotifications(Long useId) {
-    return notificationQueryRepository.findActivityNotifications(useId);
+  public List<NotificationCommand> findActivityNotifications(Long userId) {
+    return notificationQueryRepository.findActivityNotifications(userId);
   }
 
   @Override
@@ -45,8 +51,16 @@ public class NotificationPersistenceAdapter implements FindActivityNotifications
   }
 
   @Override
-  public List<FindExpenseNotificationCommand> findExpenseNotification(Long userId) {
+  public List<UserActivityNotification> findActivityNotification(List<Long> activityNotificationId) {
 
+    List<UserActivityNotificationJpaEntity> userActivityNotificationJpaEntities =
+        notificationQueryRepository.findActivityNotifications(activityNotificationId);
+
+    return userActivityNotificationJpaEntities.stream().map(userActivityNotificationMapper::mapToDomainEntity).toList();
+  }
+
+  @Override
+  public List<FindExpenseNotificationCommand> findExpenseNotification(Long userId) {
     return notificationQueryRepository.findExpenseNotifications(userId);
   }
 
@@ -58,5 +72,12 @@ public class NotificationPersistenceAdapter implements FindActivityNotifications
     return activityNotificationJpaRepository.save(activityNotificationJpaEntity)
         .getActivityNotificationId();
 
+  }
+
+  @Override
+  public void saveUserActivityNotifications(List<UserActivityNotification> userActivityNotifications) {
+    List<UserActivityNotificationJpaEntity> userActivityNotificationJpaEntities = userActivityNotifications.stream()
+        .map(userActivityNotificationMapper::mapToJpaEntity).toList();
+    userActivityNotificationJpaRepository.saveAll(userActivityNotificationJpaEntities);
   }
 }
