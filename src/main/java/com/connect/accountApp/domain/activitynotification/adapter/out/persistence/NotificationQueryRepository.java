@@ -73,6 +73,7 @@ public class NotificationQueryRepository {
 
     return jpaQueryFactory
         .select(Projections.constructor(ActivityNotificationCommand.class,
+            userActivityNotificationJpaEntity.userNotiId.as("userActivityNotificationId"),
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.activityNotificationCategory.as("notiCategory"),
             userActivityNotificationJpaEntity.isRead,
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.createdAt,
@@ -81,7 +82,8 @@ public class NotificationQueryRepository {
         .from(userActivityNotificationJpaEntity)
         .join(userActivityNotificationJpaEntity.activityNotificationJpaEntity)
         .join(userActivityNotificationJpaEntity.userJpaEntity)
-        .leftJoin(userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity)
+        .leftJoin(
+            userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity)
         .where(
             userActivityNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
         )
