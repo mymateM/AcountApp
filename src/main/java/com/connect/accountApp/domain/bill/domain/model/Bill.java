@@ -1,6 +1,7 @@
 package com.connect.accountApp.domain.bill.domain.model;
 
 import com.connect.accountApp.domain.household.domain.model.Household;
+import com.connect.accountApp.domain.user.domain.model.User;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.AccessLevel;
@@ -13,22 +14,23 @@ import lombok.NoArgsConstructor;
 public class Bill {
 
   private Long billId;
-  private LocalDate billDate;
+  private LocalDate billPaymentDate;
   private BigDecimal billPayment;
-  private String billImgUrl;
-  private Household household;
   private String billStore;
-  private String billImage;
+  private BillCategory billCategory;
+
+  private User billRegister;
+  private Household household;
 
   @Builder
-  public Bill(Long billId, LocalDate billDate, BigDecimal billPayment, String billImgUrl,
-      Household household, String billStore, String billImage) {
+  public Bill(Long billId, LocalDate billPaymentDate, BigDecimal billPayment, String billStore,
+      BillCategory billCategory, User billRegister, Household household) {
     this.billId = billId;
-    this.billDate = billDate;
+    this.billPaymentDate = billPaymentDate;
     this.billPayment = billPayment;
-    this.billImgUrl = billImgUrl;
-    this.household = household;
     this.billStore = billStore;
-    this.billImage = billImage;
+    this.billCategory = billCategory;
+    this.billRegister = billRegister;
+    this.household = household;
   }
 }

@@ -1,6 +1,8 @@
 package com.connect.accountApp.domain.bill.adapter.out.persistence.jpa.model;
 
+import com.connect.accountApp.domain.bill.domain.model.BillCategory;
 import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
+import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,23 +25,29 @@ public class BillJpaEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long billId;
-  private LocalDate billDate;
+  private LocalDate billPaymentDate;
   private BigDecimal billPayment;
-  private String billImgUrl;
   private String billStore;
+  private BillCategory billCategory;
 
   @ManyToOne
-  @JoinColumn(name = "household_id")
+  @JoinColumn("user_id")
+  private UserJpaEntity billRegisterJpaEntity;
+
+  @ManyToOne
+  @JoinColumn("household_id")
   private HouseHoldJpaEntity houseHoldJpaEntity;
 
   @Builder
-  public BillJpaEntity(Long billId, LocalDate billDate, BigDecimal billPayment, String billImgUrl,
-      HouseHoldJpaEntity houseHoldJpaEntity, String billStore) {
+  public BillJpaEntity(Long billId, LocalDate billPaymentDate, BigDecimal billPayment,
+      String billStore, BillCategory billCategory,
+      UserJpaEntity billRegisterJpaEntity, HouseHoldJpaEntity houseHoldJpaEntity) {
     this.billId = billId;
-    this.billDate = billDate;
+    this.billPaymentDate = billPaymentDate;
     this.billPayment = billPayment;
-    this.billImgUrl = billImgUrl;
-    this.houseHoldJpaEntity = houseHoldJpaEntity;
     this.billStore = billStore;
+    this.billCategory = billCategory;
+    this.billRegisterJpaEntity = billRegisterJpaEntity;
+    this.houseHoldJpaEntity = houseHoldJpaEntity;
   }
 }
