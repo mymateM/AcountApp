@@ -4,6 +4,8 @@ import com.connect.accountApp.domain.bill.domain.model.BillCategory;
 import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,6 +31,8 @@ public class BillJpaEntity {
   private LocalDate billPaymentDate;
   private BigDecimal billPayment;
   private String billStore;
+
+  @Enumerated(EnumType.STRING)
   private BillCategory billCategory;
 
   @OneToOne
