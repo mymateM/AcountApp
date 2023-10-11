@@ -32,11 +32,11 @@ public class BillJpaEntity {
   private BillCategory billCategory;
 
   @OneToOne
-  @JoinColumn("user_id")
+  @JoinColumn(name = "user_id")
   private UserJpaEntity billRegisterJpaEntity;
 
   @ManyToOne
-  @JoinColumn("household_id")
+  @JoinColumn(name = "household_id")
   private HouseHoldJpaEntity houseHoldJpaEntity;
 
   @Builder
