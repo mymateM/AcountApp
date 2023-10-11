@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.bill.adapter.in.web.response;
 import com.connect.accountApp.domain.bill.application.port.command.BillCommand;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AccessLevel;
@@ -41,7 +42,7 @@ public class GetBillsResponse {
       this.billImageUrl = command.getBillImageUrl();
       this.billPaymentDate = command.getBillPaymentDate();
       this.billStore = command.getBillStore();
-      this.billPaymentAmount = command.getBillPaymentAmount();
+      this.billPaymentAmount = command.getBillPaymentAmount().setScale(0, RoundingMode.FLOOR);
     }
   }
 
