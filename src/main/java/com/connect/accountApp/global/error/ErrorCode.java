@@ -32,6 +32,8 @@ public enum ErrorCode {
   EXPENSE_NOT_FOUND(404, "E001", "존재하지 않는 지출입니다."),
   EXPENSE_DELEGATE_USER_NOT_FOUND(400, "E002", "실제 지출한 가구원을 입력하세요."),
 
+  // bill
+  BILL_NOT_FOUND(404, "B001", "존재하지 않는 고지서 아이디 입니다."),
 
   // global
   DATE_NOT_FOUND(400, "D001", "정확한 날짜를 입력해주세요.");
