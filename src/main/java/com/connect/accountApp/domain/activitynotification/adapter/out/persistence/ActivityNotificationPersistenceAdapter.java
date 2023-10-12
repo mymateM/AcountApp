@@ -46,6 +46,18 @@ public class ActivityNotificationPersistenceAdapter implements FindActivityNotif
     return notificationQueryRepository.findActivityNotifications(userEmail);
   }
 
+  @Override
+  public ActivityNotification findActivityNotification(Long activityNotificationId) {
+    ActivityNotificationJpaEntity activityNotificationJpaEntity = activityNotificationJpaRepository
+        .findById(activityNotificationId)
+        .orElseThrow(
+            () -> new ActivityNotificationNotFoundException(
+                "[activityNotificationId] " + activityNotificationId + "에 해당하는 객체가 존재하지 않습니다.")
+        );
+
+    return activityNotificationMapper.mapToDomainEntity(activityNotificationJpaEntity);
+  }
+
 
   @Override
   public List<FindExpenseNotificationCommand> findExpenseNotification(Long userId) {
