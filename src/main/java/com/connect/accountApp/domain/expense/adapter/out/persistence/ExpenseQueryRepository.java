@@ -7,6 +7,7 @@ import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.mod
 
 import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
+import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseByCategoryCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
@@ -137,6 +138,25 @@ public class ExpenseQueryRepository {
         )
         .groupBy(expenseJpaEntity.expenseDate.dayOfMonth())
         .fetch();
+  }
+
+  public List<TotalExpenseByCategoryCommand> getTotalExpenseGroupByCategory(Long householdId, LocalDate from, LocalDate to) {
+
+    return queryFactory
+        .select(Projections.constructor(TotalExpenseByCategoryCommand.class,
+            settlementJpaEntity.expenseJpaEntity.expenseCategory.as("expenseCategory"),
+            settlementJpaEntity.expenseJpaEntity.expenseAmount.sum().as("totalExpenseAmount"))
+        )
+        .from(settlementJpaEntity)
+        .join(settlementJpaEntity.userJpaEntity)
+        .join(settlementJpaEntity.expenseJpaEntity)
+        .where(
+            settlementJpaEntity.userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+            settlementJpaEntity.expenseJpaEntity.expenseDate.between(from, to)
+        )
+        .groupBy(expenseJpaEntity.expenseCategory)
+        .fetch();
+
   }
 
   private BooleanExpression eqHouseholdId(Long householdId) {

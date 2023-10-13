@@ -9,6 +9,7 @@ import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTo
 import com.connect.accountApp.domain.expense.application.port.out.GetTotalExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.SaveExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
+import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseByCategoryCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
 import com.connect.accountApp.domain.expense.domain.model.Expense;
 import com.connect.accountApp.domain.expense.exception.ExpenseNotFoundException;
@@ -35,6 +36,13 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
     List<TotalExpenseCommand> totalExpenseQuery  = expenseQueryRepository.getTotalExpenseQuery(
         householdId, startTime, endTime);
     return totalExpenseQuery;
+  }
+
+  @Override
+  public List<TotalExpenseByCategoryCommand> getTotalExpenseGroupByCategory(Long householdId,
+      LocalDate startTime, LocalDate endTime) {
+
+    return expenseQueryRepository.getTotalExpenseGroupByCategory(householdId, startTime, endTime);
   }
 
   @Override
