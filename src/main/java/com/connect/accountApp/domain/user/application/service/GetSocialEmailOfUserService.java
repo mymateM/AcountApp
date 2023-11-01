@@ -7,7 +7,7 @@ import com.connect.accountApp.domain.user.application.port.out.GetUserSocialEmai
 import com.connect.accountApp.domain.user.application.port.out.SaveUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +17,7 @@ public class GetSocialEmailOfUserService implements GetSocialEmailOfUserUseCase 
   private final GetUserSocialEmailPort getUserSocialEmailPort;
   private final GetUserPort getUserPort;
   private final SaveUserPort saveUserPort;
-  private final BCryptPasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public String getSocialEmailOfUser(SocialAuthenticationRequest request) {

@@ -4,7 +4,7 @@ import com.connect.accountApp.domain.user.application.port.in.UserPasswordValida
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserPasswordValidateService implements UserPasswordValidateUseCase {
 
   private final GetUserPort getUserPort;
-  private final BCryptPasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
 
   @Override
