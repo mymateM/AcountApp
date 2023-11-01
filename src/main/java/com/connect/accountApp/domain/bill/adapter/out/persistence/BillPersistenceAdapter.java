@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.bill.adapter.out.persistence.jpa.BillJpaRep
 import com.connect.accountApp.domain.bill.adapter.out.persistence.jpa.model.BillJpaEntity;
 import com.connect.accountApp.domain.bill.application.port.command.BillCommand;
 import com.connect.accountApp.domain.bill.application.port.command.RecentBillCategoryCommand;
+import com.connect.accountApp.domain.bill.application.port.out.DeleteBillPort;
 import com.connect.accountApp.domain.bill.application.port.out.FindBillPort;
 import com.connect.accountApp.domain.bill.application.port.out.SaveBillPort;
 import com.connect.accountApp.domain.bill.domain.model.Bill;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BillPersistenceAdapter implements FindBillPort, SaveBillPort {
+public class BillPersistenceAdapter implements FindBillPort, SaveBillPort, DeleteBillPort {
 
     private final BillQueryRepository billQueryRepository;
     private final BillJpaRepository billJpaRepository;
@@ -51,5 +52,10 @@ public class BillPersistenceAdapter implements FindBillPort, SaveBillPort {
         BillJpaEntity billJpaEntity = billMapper.mapToJpaEntity(newBill);
         BillJpaEntity savedBillJpaEntity = billJpaRepository.save(billJpaEntity);
         return billMapper.mapToDomainEntity(savedBillJpaEntity);
+    }
+
+    @Override
+    public void deleteBills(List<Long> billIds) {
+        billJpaRepository.deleteAllById(billIds);
     }
 }

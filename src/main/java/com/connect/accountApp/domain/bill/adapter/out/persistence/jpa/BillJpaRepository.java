@@ -11,4 +11,7 @@ public interface BillJpaRepository extends JpaRepository<BillJpaEntity, Long> {
 
   @Override
   Optional<BillJpaEntity> findById(Long aLong);
+
+  @Override
+  void deleteAllById(Iterable<? extends Long> longs);
 }
