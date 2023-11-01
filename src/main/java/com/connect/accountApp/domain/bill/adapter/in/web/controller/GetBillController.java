@@ -1,13 +1,9 @@
 package com.connect.accountApp.domain.bill.adapter.in.web.controller;
 
 import com.connect.accountApp.domain.bill.adapter.in.web.response.GetBillResponse;
-import com.connect.accountApp.domain.bill.adapter.in.web.response.GetBillsResponse;
-import com.connect.accountApp.domain.bill.application.port.command.BillCommand;
 import com.connect.accountApp.domain.bill.application.port.in.GetBillUseCase;
 import com.connect.accountApp.domain.bill.domain.model.Bill;
-import com.connect.accountApp.domain.bill.domain.model.BillCategory;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
