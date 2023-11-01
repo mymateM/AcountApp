@@ -11,6 +11,7 @@ public class SuccessResponse<T> {
 
   public static final String SUCCESS_MESSAGE = "Ok";
   public static final String CREATED_MESSAGE = "Created";
+  public static final String NO_CONTENT_MESSAGE = "No Content";
 
   private String message;
   private int status;
@@ -27,5 +28,9 @@ public class SuccessResponse<T> {
 
   public static <T> SuccessResponse create201CreatedResponse(T data) {
     return new SuccessResponse(CREATED_MESSAGE, 201, data);
+  }
+
+  public static <T> SuccessResponse create204NoContentResponse() {
+    return new SuccessResponse(NO_CONTENT_MESSAGE, 204, null);
   }
 }
