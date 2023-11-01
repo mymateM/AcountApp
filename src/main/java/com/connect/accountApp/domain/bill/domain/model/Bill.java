@@ -18,13 +18,14 @@ public class Bill {
   private BigDecimal billPayment;
   private String billStore;
   private BillCategory billCategory;
+  private String billMemo;
 
   private User billRegister;
   private Household household;
 
   @Builder
   public Bill(Long billId, LocalDate billPaymentDate, BigDecimal billPayment, String billStore,
-      BillCategory billCategory, User billRegister, Household household) {
+      BillCategory billCategory, User billRegister, Household household, String billMemo) {
     this.billId = billId;
     this.billPaymentDate = billPaymentDate;
     this.billPayment = billPayment;
@@ -32,5 +33,6 @@ public class Bill {
     this.billCategory = billCategory;
     this.billRegister = billRegister;
     this.household = household;
+    this.billMemo = billMemo;
   }
 }

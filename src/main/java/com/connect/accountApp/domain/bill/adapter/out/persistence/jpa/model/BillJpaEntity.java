@@ -31,6 +31,7 @@ public class BillJpaEntity {
   private LocalDate billPaymentDate;
   private BigDecimal billPayment;
   private String billStore;
+  private String billMemo;
 
   @Enumerated(EnumType.STRING)
   private BillCategory billCategory;
@@ -46,7 +47,7 @@ public class BillJpaEntity {
   @Builder
   public BillJpaEntity(Long billId, LocalDate billPaymentDate, BigDecimal billPayment,
       String billStore, BillCategory billCategory,
-      UserJpaEntity billRegisterJpaEntity, HouseHoldJpaEntity houseHoldJpaEntity) {
+      UserJpaEntity billRegisterJpaEntity, HouseHoldJpaEntity houseHoldJpaEntity, String billMemo) {
     this.billId = billId;
     this.billPaymentDate = billPaymentDate;
     this.billPayment = billPayment;
@@ -54,5 +55,6 @@ public class BillJpaEntity {
     this.billCategory = billCategory;
     this.billRegisterJpaEntity = billRegisterJpaEntity;
     this.houseHoldJpaEntity = houseHoldJpaEntity;
+    this.billMemo = billMemo;
   }
 }

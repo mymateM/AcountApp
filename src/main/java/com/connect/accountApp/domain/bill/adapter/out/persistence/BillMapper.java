@@ -26,14 +26,15 @@ public class BillMapper {
     }
 
     return Bill.builder()
-        .billId(billJpaEntity.getBillId())
-        .billPaymentDate(billJpaEntity.getBillPaymentDate())
-        .billPayment(billJpaEntity.getBillPayment())
-        .billCategory(billJpaEntity.getBillCategory())
-        .billStore(billJpaEntity.getBillStore())
-        .billRegister(getUser(billJpaEntity.getBillRegisterJpaEntity()))
-        .household(getHousehold(billJpaEntity.getHouseHoldJpaEntity()))
-        .build();
+            .billId(billJpaEntity.getBillId())
+            .billPaymentDate(billJpaEntity.getBillPaymentDate())
+            .billPayment(billJpaEntity.getBillPayment())
+            .billCategory(billJpaEntity.getBillCategory())
+            .billStore(billJpaEntity.getBillStore())
+            .billMemo(billJpaEntity.getBillMemo())
+            .billRegister(getUser(billJpaEntity.getBillRegisterJpaEntity()))
+            .household(getHousehold(billJpaEntity.getHouseHoldJpaEntity()))
+            .build();
   }
 
   public BillJpaEntity mapToJpaEntity(Bill bill) {
@@ -43,14 +44,15 @@ public class BillMapper {
     }
 
     return BillJpaEntity.builder()
-        .billId(bill.getBillId())
-        .billPaymentDate(bill.getBillPaymentDate())
-        .billPayment(bill.getBillPayment())
-        .billCategory(bill.getBillCategory())
-        .billStore(bill.getBillStore())
-        .billRegisterJpaEntity(userMapper.mapToJpaEntity(bill.getBillRegister()))
-        .houseHoldJpaEntity(householdMapper.mapToJpaEntity(bill.getHousehold()))
-        .build();
+            .billId(bill.getBillId())
+            .billPaymentDate(bill.getBillPaymentDate())
+            .billPayment(bill.getBillPayment())
+            .billCategory(bill.getBillCategory())
+            .billStore(bill.getBillStore())
+            .billMemo(bill.getBillMemo())
+            .billRegisterJpaEntity(userMapper.mapToJpaEntity(bill.getBillRegister()))
+            .houseHoldJpaEntity(householdMapper.mapToJpaEntity(bill.getHousehold()))
+            .build();
   }
 
   private User getUser(UserJpaEntity userJpaEntity) {
