@@ -83,8 +83,7 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
 
   @Override
   public List<DailyExpenseCommand> findSearchedExpenses(Long householdId, SearchedCondition condition) {
-    expenseQueryRepository.findSearchedExpenses(householdId, condition);
-    return null;
+    return expenseQueryRepository.findSearchedExpenses(householdId, condition);
   }
 
 }
