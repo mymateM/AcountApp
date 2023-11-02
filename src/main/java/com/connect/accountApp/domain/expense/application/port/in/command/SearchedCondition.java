@@ -31,4 +31,16 @@ public class SearchedCondition {
         }
         return ExpenseCategory.valueOf(expenseCategoryName);
     }
+
+    @Override
+    public String toString() {
+        return "SearchedCondition{" +
+                "expenseDateMax=" + expenseDateMax +
+                ", expenseDateMin=" + expenseDateMin +
+                ", expenseCategory=" + expenseCategory +
+                ", expenseAmountMax=" + expenseAmountMax +
+                ", expenseAmountMin=" + expenseAmountMin +
+                ", sortedByNewest=" + sortedByNewest +
+                '}';
+    }
 }

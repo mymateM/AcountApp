@@ -1,6 +1,5 @@
 package com.connect.accountApp.domain.expense.adapter.in.web.controller;
 
-import com.connect.accountApp.domain.expense.adapter.in.web.controller.request.SearchConditionRequest;
 import com.connect.accountApp.domain.expense.adapter.in.web.controller.response.DailyExpenseResponse;
 import com.connect.accountApp.domain.expense.application.port.in.SearchExpenseUseCase;
 import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

@@ -23,8 +23,8 @@ public class GetSearchedExpenseService implements SearchExpenseUseCase {
         User user = getUserPort.findUserWithHousehold(userEmail);
         Long householdId = user.getHousehold().getHouseholdId();
 
-        List<DailyExpenseCommand> DailyExpenseCommands = findExpensePort.findSearchedExpenses(householdId, condition);
+        List<DailyExpenseCommand> dailyExpenseCommands = findExpensePort.findSearchedExpenses(householdId, condition);
 
-        return DailyExpenseCommands;
+        return dailyExpenseCommands;
     }
 }
