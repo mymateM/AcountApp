@@ -6,10 +6,12 @@ import static com.connect.accountApp.domain.settlement.adapter.out.persistence.j
 import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 
 import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
+import com.connect.accountApp.domain.expense.application.port.in.command.SearchedCondition;
 import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseByCategoryCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
 import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -95,8 +97,52 @@ public class ExpenseQueryRepository {
         );
   }
 
+    public List<DailyExpenseCommand> findSearchedExpenses(Long householdId, SearchedCondition condition) {
 
-  public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
+        OrderSpecifier<LocalDate> sorted = sorted(condition);
+
+        return queryFactory
+                .from(settlementJpaEntity)
+                .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
+                .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
+                .where(
+                        userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+                        settlementJpaEntity.expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
+                        settlementJpaEntity.expenseJpaEntity.expenseCategory.eq(condition.getExpenseCategory()),
+                        settlementJpaEntity.expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(), condition.getExpenseAmountMax())
+
+                )
+                .orderBy(sorted)
+                .transform(GroupBy.groupBy(settlementJpaEntity.expenseJpaEntity.expenseId).list(
+                                Projections.constructor(DailyExpenseCommand.class,
+                                        settlementJpaEntity.expenseJpaEntity.expenseId,
+                                        settlementJpaEntity.expenseJpaEntity.expenseAmount,
+                                        settlementJpaEntity.expenseJpaEntity.expenseStore,
+                                        settlementJpaEntity.expenseJpaEntity.expenseCategory,
+                                        GroupBy.list(
+                                                Projections.constructor(
+                                                        DailyExpenseCommand.SettlementSubjectCommand.class,
+                                                        userJpaEntity.userId,
+                                                        userJpaEntity.userNickname,
+                                                        settlementJpaEntity.isSettlementDelegate.as("isExpenseConsumer"),
+                                                        userJpaEntity.userImgUrl.as("userProfileImage")
+                                                ).as("settlementSubjects")
+                                        )
+                                )
+                        )
+                );
+    }
+
+    private OrderSpecifier<LocalDate> sorted(SearchedCondition condition) {
+        OrderSpecifier<LocalDate> sorted = settlementJpaEntity.expenseJpaEntity.expenseDate.asc();
+        if (condition.getSortedByNewest()) {
+            sorted = settlementJpaEntity.expenseJpaEntity.expenseDate.desc();
+        }
+        return sorted;
+    }
+
+
+    public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 
 //    Integer householdTotalExpense = queryFactory
 //        .select(

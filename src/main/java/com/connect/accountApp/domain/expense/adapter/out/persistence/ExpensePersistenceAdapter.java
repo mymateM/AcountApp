@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.expense.adapter.out.persistence;
 import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.ExpenseJpaRepository;
 import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.ExpenseJpaEntity;
 import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
+import com.connect.accountApp.domain.expense.application.port.in.command.SearchedCondition;
 import com.connect.accountApp.domain.expense.application.port.out.FindDailyTotalExpensesPort;
 import com.connect.accountApp.domain.expense.application.port.out.FindExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTotalExpensePort;
@@ -78,6 +79,11 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   @Override
   public List<DailyExpenseCommand> findDailyExpenses(Long householdId, LocalDate date) {
     return expenseQueryRepository.findDailyExpenses(householdId, date);
+  }
+
+  @Override
+  public List<DailyExpenseCommand> findSearchedExpenses(Long householdId, SearchedCondition condition) {
+    return expenseQueryRepository.findSearchedExpenses(householdId, condition);
   }
 
 }
