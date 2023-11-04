@@ -10,6 +10,7 @@ import com.connect.accountApp.domain.expense.application.port.in.command.Searche
 import com.connect.accountApp.domain.expense.application.port.out.command.DailyTotalExpensesCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseByCategoryCommand;
 import com.connect.accountApp.domain.expense.application.port.out.command.TotalExpenseCommand;
+import com.connect.accountApp.domain.expense.domain.model.ExpenseCategory;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -18,6 +19,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -108,8 +110,9 @@ public class ExpenseQueryRepository {
                 .where(
                         userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
                         settlementJpaEntity.expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
-                        settlementJpaEntity.expenseJpaEntity.expenseCategory.eq(condition.getExpenseCategory()),
-                        settlementJpaEntity.expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(), condition.getExpenseAmountMax())
+                        eqCategory(condition.getExpenseCategory().orElse(null)),
+                        settlementJpaEntity.expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(),
+                                condition.getExpenseAmountMax())
 
                 )
                 .orderBy(sorted)
@@ -221,5 +224,9 @@ public class ExpenseQueryRepository {
 
     return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate.between(startDate.toLocalDate(), endDate.toLocalDate()) : null;
   }
+
+    private BooleanExpression eqCategory(ExpenseCategory category) {
+        return (category != null) ? settlementJpaEntity.expenseJpaEntity.expenseCategory.eq(category) : null;
+    }
 
 }

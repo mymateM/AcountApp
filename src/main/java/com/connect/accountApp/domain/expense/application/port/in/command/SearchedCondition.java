@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.expense.application.port.in.command;
 import com.connect.accountApp.domain.expense.domain.model.ExpenseCategory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 import lombok.Getter;
 
 @Getter
@@ -10,7 +11,7 @@ public class SearchedCondition {
 
     private LocalDate expenseDateMax;
     private LocalDate expenseDateMin;
-    private ExpenseCategory expenseCategory;
+    private Optional<ExpenseCategory> expenseCategory;
     private BigDecimal expenseAmountMax;
     private BigDecimal expenseAmountMin;
     private Boolean sortedByNewest;
@@ -25,11 +26,11 @@ public class SearchedCondition {
         this.sortedByNewest = sortedBy;
     }
 
-    private ExpenseCategory findExpenseCategory(String expenseCategoryName) {
-        if (expenseCategoryName == null) {
-            return null;
+    private Optional<ExpenseCategory> findExpenseCategory(String expenseCategoryName) {
+        if (expenseCategoryName.equals("")) {
+            return Optional.empty();
         }
-        return ExpenseCategory.valueOf(expenseCategoryName);
+        return Optional.of(ExpenseCategory.valueOf(expenseCategoryName));
     }
 
     @Override
