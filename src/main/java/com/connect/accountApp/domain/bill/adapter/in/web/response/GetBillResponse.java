@@ -23,6 +23,8 @@ public class GetBillResponse {
     private LocalDate billPaymentDate;
     @JsonProperty("bill_memo")
     private String billMemo;
+    @JsonProperty("register_date")
+    private LocalDate createdAt;
 
     public GetBillResponse(Bill bill) {
         this.billCategory = bill.getBillCategory().getTitle();
@@ -30,5 +32,6 @@ public class GetBillResponse {
         this.billImageUrl = bill.getBillCategory().getImgUrl();
         this.billPaymentDate = bill.getBillPaymentDate();
         this.billMemo = bill.getBillMemo();
+        this.createdAt = bill.getCreatedAt().toLocalDate();
     }
 }

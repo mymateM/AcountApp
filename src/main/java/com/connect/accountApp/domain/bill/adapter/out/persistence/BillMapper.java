@@ -34,6 +34,7 @@ public class BillMapper {
             .billMemo(billJpaEntity.getBillMemo())
             .billRegister(getUser(billJpaEntity.getBillRegisterJpaEntity()))
             .household(getHousehold(billJpaEntity.getHouseHoldJpaEntity()))
+            .createdAt(billJpaEntity.getCreatedAt())
             .build();
   }
 
@@ -52,6 +53,7 @@ public class BillMapper {
             .billMemo(bill.getBillMemo())
             .billRegisterJpaEntity(userMapper.mapToJpaEntity(bill.getBillRegister()))
             .houseHoldJpaEntity(householdMapper.mapToJpaEntity(bill.getHousehold()))
+            .createdAt(bill.getCreatedAt())
             .build();
   }
 

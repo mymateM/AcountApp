@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,12 +21,14 @@ public class Bill {
   private BillCategory billCategory;
   private String billMemo;
 
+  private LocalDateTime createdAt;
+
   private User billRegister;
   private Household household;
 
   @Builder
   public Bill(Long billId, LocalDate billPaymentDate, BigDecimal billPayment, String billStore,
-      BillCategory billCategory, User billRegister, Household household, String billMemo) {
+      BillCategory billCategory, User billRegister, Household household, String billMemo, LocalDateTime createdAt) {
     this.billId = billId;
     this.billPaymentDate = billPaymentDate;
     this.billPayment = billPayment;
@@ -34,5 +37,6 @@ public class Bill {
     this.billRegister = billRegister;
     this.household = household;
     this.billMemo = billMemo;
+    this.createdAt = createdAt;
   }
 }

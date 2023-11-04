@@ -15,10 +15,12 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Getter
@@ -32,6 +34,9 @@ public class BillJpaEntity {
   private BigDecimal billPayment;
   private String billStore;
   private String billMemo;
+
+  @CreationTimestamp
+  private LocalDateTime createdAt;
 
   @Enumerated(EnumType.STRING)
   private BillCategory billCategory;
@@ -47,7 +52,7 @@ public class BillJpaEntity {
   @Builder
   public BillJpaEntity(Long billId, LocalDate billPaymentDate, BigDecimal billPayment,
       String billStore, BillCategory billCategory,
-      UserJpaEntity billRegisterJpaEntity, HouseHoldJpaEntity houseHoldJpaEntity, String billMemo) {
+      UserJpaEntity billRegisterJpaEntity, HouseHoldJpaEntity houseHoldJpaEntity, String billMemo, LocalDateTime createdAt) {
     this.billId = billId;
     this.billPaymentDate = billPaymentDate;
     this.billPayment = billPayment;
@@ -56,5 +61,6 @@ public class BillJpaEntity {
     this.billRegisterJpaEntity = billRegisterJpaEntity;
     this.houseHoldJpaEntity = houseHoldJpaEntity;
     this.billMemo = billMemo;
+    this.createdAt = createdAt;
   }
 }
