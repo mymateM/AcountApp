@@ -67,13 +67,14 @@ public class RegisterBillService implements RegisterBillUseCase {
   private Bill createBill(User user, RegisterBillRequest request) {
 
     return Bill.builder()
-        .billPaymentDate(request.getBillPaymentDate())
-        .billPayment(request.getBillPaymentAmount())
-        .billStore(request.getBillStore())
-        .billCategory(BillCategory.valueOf(request.getBillCategoryTitle()))
-        .billRegister(user)
-        .household(user.getHousehold())
-        .build();
+            .billPaymentDate(request.getBillPaymentDate())
+            .billPayment(request.getBillPaymentAmount())
+            .billStore(request.getBillStore())
+            .billMemo(request.getBillMemo())
+            .billCategory(BillCategory.valueOf(request.getBillCategoryTitle()))
+            .billRegister(user)
+            .household(user.getHousehold())
+            .build();
   }
 
   private List<VirtualAccount> createVirtualAccounts(List<VirtualAccountRequest> requests, Bill savedBill) {
