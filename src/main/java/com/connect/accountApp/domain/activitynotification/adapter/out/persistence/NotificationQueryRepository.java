@@ -4,9 +4,11 @@ import static com.connect.accountApp.domain.activitynotification.adapter.out.per
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
 import static com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.model.QUserActivityNotificationJpaEntity.userActivityNotificationJpaEntity;
 
+import com.connect.accountApp.domain.activitynotification.adapter.out.persistence.jpa.model.ActivityNotificationJpaEntity;
 import com.connect.accountApp.domain.activitynotification.application.port.in.command.ActivityNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.FindExpenseNotificationCommand;
 import com.connect.accountApp.domain.activitynotification.application.port.out.command.NotificationCommand;
+import com.connect.accountApp.domain.activitynotification.domain.model.ActivityNotification;
 import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -86,6 +88,20 @@ public class NotificationQueryRepository {
         )
         .fetch();
   }
+
+    public List<ActivityNotificationJpaEntity> findActivityNotificationByBill(List<Long> billIds) {
+
+        return jpaQueryFactory
+                .select(activityNotificationJpaEntity)
+                .from(userActivityNotificationJpaEntity)
+                .join(userActivityNotificationJpaEntity.activityNotificationJpaEntity)
+                .join(userActivityNotificationJpaEntity.userJpaEntity)
+                .leftJoin(userActivityNotificationJpaEntity.activityNotificationJpaEntity.billJpaEntity)
+                .where(
+                        userActivityNotificationJpaEntity.activityNotificationJpaEntity.billJpaEntity.billId.in(billIds)
+                )
+                .fetch();
+    }
 
 
   private BooleanExpression eqUserId(Long userId) {

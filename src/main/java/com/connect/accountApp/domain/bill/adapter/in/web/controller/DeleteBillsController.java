@@ -23,8 +23,6 @@ public class DeleteBillsController {
     public ResponseEntity deleteBills(@AuthenticationPrincipal UserDetails userDetails,
                                       @RequestParam("bill_id_list") List<Long> billIds) {
 
-        System.out.println("==========");
-
         String userEmail = userDetails.getUsername();
 
         deleteBillsUseCase.deleteBills(userEmail, billIds);

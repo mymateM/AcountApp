@@ -11,6 +11,8 @@ public interface FindActivityNotificationsPort {
 
   ActivityNotification findUserActivityNotification(Long activityNotificationId);
 
+  List<ActivityNotification> findUserActivityNotificationByBill(List<Long> billIds);
+
   List<ActivityNotificationCommand> findActivityNotifications(String userEmail);
 
   ActivityNotification findActivityNotification(Long activityNotificationId);

@@ -7,5 +7,6 @@ import java.util.List;
 public interface SaveActivityNotificationPort {
 
   Long saveActivityNotification(ActivityNotification activityNotification);
+  void saveAllActivityNotification(List<ActivityNotification> activityNotification);
 
 }

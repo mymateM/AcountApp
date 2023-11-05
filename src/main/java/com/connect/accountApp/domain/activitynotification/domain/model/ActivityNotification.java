@@ -45,4 +45,8 @@ public class ActivityNotification {
   private void setRead(Boolean read) {
     isRead = read;
   }
+
+  public void setBillNull() {
+    bill = null;
+  }
 }

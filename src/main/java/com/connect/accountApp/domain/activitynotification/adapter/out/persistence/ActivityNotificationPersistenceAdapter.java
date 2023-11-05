@@ -13,6 +13,7 @@ import com.connect.accountApp.domain.activitynotification.exception.ActivityNoti
 import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.jpa.UserActivityNotificationJpaRepository;
 import com.connect.accountApp.domain.usernotification.adapter.port.out.persistence.UserActivityNotificationMapper;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -39,6 +40,13 @@ public class ActivityNotificationPersistenceAdapter implements FindActivityNotif
     );
 
     return activityNotificationMapper.mapToDomainEntity(activityNotificationJpaEntity);
+  }
+
+  @Override
+  public List<ActivityNotification> findUserActivityNotificationByBill(List<Long> billIds) {
+    List<ActivityNotificationJpaEntity> ActivityJpaEntities =
+            notificationQueryRepository.findActivityNotificationByBill(billIds);
+    return ActivityJpaEntities.stream().map(activityNotificationMapper::mapToDomainEntity).toList();
   }
 
   @Override
@@ -72,6 +80,13 @@ public class ActivityNotificationPersistenceAdapter implements FindActivityNotif
     return activityNotificationJpaRepository.save(activityNotificationJpaEntity)
         .getActivityNotificationId();
 
+  }
+
+  @Override
+  public void saveAllActivityNotification(List<ActivityNotification> activityNotifications) {
+    List<ActivityNotificationJpaEntity> activityNotificationJpaEntities = activityNotifications.stream()
+            .map(activityNotificationMapper::mapToJpaEntity).toList();
+    activityNotificationJpaRepository.saveAll(activityNotificationJpaEntities);
   }
 
 }
