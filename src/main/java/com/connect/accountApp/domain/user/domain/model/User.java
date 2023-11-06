@@ -66,6 +66,11 @@ public class User {
     setUserRatio(userRatio);
   }
 
+  public void updateUserAccount(Bank bank, String userAccount) {
+    setUserAccountBank(bank);
+    setUserAccount(userAccount);
+  }
+
   private void setUserNickname(String userNickname) {
     this.userNickname = userNickname;
   }
