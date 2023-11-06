@@ -62,7 +62,7 @@ public enum Bank {
 
   }
 
-
-
-
+  public String getBankName() {
+    return bankName;
+  }
 }
