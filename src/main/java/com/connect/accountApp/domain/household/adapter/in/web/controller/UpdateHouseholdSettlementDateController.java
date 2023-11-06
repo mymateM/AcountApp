@@ -2,7 +2,6 @@ package com.connect.accountApp.domain.household.adapter.in.web.controller;
 
 import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.UPDATE_SETTLEMENT_DATE;
 
-import com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory;
 import com.connect.accountApp.domain.household.adapter.in.web.request.UpdateSettlementDayOfMonthRequest;
 import com.connect.accountApp.domain.household.application.port.in.UpdateSettlementDayOfMonthUseCase;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
@@ -12,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,10 +24,7 @@ public class UpdateHouseholdSettlementDateController {
   private final UpdateSettlementDayOfMonthUseCase updateSettlementDayOfMonthUseCase;
   private final FcmNotificationUseCase fcmNotificationUseCase;
 
-
-
-
-  @PatchMapping("/settlement-date")
+  @PostMapping("/settlement-date")
   public ResponseEntity registerHousehold(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateSettlementDayOfMonthRequest request) {
 
     String userEmail = userDetails.getUsername();
