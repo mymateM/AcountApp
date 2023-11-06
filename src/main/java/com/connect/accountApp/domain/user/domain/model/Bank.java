@@ -65,4 +65,8 @@ public enum Bank {
   public String getBankName() {
     return bankName;
   }
+
+  public String getBankImage() {
+    return bankImage;
+  }
 }

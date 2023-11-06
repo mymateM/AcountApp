@@ -14,9 +14,12 @@ public class UserAccountResponse {
     private String accountBank;
     @JsonProperty("account_number")
     private String accountNumber;
+    @JsonProperty("account_image_url")
+    private String accountImageUrl;
 
     public UserAccountResponse(User user) {
         this.accountBank = user.getUserAccountBank().getBankName();
         this.accountNumber = user.getUserAccount();
+        this.accountImageUrl = user.getUserAccountBank().getBankImage();
     }
 }
