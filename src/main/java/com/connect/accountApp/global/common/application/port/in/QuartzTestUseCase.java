@@ -4,4 +4,6 @@ public interface QuartzTestUseCase {
 
   String changeScheduleTime(int second);
 
+  void initSchedule(Integer dayOfMonth, Long householdId);
+
 }

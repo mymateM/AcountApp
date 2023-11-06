@@ -6,6 +6,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 import com.connect.accountApp.global.common.application.port.in.QuartzTestUseCase;
 import com.connect.accountApp.global.common.domain.HelloJob;
+import com.connect.accountApp.global.common.domain.NotifySettlementJob;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +53,51 @@ public class QuartzTestService implements QuartzTestUseCase {
 
     }
     return "스케쥴러 시작";
+  }
+
+  @Override
+  public void initSchedule(Integer dayOfMonth, Long householdId) {
+    createSettlementNotificationScheduler(dayOfMonth, householdId);
+
+  }
+
+  private void createSettlementNotificationScheduler(int settlementDayOfMonth, Long householdId) {
+    try {
+      SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+      Scheduler scheduler = schedulerFactory.getScheduler();
+
+      JobDetail job = getJobDetail(householdId);
+      Trigger trigger = getTrigger(settlementDayOfMonth);
+
+      scheduler.scheduleJob(job, trigger);
+      scheduler.start();
+    } catch (SchedulerException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private Trigger getTrigger(int settlementDayOfMonth) {
+    return newTrigger()
+            .withIdentity("notifySettlementTrigger", "notifyTriggerGroup")
+            .startNow()
+            .withSchedule(cronSchedule("0 0 10 " + settlementDayOfMonth + " 1/1 ? *"))
+            .build();
+  }
+
+  private JobDetail getJobDetail(Long householdId) {
+    JobDataMap jobDataMap = getJobDataMap(householdId);
+    return newJob(NotifySettlementJob.class)
+            .withIdentity("notifySettlement", "notifyGroup")
+            .withDescription("정산일을 알리는 역할")
+            .usingJobData(jobDataMap)
+            .build();
+  }
+
+  private JobDataMap getJobDataMap(Long householdId) {
+    Map<String, Object> map = new LinkedHashMap<>();
+    map.put("applicationContext", applicationContext);
+    map.put("householdId", householdId);
+
+    return new JobDataMap(map);
   }
 }

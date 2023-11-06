@@ -1,5 +1,6 @@
 package com.connect.accountApp.global.common.adapter.in.web;
 
+import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import com.connect.accountApp.global.common.application.port.in.QuartzTestUseCase;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,14 @@ public class QuartzTestController {
   public ResponseEntity getPracticeResponse1(@RequestParam("second") int second) {
 
     quartzTestUseCase.changeScheduleTime(second);
+
+    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse());
+  }
+
+  @GetMapping("/register-settlement-date")
+  public ResponseEntity addAlarmSettlementDate(@RequestParam Integer dayOfMonth, @RequestParam Long householdId) {
+
+    quartzTestUseCase.initSchedule(dayOfMonth, householdId);
 
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse());
   }
