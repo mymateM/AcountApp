@@ -12,6 +12,7 @@ import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.global.common.application.port.out.FcmNotificationUseCase;
 import com.connect.accountApp.global.common.service.FcmNotificationService;
 import com.google.firebase.messaging.Notification;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.math.BigDecimal;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -28,7 +29,8 @@ public class NotifyUpdatedBudgetJob extends QuartzJobBean {
     JobDataMap dataMap = context.getJobDetail().getJobDataMap();
     Household household = (Household) dataMap.get("household");
     User user = (User) dataMap.get("user");
-    BigDecimal newBudgetAmount = (BigDecimal) dataMap.get("newBudgetAmount");
+    BigDecimal newBudgetAmount = (BigDecimal) dataMap.get("newAllowanceAmount");
+    Integer newAllowanceRatio = (Integer) dataMap.get("newAllowanceRatio");
 
 
     FcmNotificationUseCase fcmNotificationService = getFcmNotificationUseCase(context);
@@ -41,14 +43,15 @@ public class NotifyUpdatedBudgetJob extends QuartzJobBean {
 
     //이 시점에 예산을 바꿔야한다.
     // willbeUpdated가 true인지 확인, 맞다면 바꿔준 뒤 willbeUpdated를 false로 바꾼다.
-    updateHouseholdBudgetAmount(household, newBudgetAmount, context);
+    updateHouseholdBudgetAmount(household, newBudgetAmount, context, newAllowanceRatio);
 
   }
 
-  private void updateHouseholdBudgetAmount(Household household, BigDecimal newBudgetAmount, JobExecutionContext context) {
+  private void updateHouseholdBudgetAmount(Household household, BigDecimal newBudgetAmount, JobExecutionContext context, Integer newAllowanceRatio) {
     SaveHouseholdPort saveHouseholdPort = getHouseholdPersistenceAdapter(context);
     if (household.isSettlementWillBeUpdated()) {
       household.updateHouseholdBudget(newBudgetAmount);
+      household.updateRatioAllowance(newAllowanceRatio);
       saveHouseholdPort.saveHousehold(household);
       household.setSettlementWillBeUpdatedToFalse();
     }

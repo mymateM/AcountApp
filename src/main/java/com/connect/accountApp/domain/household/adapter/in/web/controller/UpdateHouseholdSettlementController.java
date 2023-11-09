@@ -22,11 +22,13 @@ public class UpdateHouseholdSettlementController {
   private final UpdateHouseholdSettlementUseCase updateHouseholdSettlementUseCase;
   private final FcmNotificationUseCase fcmNotificationUseCase;
 
-  @GetMapping("/settlement/{budget_amount}")
-  public ResponseEntity registerHousehold(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("budget_amount") BigDecimal budgetAmount) {
+  @GetMapping("/settlement/{budget_amount}/{allowance_ratio}")
+  public ResponseEntity registerHousehold(@AuthenticationPrincipal UserDetails userDetails,
+                                          @PathVariable("budget_amount") BigDecimal budgetAmount,
+                                          @PathVariable("allowance_ratio") Integer allowanceRatio) {
 
     String userEmail = userDetails.getUsername();
-    BigDecimal householdBudget = updateHouseholdSettlementUseCase.updateHouseholdSettlement(userEmail, budgetAmount);
+    BigDecimal householdBudget = updateHouseholdSettlementUseCase.updateHouseholdSettlement(userEmail, budgetAmount, allowanceRatio);
 
 
     Notification notification = Notification.builder()

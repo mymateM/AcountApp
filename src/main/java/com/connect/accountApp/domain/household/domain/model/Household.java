@@ -56,6 +56,9 @@ public class Household {
     setHouseholdBudget(householdBudget);
   }
 
+  public void updateRatioAllowance(Integer allowanceRatio) {
+    setHouseholdBudgetAllowanceRatio(allowanceRatio);
+  }
   private void setHouseholdBudget(BigDecimal householdBudget) {
     this.householdBudget = householdBudget;
   }
@@ -70,5 +73,9 @@ public class Household {
 
   private void setSettlementWillBeUpdated(boolean settlementWillBeUpdated) {
     this.settlementWillBeUpdated = settlementWillBeUpdated;
+  }
+
+  private void setHouseholdBudgetAllowanceRatio(Integer householdBudgetAllowanceRatio) {
+    this.householdBudgetAllowanceRatio = householdBudgetAllowanceRatio;
   }
 }

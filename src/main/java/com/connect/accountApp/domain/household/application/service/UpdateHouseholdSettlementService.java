@@ -12,6 +12,7 @@ import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.global.common.domain.NotifyUpdatedBudgetJob;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -42,7 +43,7 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
   private final ApplicationContext applicationContext;
 
   @Override
-  public BigDecimal updateHouseholdSettlement(String userEmail, BigDecimal newBudgetAmount) {
+  public BigDecimal updateHouseholdSettlement(String userEmail, BigDecimal newBudgetAmount, Integer newAllowanceAmount) {
 
     User user = getUserPort.findUserWithHousehold(userEmail);
     Household household = user.getHousehold();
@@ -55,7 +56,7 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
     saveActivityNotificationPort.saveActivityNotification(activityNotification);
 
     // 정산이 있고 난 뒤, 정산일 다음 날부터 이번 정산은 00원의 예산을 가지고 정산할 것이라고 말해줘야함.
-    createUpdateSettlementDateNotificationScheduler(household, user, newBudgetAmount);
+    createUpdateSettlementDateNotificationScheduler(household, user, newBudgetAmount, newAllowanceAmount);
 
     return household.getHouseholdBudget();
   }
@@ -70,12 +71,12 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
         .build();
   }
 
-  private void createUpdateSettlementDateNotificationScheduler(Household household, User user, BigDecimal newBudgetAmount) {
+  private void createUpdateSettlementDateNotificationScheduler(Household household, User user, BigDecimal newBudgetAmount, Integer newAllowanceRatio) {
     try {
       SchedulerFactory schedulerFactory = new StdSchedulerFactory();
       Scheduler scheduler = schedulerFactory.getScheduler();
 
-      JobDetail job = getJobDetail(household, user, newBudgetAmount);
+      JobDetail job = getJobDetail(household, user, newBudgetAmount, newAllowanceRatio);
       Trigger trigger = getTrigger(household);
 
       scheduler.scheduleJob(job, trigger);
@@ -119,8 +120,8 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
     return Date.from(instant);
   }
 
-  private JobDetail getJobDetail(Household household, User user, BigDecimal newBudgetAmount) {
-    JobDataMap jobDataMap = getJobDataMap(household, user, newBudgetAmount);
+  private JobDetail getJobDetail(Household household, User user, BigDecimal newBudgetAmount, Integer newAllowanceAmount) {
+    JobDataMap jobDataMap = getJobDataMap(household, user, newBudgetAmount, newAllowanceAmount);
     return newJob(NotifyUpdatedBudgetJob.class)
         .withIdentity("notifyBudgetUpdated", "notifyGroup")
         .withDescription("예산이 변경되었음을 알리는 역할")
@@ -128,12 +129,13 @@ public class UpdateHouseholdSettlementService implements UpdateHouseholdSettleme
         .build();
   }
 
-  private JobDataMap getJobDataMap(Household household, User user, BigDecimal newBudgetAmount) {
+  private JobDataMap getJobDataMap(Household household, User user, BigDecimal newBudgetAmount, Integer newAllowanceAmount) {
     Map<String, Object> map = new LinkedHashMap<>();
     map.put("applicationContext", applicationContext);
     map.put("household", household);
     map.put("user", user);
     map.put("newBudgetAmount", newBudgetAmount);
+    map.put("newAllowanceAmount", newAllowanceAmount);
 
     return new JobDataMap(map);
   }
