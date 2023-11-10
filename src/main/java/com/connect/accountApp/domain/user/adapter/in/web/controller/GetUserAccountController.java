@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.user.adapter.in.web.response.UserAccountRes
 import com.connect.accountApp.domain.user.application.port.in.GetUserAccountUseCase;
 import com.connect.accountApp.domain.user.domain.model.User;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +25,8 @@ public class GetUserAccountController {
         String userEmail = userDetails.getUsername();
 
         User user = getUserAccountUseCase.getUserAccount(userEmail);
-        UserAccountResponse response = new UserAccountResponse(user);
+        List<User> members = getUserAccountUseCase.getMembersAccount(userEmail);
+        UserAccountResponse response = new UserAccountResponse(user, members);
         return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
     }
 }
