@@ -49,7 +49,21 @@ public class GetHomeService implements GetHouseholdHomeUseCase {
 
     @Override
     public GetUserHomeCommand getUserHome(String userEmail) {
-        return null;
+
+        User userWithHousehold = getUserPort.findUserWithHousehold(userEmail);
+        Household household = userWithHousehold.getHousehold();
+
+        BigDecimal householdBudget = household.getHouseholdBudget();
+        BigDecimal userRatio = BigDecimal.valueOf(userWithHousehold.getUserRatio());
+
+        BigDecimal userTotalBudget = householdBudget.multiply(userRatio.divide(BigDecimal.valueOf(100)));
+
+        LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(), household.getHouseholdSettlementDayOfMonth());
+
+        BigDecimal userByNowTotalExpense =
+                getHouseholdTotalExpensePort.getUserTotalExpenseByDate(userWithHousehold.getUserId(), pastNearSettlementDate, LocalDateTime.now());
+
+        return new GetUserHomeCommand(userWithHousehold.getUserId(), userTotalBudget, userByNowTotalExpense);
     }
 
 

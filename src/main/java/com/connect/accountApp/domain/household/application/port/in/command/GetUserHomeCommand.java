@@ -14,11 +14,10 @@ public class GetUserHomeCommand {
     private BigDecimal userByNowTotalExpense;
     private BigDecimal userByNowLeftExpense;
 
-    public GetUserHomeCommand(Long userId, BigDecimal userTotalBudget, BigDecimal userByNowTotalExpense,
-                              BigDecimal userByNowLeftExpense) {
+    public GetUserHomeCommand(Long userId, BigDecimal userTotalBudget, BigDecimal userByNowTotalExpense) {
         this.userId = userId;
         this.userTotalBudget = userTotalBudget;
         this.userByNowTotalExpense = userByNowTotalExpense;
-        this.userByNowLeftExpense = userByNowLeftExpense;
+        this.userByNowLeftExpense = userTotalBudget.subtract(userByNowTotalExpense);
     }
 }

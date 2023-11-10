@@ -164,6 +164,24 @@ public class ExpenseQueryRepository {
                 .fetchOne();
   }
 
+    public BigDecimal getUserTotalExpense(Long userId, LocalDateTime startTime, LocalDateTime endTime) {
+
+        return queryFactory
+                .select(
+                        expenseJpaEntity.expenseAmount.sum().as("userTotalExpense")
+                )
+                .from(settlementJpaEntity)
+                .join(settlementJpaEntity.expenseJpaEntity)
+                .join(settlementJpaEntity.userJpaEntity)
+                .join(settlementJpaEntity.userJpaEntity.houseHoldJpaEntity)
+                .where(
+                        settlementJpaEntity.isSettlementDelegate.isTrue(),
+                        settlementJpaEntity.userJpaEntity.userId.eq(userId),
+                        betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
+                )
+                .groupBy(settlementJpaEntity.userJpaEntity.houseHoldJpaEntity.householdId)
+                .fetchOne();
+    }
 
     public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 

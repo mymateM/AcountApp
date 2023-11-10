@@ -9,4 +9,6 @@ public interface GetHouseholdTotalExpensePort {
 
   BigDecimal getHouseholdTotalExpenseByDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime);
 
+  BigDecimal getUserTotalExpenseByDate(Long userId, LocalDateTime startTime, LocalDateTime endTime);
+
 }

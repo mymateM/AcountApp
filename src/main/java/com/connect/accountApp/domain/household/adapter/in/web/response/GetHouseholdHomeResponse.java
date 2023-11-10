@@ -19,7 +19,7 @@ public class GetHouseholdHomeResponse {
 
     public GetHouseholdHomeResponse(GetHouseholdHomeCommand householdHomeCommand, GetUserHomeCommand getUserHomeCommand) {
         this.householdResponse = new HouseholdResponse(householdHomeCommand);
-        this.meResponse = meResponse;
+        this.meResponse = new MeResponse(getUserHomeCommand);
     }
 
     @Getter
@@ -67,10 +67,10 @@ public class GetHouseholdHomeResponse {
         private BigDecimal userByNowLeftExpense;
 
         public MeResponse(GetUserHomeCommand command) {
-            this.userId = userId;
-            this.userTotalBudget = userTotalBudget;
-            this.userByNowTotalExpense = userByNowTotalExpense;
-            this.userByNowLeftExpense = userByNowLeftExpense;
+            this.userId = command.getUserId();
+            this.userTotalBudget = command.getUserTotalBudget().setScale(0, RoundingMode.FLOOR);
+            this.userByNowTotalExpense = command.getUserByNowTotalExpense().setScale(0, RoundingMode.FLOOR);
+            this.userByNowLeftExpense = command.getUserByNowLeftExpense().setScale(0, RoundingMode.FLOOR);
         }
     }
 

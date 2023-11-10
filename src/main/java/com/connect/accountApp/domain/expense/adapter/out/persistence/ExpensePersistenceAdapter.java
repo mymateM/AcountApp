@@ -63,6 +63,11 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   }
 
   @Override
+  public BigDecimal getUserTotalExpenseByDate(Long userId, LocalDateTime startTime, LocalDateTime endTime) {
+    return expenseQueryRepository.getUserTotalExpense(userId, startTime, endTime);
+  }
+
+  @Override
   public List<DailyTotalExpensesCommand> FindDailyTotalExpenses(Long householdId, LocalDate date) {
 
     return expenseQueryRepository.getDailyTotalExpenseOfHousehold(householdId, date);
