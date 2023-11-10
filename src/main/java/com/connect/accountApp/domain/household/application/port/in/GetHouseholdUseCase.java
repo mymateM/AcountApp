@@ -4,4 +4,6 @@ public interface GetHouseholdUseCase {
 
     String getHouseholdName(String userEmail);
 
+    String getHouseholdInviteCode(String userEmail);
+
 }

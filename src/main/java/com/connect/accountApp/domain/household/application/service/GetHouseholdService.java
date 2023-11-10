@@ -19,4 +19,11 @@ public class GetHouseholdService implements GetHouseholdUseCase {
 
         return userWithHousehold.getHousehold().getHouseholdName();
     }
+
+    @Override
+    public String getHouseholdInviteCode(String userEmail) {
+        User userWithHousehold = getUserPort.findUserWithHousehold(userEmail);
+
+        return userWithHousehold.getHousehold().getInviteCode();
+    }
 }
