@@ -141,7 +141,7 @@ public class RegisterHouseholdService implements RegisterHouseholdUseCase {
   }
 
   private String createInviteCodeOfHousehold() { // todo 중복 문제
-    return UUID.randomUUID().toString();
+    return UUID.randomUUID().toString().substring(0,6);
   }
 
 
