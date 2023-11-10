@@ -53,8 +53,6 @@ public class HouseholdNowCommand {
     int passDay = dayDiff(pastNearSettlementDate, LocalDate.now());
     int settlementDayDiff = dayDiff(pastNearSettlementDate, pastNearSettlementDate.plusMonths(1));
     int standard = (budget / settlementDayDiff) * passDay;
-    System.out.println("standard" + standard);
-    System.out.println("householdByNowExpense" + householdByNowExpense);
 
     return standard <= householdByNowExpense;
   }

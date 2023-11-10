@@ -15,6 +15,7 @@ import com.connect.accountApp.domain.expense.application.port.out.command.TotalE
 import com.connect.accountApp.domain.expense.domain.model.Expense;
 import com.connect.accountApp.domain.expense.exception.ExpenseNotFoundException;
 import com.connect.accountApp.domain.user.application.port.out.GetUserSendMoneyPort;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,6 +55,11 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   @Override
   public int getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
     return expenseQueryRepository.getHouseholdTotalExpense(householdId, startTime, endTime);
+  }
+
+  @Override
+  public BigDecimal getHouseholdTotalExpenseByDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
+    return expenseQueryRepository.getHouseholdTotalExpenseBetweenDate(householdId, startTime, endTime);
   }
 
   @Override

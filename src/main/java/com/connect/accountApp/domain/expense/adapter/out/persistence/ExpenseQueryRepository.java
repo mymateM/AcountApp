@@ -16,10 +16,10 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -145,6 +145,26 @@ public class ExpenseQueryRepository {
     }
 
 
+    public BigDecimal getHouseholdTotalExpenseBetweenDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
+
+
+        return queryFactory
+                .select(
+                        expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense")
+                )
+                .from(settlementJpaEntity)
+                .join(settlementJpaEntity.expenseJpaEntity)
+                .join(settlementJpaEntity.userJpaEntity)
+                .join(settlementJpaEntity.userJpaEntity.houseHoldJpaEntity)
+                .where(
+                        eqHouseholdId(householdId),
+                        betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
+                )
+                .groupBy(settlementJpaEntity.userJpaEntity.houseHoldJpaEntity.householdId)
+                .fetchOne();
+  }
+
+
     public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 
 //    Integer householdTotalExpense = queryFactory
@@ -159,8 +179,8 @@ public class ExpenseQueryRepository {
 //        )
 //        .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
 //        .fetchOne();
-    return 1;
-  }
+        return 1;
+    }
 
   public List<DailyTotalExpensesCommand> getDailyTotalExpenseOfHousehold(Long householdId, LocalDate date) {
 
