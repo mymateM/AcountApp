@@ -26,4 +26,10 @@ public class GetHouseholdService implements GetHouseholdUseCase {
 
         return userWithHousehold.getHousehold().getInviteCode();
     }
+
+    @Override
+    public  Integer getHouseholdSettlementDayOfWeek(String userEmail) {
+        User userWithHousehold = getUserPort.findUserWithHousehold(userEmail);
+        return userWithHousehold.getHousehold().getHouseholdSettlementDayOfMonth();
+    }
 }

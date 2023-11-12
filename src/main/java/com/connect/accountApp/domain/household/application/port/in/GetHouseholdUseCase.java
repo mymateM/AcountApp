@@ -6,4 +6,6 @@ public interface GetHouseholdUseCase {
 
     String getHouseholdInviteCode(String userEmail);
 
+    Integer getHouseholdSettlementDayOfWeek(String userEmail);
+
 }
