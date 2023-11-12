@@ -41,6 +41,8 @@ public class GetHouseholdHomeResponse {
         private BigDecimal nowExpenseDiff;
         @JsonProperty("is_household_budget_over_warn")
         private Boolean isHouseholdBudgetOverWarn;
+        @JsonProperty("expense_duration")
+        private Integer expenseDuration;
 
         public HouseholdResponse(GetHouseholdHomeCommand command) {
             this.householdId = command.getHouseholdId();
@@ -51,6 +53,7 @@ public class GetHouseholdHomeResponse {
             this.byPreviousExpense = command.getByPreviousExpense().setScale(0, RoundingMode.FLOOR);
             this.nowExpenseDiff = command.getNowExpenseDiff().setScale(0, RoundingMode.FLOOR);
             this.isHouseholdBudgetOverWarn = command.getIsHouseholdBudgetOverWarn();
+            this.expenseDuration = command.getExpenseDuration();
         }
     }
 

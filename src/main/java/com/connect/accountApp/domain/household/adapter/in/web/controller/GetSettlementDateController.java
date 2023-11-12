@@ -17,7 +17,7 @@ public class GetSettlementDateController {
 
     private final GetHouseholdUseCase getHouseholdUseCase;
 
-    @GetMapping("/settlement-date")
+    @GetMapping("/settlement/date")
     public ResponseEntity getSettlementDate(@AuthenticationPrincipal UserDetails userDetails) {
         String userEmail = userDetails.getUsername();
         Integer settlementDayOfWeek = getHouseholdUseCase.getHouseholdSettlementDayOfWeek(userEmail);

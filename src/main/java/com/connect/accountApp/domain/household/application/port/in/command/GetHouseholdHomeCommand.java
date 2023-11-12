@@ -6,6 +6,7 @@ import com.connect.accountApp.domain.household.domain.model.Household;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.Period;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class GetHouseholdHomeCommand {
     private BigDecimal byPreviousExpense;
     private BigDecimal nowExpenseDiff;
     private Boolean isHouseholdBudgetOverWarn;
+    private Integer expenseDuration;
 
 
     public GetHouseholdHomeCommand(Household household, BigDecimal byNowExpense, BigDecimal byPreviousExpense, int dDay, LocalDate pastNearSettlementDate) {
@@ -33,6 +35,7 @@ public class GetHouseholdHomeCommand {
         this.settlementDDay = dDay;
         this.nowExpenseDiff = byPreviousExpense.subtract(byNowExpense);
         this.isHouseholdBudgetOverWarn = isHouseholdBudgetOverWarn(household.getHouseholdBudget(), pastNearSettlementDate, byNowExpense);
+        this.expenseDuration = Period.between(pastNearSettlementDate, LocalDate.now()).getDays();
     }
 
     private boolean isHouseholdBudgetOverWarn(BigDecimal budget, LocalDate pastNearSettlementDate, BigDecimal householdByNowExpense) {
