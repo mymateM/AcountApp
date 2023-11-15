@@ -147,6 +147,9 @@ public class ExpenseQueryRepository {
 
     public BigDecimal getHouseholdTotalExpenseBetweenDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 
+        System.out.println("householdId = " + householdId);
+        System.out.println("startTime = " + startTime);
+        System.out.println("endTime = " + endTime);
 
         return queryFactory
                 .select(
