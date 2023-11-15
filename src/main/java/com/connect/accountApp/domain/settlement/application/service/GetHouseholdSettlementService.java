@@ -111,10 +111,11 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
     }
 
+    System.out.println("settlements.size() = " + settlements.size());
+
     List<SettlementCommand> filteredSettlements = settlements.stream()
         .filter(settlement -> {
-          return settlement.getGiverId().equals(user.getUserId()) || settlement.getSenderId()
-              .equals(user.getUserId());
+          return settlement.getGiverId().equals(user.getUserId()) || settlement.getSenderId().equals(user.getUserId());
         }).toList();
 
     System.out.println("size     " + filteredSettlements.size());
