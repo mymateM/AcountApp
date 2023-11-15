@@ -115,7 +115,10 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
     List<SettlementCommand> filteredSettlements = settlements.stream()
         .filter(settlement -> {
-          return settlement.getGiverId().equals(user.getUserId()) || settlement.getSenderId().equals(user.getUserId());
+          System.out.println("settlement.getSenderId() = " + settlement.getSenderId());
+          System.out.println("settlement.getGiverId() = " + settlement.getGiverId());
+          System.out.println("settlement.getSettlementAmount() = " + settlement.getSettlementAmount());
+          return (settlement.getGiverId().equals(user.getUserId()) || settlement.getSenderId().equals(user.getUserId()));
         }).toList();
 
     System.out.println("size     " + filteredSettlements.size());
@@ -123,7 +126,9 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
     boolean isSender;
 
     System.out.println(" =========");
-    if (filteredSettlements.get(0).getSenderId().equals(user.getUserId())) {
+    if (filteredSettlements.isEmpty()) {
+      isSender = false;
+    } else if (filteredSettlements.get(0).getSenderId().equals(user.getUserId())) {
       isSender = true;
     } else {
       isSender = false;
