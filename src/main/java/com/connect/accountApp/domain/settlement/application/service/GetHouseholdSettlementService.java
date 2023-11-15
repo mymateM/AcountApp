@@ -73,6 +73,14 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
     // 1. 먼저 같은 얘들은 빼기
     findEqualSettlement(keySetDesc, keySetAsc, creditorMap, debtorMap, settlements);
 
+    for (Long hi : creditorMap.keySet()) {
+      System.out.println("creditor  " + creditorMap.get(hi));
+    }
+
+    for (Long hi : debtorMap.keySet()) {
+      System.out.println("debtor  " + debtorMap.get(hi));
+    }
+
     //2. 제일 큰 얘들부터 비교해가며 빼주기
 
     for (int i = 0; i < keySetDesc.size(); i++) {
@@ -109,6 +117,7 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
               .equals(user.getUserId());
         }).toList();
 
+    System.out.println("size     " + filteredSettlements.size());
 
     boolean isSender;
 
