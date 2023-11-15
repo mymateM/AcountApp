@@ -85,7 +85,7 @@ public class NotificationQueryRepository {
             userActivityNotificationJpaEntity.activityNotificationJpaEntity.requesterJpaEntity)
         .where(
             userActivityNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
-        )
+        ).orderBy(userActivityNotificationJpaEntity.activityNotificationJpaEntity.createdAt.desc())
         .fetch();
   }
 
