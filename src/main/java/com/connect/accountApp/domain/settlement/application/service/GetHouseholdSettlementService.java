@@ -46,6 +46,7 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
     User user = getUserPort.findUserWithHousehold(userEmail);
     BigDecimal userSettlement = getUserSettlement(user, startDate, endDate);
 
+
     addSettlementToMap(userSettlement, user, creditorMap, debtorMap);
 
     List<User> householdMembers = findHouseholdUserListPort.findHouseholdMembers(user.getHousehold().getHouseholdId());
@@ -61,6 +62,13 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
     List<Long> keySetDesc = sortMap(creditorMap);
     List<Long> keySetAsc = sortMap(debtorMap);
+
+    for (Long hi : keySetDesc) {
+      System.out.println("hi = " + hi);
+    }
+    for (Long hi : keySetAsc) {
+      System.out.println("hi = " + hi);
+    }
 
     // 1. 먼저 같은 얘들은 빼기
     findEqualSettlement(keySetDesc, keySetAsc, creditorMap, debtorMap, settlements);
@@ -104,11 +112,14 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
     boolean isSender;
 
+    System.out.println(" =========");
     if (filteredSettlements.get(0).getSenderId().equals(user.getUserId())) {
       isSender = true;
     } else {
       isSender = false;
     }
+
+    System.out.println(" =========");
 
     List<RoommateSettlementCommand> RoommateSettlementCommands;
     BigDecimal totalAmount = filteredSettlements.stream().map(SettlementCommand::getSettlementAmount)

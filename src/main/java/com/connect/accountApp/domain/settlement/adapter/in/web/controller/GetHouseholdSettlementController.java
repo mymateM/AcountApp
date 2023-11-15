@@ -33,14 +33,11 @@ public class GetHouseholdSettlementController {
 
     String userEmail = userDetails.getUsername();
 
-    System.out.println("userEmail = " + userEmail);
-
-
-
-
 
     HouseholdSettlementCommand command = getHouseholdSettlementUseCase.getRoommateSettlement(
         userEmail, startDate, endDate);
+    System.out.println(
+            "command.getRoommateSettlementCommands().size() = " + command.getRoommateSettlementCommands().size());
 
     HouseholdSettlementResponse response = new HouseholdSettlementResponse(command, startDate, endDate);
 
