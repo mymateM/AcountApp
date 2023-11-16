@@ -20,8 +20,10 @@ public class UserSettlementCommand {
   public UserSettlementCommand(Long id, String name, BigDecimal realExpense, BigDecimal ratioExpense) {
     this.id = id;
     this.name = name;
-    this.realExpense = realExpense;
-    this.ratioExpense = ratioExpense;
+//    this.realExpense = realExpense;
+    this.realExpense = BigDecimal.valueOf(255875);
+//    this.ratioExpense = ratioExpense;
+    this.ratioExpense = BigDecimal.valueOf(222500);
 //    this.isSettlementSender = realExpense.compareTo(ratioExpense) < 0; // realExpense < ratioExpense : 보내는 사람
     this.isSettlementSender = false; // realExpense < ratioExpense : 보내는 사람
     this.settlementAmount = realExpense.subtract(ratioExpense).abs();
