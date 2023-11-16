@@ -111,7 +111,7 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
     }
 
-    System.out.println("settlements.size() = " + settlements.size());
+    System.out.println("settlements.size() = " + settlements.size()); // 여기에 값이 없음.
 
     List<SettlementCommand> filteredSettlements = settlements.stream()
         .filter(settlement -> {

@@ -22,7 +22,8 @@ public class UserSettlementCommand {
     this.name = name;
     this.realExpense = realExpense;
     this.ratioExpense = ratioExpense;
-    this.isSettlementSender = realExpense.compareTo(ratioExpense) < 0; // realExpense < ratioExpense : 보내는 사람
+//    this.isSettlementSender = realExpense.compareTo(ratioExpense) < 0; // realExpense < ratioExpense : 보내는 사람
+    this.isSettlementSender = false; // realExpense < ratioExpense : 보내는 사람
     this.settlementAmount = realExpense.subtract(ratioExpense).abs();
   }
 
