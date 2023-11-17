@@ -34,8 +34,8 @@ public class GetHouseholdSettlementController {
     String userEmail = userDetails.getUsername();
 
 
-    HouseholdSettlementCommand command = getHouseholdSettlementUseCase.getRoommateSettlement(
-        userEmail, startDate, endDate);
+    HouseholdSettlementCommand command =
+            getHouseholdSettlementUseCase.getRoommateSettlement(userEmail, startDate, endDate);
     System.out.println(
             "command.getRoommateSettlementCommands().size() = " + command.getRoommateSettlementCommands().size());
 

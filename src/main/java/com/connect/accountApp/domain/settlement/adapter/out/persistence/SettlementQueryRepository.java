@@ -23,7 +23,7 @@ public class SettlementQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<BigDecimal> findUserRealExpense(Long userId, LocalDate startDate, LocalDate endDate) {
+    public BigDecimal findUserRealExpense(Long userId, LocalDate startDate, LocalDate endDate) {
 
         return queryFactory
                 .select(expenseJpaEntity.expenseAmount)
@@ -35,7 +35,7 @@ public class SettlementQueryRepository {
                         expenseJpaEntity.spender.userId.eq(userId)
 
                         )
-                .fetch();
+                .fetchOne();
     }
 
     public List<ExpenseOfHouseholdCommand> findExpenseOfHousehold(Long householdId, LocalDate startDate,

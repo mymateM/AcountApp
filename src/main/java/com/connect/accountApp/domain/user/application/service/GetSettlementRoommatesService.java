@@ -33,7 +33,9 @@ public class GetSettlementRoommatesService implements GetSettlementRoommatesUseC
 
     User user = getUserPort.getUser(userId);
     Household household = getHouseholdPort.getHousehold(user.getHousehold().getHouseholdId());
-    LocalDate householdSettlementDate = household.getHouseholdSettlementDate();
+
+
+    LocalDate householdSettlementDate = household.getHouseholdSettlementDate();// 이부분 정리
 
     //TODO : 날짜에 맞추기
     LocalDate pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(), householdSettlementDate);

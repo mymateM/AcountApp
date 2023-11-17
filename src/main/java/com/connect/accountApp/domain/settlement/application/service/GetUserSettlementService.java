@@ -8,7 +8,6 @@ import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +27,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
 
     BigDecimal householdTotalExpense =
             expensePort.findHouseholdTotalExpenses(user.getHousehold().getHouseholdId(), startDate, endDate);
-    BigDecimal userRatioExpense = BigDecimal.valueOf(user.getUserRatio()).divide(householdTotalExpense)
-            .multiply(BigDecimal.valueOf(100L));
+    BigDecimal userRatioExpense = householdTotalExpense.multiply(BigDecimal.valueOf(user.getUserRatio() / 100.0));
 
     return new UserSettlementWithHouseholdTotalExpenseCommand(householdTotalExpense, userRealTotalExpense, userRatioExpense, user);
   }
@@ -42,7 +40,6 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
    * @return user의 from에서 to까지 실제 지출의 총 합을 반환
    */
   private BigDecimal getUserTotalRealExpense(Long userId, LocalDate from, LocalDate to) {
-    List<BigDecimal> userRealExpenses = findSettlementPort.findUserRealExpense(userId, from, to);
-    return userRealExpenses.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+    return findSettlementPort.findUserRealExpense(userId, from, to);
   }
 }
