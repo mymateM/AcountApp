@@ -125,43 +125,32 @@ public class ExpenseQueryRepository {
     }
 
 
-    public BigDecimal getHouseholdTotalExpenseBetweenDate(Long householdId, LocalDateTime startTime,
-                                                          LocalDateTime endTime) {
+    public BigDecimal getHouseholdTotalExpenseBetweenDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
 
-        return null;
-//        System.out.println("householdId = " + householdId);
-//        System.out.println("startTime = " + startTime);
-//        System.out.println("endTime = " + endTime);
-//
-//        return queryFactory
-//                .select(
-//                        expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense")
-//                )
-//                .from(settlementJpaEntity)
-//                .join(settlementJpaEntity.expenseJpaEntity)
-//                .join(settlementJpaEntity.userJpaEntity)
-//                .join(settlementJpaEntity.userJpaEntity.houseHoldJpaEntity)
-//                .where(
-//                        eqHouseholdId(householdId),
-//                        betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
-//                )
-//                .groupBy(settlementJpaEntity.userJpaEntity.houseHoldJpaEntity.householdId)
-//                .fetchOne();
+        return queryFactory
+                .select(
+                        expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense")
+                )
+                .from(expenseJpaEntity)
+                .join(expenseJpaEntity.houseHoldJpaEntity, houseHoldJpaEntity)
+                .where(
+                        eqHouseholdId(householdId),
+                        betweenDate(startTime.toLocalDate(), endTime.toLocalDate())
+                )
+                .groupBy(expenseJpaEntity.houseHoldJpaEntity.householdId)
+                .fetchOne();
     }
 
     public BigDecimal getUserTotalExpense(Long userId, LocalDateTime startTime, LocalDateTime endTime) {
-
         return null;
 //        return queryFactory
 //                .select(
 //                        expenseJpaEntity.expenseAmount.sum().as("userTotalExpense")
 //                )
-//                .from(settlementJpaEntity)
-//                .join(settlementJpaEntity.expenseJpaEntity)
-//                .join(settlementJpaEntity.userJpaEntity)
-//                .join(settlementJpaEntity.userJpaEntity.houseHoldJpaEntity)
+//                .from(expenseJpaEntity)
+//                .join(expenseJpaEntity.spender, userJpaEntity)
 //                .where(
-//                        settlementJpaEntity.isSettlementDelegate.isTrue(),
+//
 //                        settlementJpaEntity.userJpaEntity.userId.eq(userId),
 //                        betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
 //                )

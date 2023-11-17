@@ -60,7 +60,8 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
 
   @Override
   public BigDecimal getHouseholdTotalExpenseByDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
-    return expenseQueryRepository.getHouseholdTotalExpenseBetweenDate(householdId, startTime, endTime);
+    return expenseQueryRepository.getHouseholdTotalExpenseBetweenDate(householdId, startTime,
+            endTime.plusDays(1).minusSeconds(1));
   }
 
   @Override
