@@ -90,39 +90,27 @@ public class ExpenseQueryRepository {
     public List<DailyExpenseCommand> findSearchedExpenses(Long householdId, SearchedCondition condition) {
 
         OrderSpecifier<LocalDate> sorted = sorted(condition);
-        return null;
 
-//        return queryFactory
-//                .from(settlementJpaEntity)
-//                .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
-//                .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
-//                .where(
-//                        userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-//                        settlementJpaEntity.expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
-//                        eqCategory(condition.getExpenseCategory().orElse(null)),
-//                        settlementJpaEntity.expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(),
-//                                condition.getExpenseAmountMax())
-//
-//                )
-//                .orderBy(sorted)
-//                .transform(GroupBy.groupBy(settlementJpaEntity.expenseJpaEntity.expenseId).list(
-//                                Projections.constructor(DailyExpenseCommand.class,
-//                                        settlementJpaEntity.expenseJpaEntity.expenseId,
-//                                        settlementJpaEntity.expenseJpaEntity.expenseAmount,
-//                                        settlementJpaEntity.expenseJpaEntity.expenseStore,
-//                                        settlementJpaEntity.expenseJpaEntity.expenseCategory,
-//                                        GroupBy.list(
-//                                                Projections.constructor(
-//                                                        DailyExpenseCommand.SettlementSubjectCommand.class,
-//                                                        userJpaEntity.userId,
-//                                                        userJpaEntity.userNickname,
-//                                                        settlementJpaEntity.isSettlementDelegate.as("isExpenseConsumer"),
-//                                                        userJpaEntity.userImgUrl.as("userProfileImage")
-//                                                ).as("settlementSubjects")
-//                                        )
-//                                )
-//                        )
-//                );
+        return queryFactory
+                .from(expenseJpaEntity)
+                .join(expenseJpaEntity.spender, userJpaEntity)
+                .where(
+                        userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
+                        eqCategory(condition.getExpenseCategory().orElse(null)),
+                        expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(), condition.getExpenseAmountMax())
+
+                )
+                .orderBy(sorted)
+                .transform(GroupBy.groupBy(expenseJpaEntity.expenseId).list(
+                                Projections.constructor(DailyExpenseCommand.class,
+                                        expenseJpaEntity.expenseId,
+                                        expenseJpaEntity.expenseAmount,
+                                        expenseJpaEntity.expenseStore,
+                                        expenseJpaEntity.expenseCategory
+                                )
+                        )
+                );
     }
 
     private OrderSpecifier<LocalDate> sorted(SearchedCondition condition) {
