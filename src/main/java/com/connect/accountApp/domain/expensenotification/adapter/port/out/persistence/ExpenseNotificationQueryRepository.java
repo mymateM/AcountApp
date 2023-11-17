@@ -2,7 +2,6 @@ package com.connect.accountApp.domain.expensenotification.adapter.port.out.persi
 
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
 import static com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.QExpenseNotificationJpaEntity.expenseNotificationJpaEntity;
-import static com.connect.accountApp.domain.settlement.adapter.out.persistence.jpa.model.QSettlementJpaEntity.settlementJpaEntity;
 
 import com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.ExpenseNotificationJpaEntity;
 import com.connect.accountApp.domain.expensenotification.application.port.in.command.ExpenseNotificationCommand;
@@ -44,22 +43,23 @@ public class ExpenseNotificationQueryRepository {
   }
 
   public List<FindSpenderCommand> findSpender(List<Long> expenseIds) {
-
-    return jpaQueryFactory
-        .select(
-            Projections.constructor(FindSpenderCommand.class,
-            settlementJpaEntity.expenseJpaEntity.expenseId,
-            settlementJpaEntity.userJpaEntity.userNickname.as("spenderName")
-            )
-        )
-        .from(settlementJpaEntity)
-        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
-        .where(
-            settlementJpaEntity.expenseJpaEntity.expenseId.in(expenseIds),
-            settlementJpaEntity.isSettlementDelegate.isTrue()
-        )
-        .orderBy()
-        .fetch();
+      return null;
+//
+//    return jpaQueryFactory
+//        .select(
+//            Projections.constructor(FindSpenderCommand.class,
+//            settlementJpaEntity.expenseJpaEntity.expenseId,
+//            settlementJpaEntity.userJpaEntity.userNickname.as("spenderName")
+//            )
+//        )
+//        .from(settlementJpaEntity)
+//        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
+//        .where(
+//            settlementJpaEntity.expenseJpaEntity.expenseId.in(expenseIds),
+//            settlementJpaEntity.isSettlementDelegate.isTrue()
+//        )
+//        .orderBy()
+//        .fetch();
   }
 
   public List<ExpenseNotificationJpaEntity> findExpenseNotifications(List<Long> expenseNotificationIds) {
