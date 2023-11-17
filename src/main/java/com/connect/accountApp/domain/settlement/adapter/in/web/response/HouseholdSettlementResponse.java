@@ -48,8 +48,8 @@ public class HouseholdSettlementResponse {
     public UserSettlementResponse(UserSettlementCommand command) {
       this.id = command.getId();
       this.name = command.getName();
-//      this.isSettlementSender = command.getIsSettlementSender();
-      this.isSettlementSender = false;
+      this.isSettlementSender = command.getIsSettlementSender();
+//      this.isSettlementSender = false;
       this.settlementAmount = command.getSettlementAmount().setScale(0, RoundingMode.FLOOR);
     }
   }

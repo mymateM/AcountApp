@@ -92,7 +92,7 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
       for (int j = 0; j < keySetAsc.size(); j++) {
         Long key2 = keySetAsc.get(j);
         BigDecimal debtorSettlement = debtorMap.get(key2);
-        if (creditorSettlement.compareTo(debtorSettlement) < 0) { // 채권자가 받을 돈이 채무자가 줄 돈보다 작다면
+        if (creditorSettlement.compareTo(debtorSettlement) <= 0) { // 채권자가 받을 돈이 채무자가 줄 돈보다 작다면
           settlements.add(new SettlementCommand(key2, key, creditorSettlement));
           debtorMap.replace(key2 ,debtorMap.get(key2).subtract(creditorSettlement));
           creditorMap.remove(key);
@@ -100,12 +100,14 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
           i--;
           break;
 
-        } else { // // 채권자가 받을 돈이 채무자가 줄 돈보다 크다면
+        } else if (creditorSettlement.compareTo(debtorSettlement) > 0) { // // 채권자가 받을 돈이 채무자가 줄 돈보다 크다면
           settlements.add(new SettlementCommand(key2, key, debtorSettlement));
-          creditorMap.replace(key ,creditorMap.get(key).subtract(debtorSettlement));
+          creditorMap.replace(key, creditorMap.get(key).subtract(debtorSettlement));
           debtorMap.remove(key2);
           keySetAsc.remove(key2);
           j--;
+        } else {
+          // 채권자가 받을 돈이 채무자가 줄 돈과 같다면 이 부분 문제인 것 같음
         }
       }
 

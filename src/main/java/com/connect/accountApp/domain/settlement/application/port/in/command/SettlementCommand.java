@@ -16,3 +16,14 @@ public class SettlementCommand {
     this.settlementAmount = settlementAmount;
   }
 }
+
+// 지출 등록
+// 달별 지출 조회
+// 일별 지출 조회
+// 지출 1건 조회
+// 지출 검색
+
+// 정산
+// 사용자 정산
+// 멤버별 정산
+// 홈 정산

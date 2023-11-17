@@ -1,5 +1,6 @@
 package com.connect.accountApp.domain.expense.domain.model;
 
+import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.domain.model.User;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,15 +21,20 @@ public class Expense {
   private String expenseMemo;
   private ExpenseCategory expenseCategory;
 
+  private Household household;
+  private User spender;
+
   @Builder
-  public Expense(Long expenseId, BigDecimal expenseAmount, LocalDate expenseDate,
-      String expenseStore, String expenseMemo,
-      User user, ExpenseCategory expenseCategory) {
+  public Expense(Long expenseId, BigDecimal expenseAmount, LocalDate expenseDate, String expenseStore,
+                 String expenseMemo, ExpenseCategory expenseCategory,
+                 Household household, User spender) {
     this.expenseId = expenseId;
     this.expenseAmount = expenseAmount;
     this.expenseDate = expenseDate;
     this.expenseStore = expenseStore;
     this.expenseMemo = expenseMemo;
     this.expenseCategory = expenseCategory;
+    this.household = household;
+    this.spender = spender;
   }
 }
