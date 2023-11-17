@@ -218,22 +218,19 @@ public class ExpenseQueryRepository {
 
     public List<TotalExpenseByCategoryCommand> getTotalExpenseGroupByCategory(Long householdId, LocalDate from,
                                                                               LocalDate to) {
-
-        return null;
-//    return queryFactory
-//        .select(Projections.constructor(TotalExpenseByCategoryCommand.class,
-//            settlementJpaEntity.expenseJpaEntity.expenseCategory.as("expenseCategory"),
-//            settlementJpaEntity.expenseJpaEntity.expenseAmount.sum().as("totalExpenseAmount"))
-//        )
-//        .from(settlementJpaEntity)
-//        .join(settlementJpaEntity.userJpaEntity)
-//        .join(settlementJpaEntity.expenseJpaEntity)
-//        .where(
-//            settlementJpaEntity.userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-//            settlementJpaEntity.expenseJpaEntity.expenseDate.between(from, to)
-//        )
-//        .groupBy(expenseJpaEntity.expenseCategory)
-//        .fetch();
+    return queryFactory
+        .select(Projections.constructor(TotalExpenseByCategoryCommand.class,
+            expenseJpaEntity.expenseCategory.as("expenseCategory"),
+            expenseJpaEntity.expenseAmount.sum().as("totalExpenseAmount"))
+        )
+        .from(expenseJpaEntity)
+        .join(expenseJpaEntity.houseHoldJpaEntity)
+        .where(
+                expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+                expenseJpaEntity.expenseDate.between(from, to)
+        )
+        .groupBy(expenseJpaEntity.expenseCategory)
+        .fetch();
 
     }
 
