@@ -70,33 +70,21 @@ public class ExpenseQueryRepository {
 
     public List<DailyExpenseCommand> findDailyExpenses(Long householdId, LocalDate date) {
 
-        return null;
-//    return queryFactory
-//        .from(settlementJpaEntity)
-//        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
-//        .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
-//        .where(
-//            userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-//            settlementJpaEntity.expenseJpaEntity.expenseDate.eq(date)
-//        )
-//        .transform(GroupBy.groupBy(settlementJpaEntity.expenseJpaEntity.expenseId).list(
-//                Projections.constructor(DailyExpenseCommand.class,
-//                    settlementJpaEntity.expenseJpaEntity.expenseId,
-//                    settlementJpaEntity.expenseJpaEntity.expenseAmount,
-//                    settlementJpaEntity.expenseJpaEntity.expenseStore,
-//                    settlementJpaEntity.expenseJpaEntity.expenseCategory,
-//                    GroupBy.list(
-//                        Projections.constructor(
-//                            DailyExpenseCommand.SettlementSubjectCommand.class,
-//                            userJpaEntity.userId,
-//                            userJpaEntity.userNickname,
-//                            settlementJpaEntity.isSettlementDelegate.as("isExpenseConsumer"),
-//                            userJpaEntity.userImgUrl.as("userProfileImage")
-//                        ).as("settlementSubjects")
-//                    )
-//                )
-//            )
-//        );
+        return queryFactory
+                .select(expenseJpaEntity)
+                .where(
+                        expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+                        expenseJpaEntity.expenseDate.eq(date)
+                )
+                .transform(GroupBy.groupBy(expenseJpaEntity.expenseId).list(
+                                Projections.constructor(DailyExpenseCommand.class,
+                                        expenseJpaEntity.expenseId,
+                                        expenseJpaEntity.expenseAmount,
+                                        expenseJpaEntity.expenseStore,
+                                        expenseJpaEntity.expenseCategory
+                                )
+                        )
+                );
     }
 
     public List<DailyExpenseCommand> findSearchedExpenses(Long householdId, SearchedCondition condition) {
