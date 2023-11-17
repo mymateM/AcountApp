@@ -234,13 +234,13 @@ public class GetHouseholdSettlementService implements GetHouseholdSettlementUseC
 
 
   private BigDecimal getUserSettlement(User user, LocalDate from, LocalDate to) {
-    BigDecimal userTotalRealExpense = getUserTotalRealExpense(user.getUserEmail(), from, to);
+    BigDecimal userTotalRealExpense = getUserTotalRealExpense(user.getUserId(), from, to);
     BigDecimal userRatioExpense = getUserRatioExpense(user, from, to);
     return userTotalRealExpense.subtract(userRatioExpense); // 실제 지출 - 정산 비율 : (-) 주어야 하는 입장 : 채무자, (+) 받아야하는 입장 : 채권자
   }
 
-  private BigDecimal getUserTotalRealExpense(String userEmail, LocalDate from, LocalDate to) {
-    List<BigDecimal> userRealExpenses = findSettlementPort.findUserRealExpense(userEmail, from, to);
+  private BigDecimal getUserTotalRealExpense(Long userId, LocalDate from, LocalDate to) {
+    List<BigDecimal> userRealExpenses = findSettlementPort.findUserRealExpense(userId, from, to);
     return userRealExpenses.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 

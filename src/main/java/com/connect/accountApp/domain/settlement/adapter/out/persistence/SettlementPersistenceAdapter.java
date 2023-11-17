@@ -24,11 +24,9 @@ public class SettlementPersistenceAdapter implements SaveSettlementPort, FindSet
 //  }
 
   @Override
-  public List<BigDecimal> findUserRealExpense(String userEmail, LocalDate startDate,
-      LocalDate endDate) {
+  public List<BigDecimal> findUserRealExpense(Long userId, LocalDate startDate, LocalDate endDate) {
 
-//    return settlementQueryRepository.findUserRealExpense(userEmail, startDate, endDate);
-    return null;
+    return settlementQueryRepository.findUserRealExpense(userId, startDate, endDate);
   }
 
   @Override

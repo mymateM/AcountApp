@@ -30,8 +30,8 @@ public class ExpenseQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<TotalExpenseCommand> getTotalExpenseQuery(Long householdId, LocalDateTime startTime,
-                                                          LocalDateTime endTime) {
+    public List<TotalExpenseCommand> getTotalExpenseQuery(Long householdId, LocalDate startTime,
+                                                          LocalDate endTime) {
 
         return queryFactory
                 .select(Projections.constructor(TotalExpenseCommand.class,
@@ -96,9 +96,11 @@ public class ExpenseQueryRepository {
                 .join(expenseJpaEntity.spender, userJpaEntity)
                 .where(
                         userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
+                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(),
+                                condition.getExpenseDateMax()),
                         eqCategory(condition.getExpenseCategory().orElse(null)),
-                        expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(), condition.getExpenseAmountMax())
+                        expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(),
+                                condition.getExpenseAmountMax())
 
                 )
                 .orderBy(sorted)
@@ -167,21 +169,18 @@ public class ExpenseQueryRepository {
 //                .fetchOne();
     }
 
-    public Integer getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
+    public BigDecimal getHouseholdTotalExpense(Long householdId, LocalDate startTime, LocalDate endTime) {
 
-//    Integer householdTotalExpense = queryFactory
-//        .select(
-//            expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense")
-//        )
-//        .from(expenseJpaEntity)
-//        .join(expenseJpaEntity.userJpaEntity, userJpaEntity)
-//        .where(
-//            eqHouseholdId(householdId),
-//            betweenDate(startTime, endTime.plusDays(1).minusSeconds(1))
-//        )
-//        .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
-//        .fetchOne();
-        return 1;
+        return queryFactory
+                .select(expenseJpaEntity.expenseAmount.sum().as("householdTotalExpense"))
+                .from(expenseJpaEntity)
+                .join(expenseJpaEntity.houseHoldJpaEntity, houseHoldJpaEntity)
+                .where(
+                        expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+                        betweenDate(startTime, endTime) //todo: 여기 포함?
+                )
+                .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
+                .fetchOne();
     }
 
     public List<DailyTotalExpensesCommand> getDailyTotalExpenseOfHousehold(Long householdId, LocalDate date) { // 월별 조회
@@ -260,11 +259,10 @@ public class ExpenseQueryRepository {
                 .between(date.toLocalDate(), date.toLocalDate()) : null;
     }
 
-    private BooleanExpression betweenDate(LocalDateTime startDate, LocalDateTime endDate) {
+    private BooleanExpression betweenDate(LocalDate startDate, LocalDate endDate) {
         log.info("startDate : {}, endDate : {}", startDate, endDate);
 
-        return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate.between(startDate.toLocalDate(),
-                endDate.toLocalDate()) : null;
+        return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate.between(startDate, endDate) : null;
     }
 
     private BooleanExpression eqCategory(ExpenseCategory category) {

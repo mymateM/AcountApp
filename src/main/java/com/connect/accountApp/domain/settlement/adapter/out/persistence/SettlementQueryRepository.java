@@ -21,28 +21,27 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SettlementQueryRepository {
 
-  private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
-  public List<BigDecimal> findUserRealExpense(String userEmail, LocalDate startDate,
-      LocalDate endDate) {
+    public List<BigDecimal> findUserRealExpense(Long userId, LocalDate startDate, LocalDate endDate) {
 
-      return null;
-//    return queryFactory
-//        .select(settlementJpaEntity.expenseJpaEntity.expenseAmount)
-//        .from(settlementJpaEntity)
-//        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
-//        .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
-//        .where(
-//            settlementJpaEntity.expenseJpaEntity.expenseDate.between(startDate, endDate),
-//            settlementJpaEntity.isSettlementDelegate.isTrue(),
-//            settlementJpaEntity.userJpaEntity.userEmail.eq(userEmail)
-//        )
-//        .fetch();
-  }
+        return queryFactory
+                .select(expenseJpaEntity.expenseAmount)
+                .from(expenseJpaEntity)
+                .join(expenseJpaEntity, expenseJpaEntity)
+                .join(expenseJpaEntity.spender, userJpaEntity)
+                .where(
+                        expenseJpaEntity.expenseDate.between(startDate, endDate),
+                        expenseJpaEntity.spender.userId.eq(userId)
 
-  public List<ExpenseOfHouseholdCommand> findExpenseOfHousehold(Long householdId, LocalDate startDate, LocalDate endDate) {
+                        )
+                .fetch();
+    }
 
-      return null;
+    public List<ExpenseOfHouseholdCommand> findExpenseOfHousehold(Long householdId, LocalDate startDate,
+                                                                  LocalDate endDate) {
+
+        return null;
 //    return queryFactory
 //        .from(settlementJpaEntity)
 //        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
@@ -64,6 +63,6 @@ public class SettlementQueryRepository {
 //                ).as("expenseRatioOfUsers")
 //                )
 //            ));
-  }
+    }
 
 }
