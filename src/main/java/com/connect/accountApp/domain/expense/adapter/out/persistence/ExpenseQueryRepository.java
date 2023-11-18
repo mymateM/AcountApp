@@ -71,7 +71,7 @@ public class ExpenseQueryRepository {
     public List<DailyExpenseCommand> findDailyExpenses(Long householdId, LocalDate date) {
 
         return queryFactory
-                .select(expenseJpaEntity)
+                .selectFrom(expenseJpaEntity)
                 .where(
                         expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
                         expenseJpaEntity.expenseDate.eq(date)
@@ -95,9 +95,8 @@ public class ExpenseQueryRepository {
                 .from(expenseJpaEntity)
                 .join(expenseJpaEntity.spender, userJpaEntity)
                 .where(
-                        userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(),
-                                condition.getExpenseDateMax()),
+                        expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
                         eqCategory(condition.getExpenseCategory().orElse(null)),
                         expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(),
                                 condition.getExpenseAmountMax())
@@ -252,8 +251,7 @@ public class ExpenseQueryRepository {
     }
 
     private BooleanExpression eqCategory(ExpenseCategory category) {
-        return null;
-//        return (category != null) ? settlementJpaEntity.expenseJpaEntity.expenseCategory.eq(category) : null;
+        return (category != null) ? expenseJpaEntity.expenseCategory.eq(category) : null;
     }
 
 }
