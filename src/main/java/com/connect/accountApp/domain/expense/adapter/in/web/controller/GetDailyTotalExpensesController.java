@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/expense")
 @RequiredArgsConstructor
-public class GetDailyTotalExpensesController {
+public class GetDailyTotalExpensesController { // 월별 지출 캘린더
 
   private final GetDailyTotalExpensesOfHouseholdUseCase getDailyTotalExpensesOfHouseholdUseCase;
 

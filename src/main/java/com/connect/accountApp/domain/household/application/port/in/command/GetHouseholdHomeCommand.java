@@ -35,7 +35,7 @@ public class GetHouseholdHomeCommand {
         this.settlementDDay = dDay;
         this.nowExpenseDiff = byPreviousExpense.subtract(byNowExpense);
         this.isHouseholdBudgetOverWarn = isHouseholdBudgetOverWarn(household.getHouseholdBudget(), pastNearSettlementDate, byNowExpense);
-        this.expenseDuration = Period.between(pastNearSettlementDate, LocalDate.now()).getDays();
+        this.expenseDuration = Period.between(pastNearSettlementDate, LocalDate.of(2023, 11, 23)).getDays();
     }
 
     private boolean isHouseholdBudgetOverWarn(BigDecimal budget, LocalDate pastNearSettlementDate, BigDecimal householdByNowExpense) {

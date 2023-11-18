@@ -1,7 +1,6 @@
 package com.connect.accountApp.domain.settlement.adapter.out.persistence;
 
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
-import static com.connect.accountApp.domain.settlement.adapter.out.persistence.jpa.model.QSettlementJpaEntity.settlementJpaEntity;
 import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
@@ -22,47 +21,48 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SettlementQueryRepository {
 
-  private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
-  public List<BigDecimal> findUserRealExpense(String userEmail, LocalDate startDate,
-      LocalDate endDate) {
+    public BigDecimal findUserRealExpense(Long userId, LocalDate startDate, LocalDate endDate) {
 
-    return queryFactory
-        .select(settlementJpaEntity.expenseJpaEntity.expenseAmount)
-        .from(settlementJpaEntity)
-        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
-        .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
-        .where(
-            settlementJpaEntity.expenseJpaEntity.expenseDate.between(startDate, endDate),
-            settlementJpaEntity.isSettlementDelegate.isTrue(),
-            settlementJpaEntity.userJpaEntity.userEmail.eq(userEmail)
-        )
-        .fetch();
-  }
+        System.out.println("userId = " + userId);
+        System.out.println("startDate = " + startDate);
+        System.out.println("endDate = " + endDate);
+        return queryFactory
+                .select(expenseJpaEntity.expenseAmount.sum())
+                .from(expenseJpaEntity)
+                .join(expenseJpaEntity.spender, userJpaEntity)
+                .where(
+                        expenseJpaEntity.expenseDate.between(startDate, endDate),
+                        expenseJpaEntity.spender.userId.eq(userId))
+                .fetchOne();
+    }
 
-  public List<ExpenseOfHouseholdCommand> findExpenseOfHousehold(Long householdId, LocalDate startDate, LocalDate endDate) {
+    public List<ExpenseOfHouseholdCommand> findExpenseOfHousehold(Long householdId, LocalDate startDate,
+                                                                  LocalDate endDate) {
 
-    return queryFactory
-        .from(settlementJpaEntity)
-        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
-        .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
-        .where(
-            settlementJpaEntity.expenseJpaEntity.expenseDate.between(startDate, endDate),
-            settlementJpaEntity.userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId)
-        )
-        .transform(
-            groupBy(settlementJpaEntity.expenseJpaEntity).list(
-                Projections.fields(ExpenseOfHouseholdCommand.class,
-                settlementJpaEntity.expenseJpaEntity.expenseId.as("expenseId"),
-                settlementJpaEntity.expenseJpaEntity.expenseAmount.as("expenseAmount"),
-                list(
-                    Projections.fields(ExpenseOfHouseholdCommand.ExpenseRatioOfUser.class,
-                        settlementJpaEntity.userJpaEntity.userId.as("userId"),
-                        settlementJpaEntity.userJpaEntity.userRatio.as("userExpenseRatio")
-                    )
-                ).as("expenseRatioOfUsers")
-                )
-            ));
-  }
+        return null;
+//    return queryFactory
+//        .from(settlementJpaEntity)
+//        .join(settlementJpaEntity.expenseJpaEntity, expenseJpaEntity)
+//        .join(settlementJpaEntity.userJpaEntity, userJpaEntity)
+//        .where(
+//            settlementJpaEntity.expenseJpaEntity.expenseDate.between(startDate, endDate),
+//            settlementJpaEntity.userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId)
+//        )
+//        .transform(
+//            groupBy(settlementJpaEntity.expenseJpaEntity).list(
+//                Projections.fields(ExpenseOfHouseholdCommand.class,
+//                settlementJpaEntity.expenseJpaEntity.expenseId.as("expenseId"),
+//                settlementJpaEntity.expenseJpaEntity.expenseAmount.as("expenseAmount"),
+//                list(
+//                    Projections.fields(ExpenseOfHouseholdCommand.ExpenseRatioOfUser.class,
+//                        settlementJpaEntity.userJpaEntity.userId.as("userId"),
+//                        settlementJpaEntity.userJpaEntity.userRatio.as("userExpenseRatio")
+//                    )
+//                ).as("expenseRatioOfUsers")
+//                )
+//            ));
+    }
 
 }

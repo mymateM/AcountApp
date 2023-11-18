@@ -36,7 +36,7 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
       LocalDateTime endTime) {
 
     List<TotalExpenseCommand> totalExpenseQuery  = expenseQueryRepository.getTotalExpenseQuery(
-        householdId, startTime, endTime);
+        householdId, startTime.toLocalDate(), endTime.toLocalDate());
     return totalExpenseQuery;
   }
 
@@ -54,12 +54,14 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
 
   @Override
   public int getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
-    return expenseQueryRepository.getHouseholdTotalExpense(householdId, startTime, endTime);
+    return 1;
+//    return expenseQueryRepository.getHouseholdTotalExpense(householdId, startTime.toLocalDate(), endTime.toLocalDate());
   }
 
   @Override
   public BigDecimal getHouseholdTotalExpenseByDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
-    return expenseQueryRepository.getHouseholdTotalExpenseBetweenDate(householdId, startTime, endTime);
+    return expenseQueryRepository.getHouseholdTotalExpenseBetweenDate(householdId, startTime,
+            endTime.plusDays(1).minusSeconds(1));
   }
 
   @Override
@@ -95,6 +97,11 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   @Override
   public List<DailyExpenseCommand> findSearchedExpenses(Long householdId, SearchedCondition condition) {
     return expenseQueryRepository.findSearchedExpenses(householdId, condition);
+  }
+
+  @Override
+  public BigDecimal findHouseholdTotalExpenses(Long householdId, LocalDate startDate, LocalDate endDate) {
+    return expenseQueryRepository.getHouseholdTotalExpense(householdId, startDate, endDate);
   }
 
 }

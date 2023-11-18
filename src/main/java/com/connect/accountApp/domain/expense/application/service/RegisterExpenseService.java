@@ -5,13 +5,14 @@ import com.connect.accountApp.domain.expense.application.port.in.RegisterExpense
 import com.connect.accountApp.domain.expense.application.port.out.FindExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.SaveExpensePort;
 import com.connect.accountApp.domain.expense.domain.model.Expense;
+import com.connect.accountApp.domain.expensenotification.application.port.out.SaveExpenseNotificationPort;
+import com.connect.accountApp.domain.expensenotification.domain.model.ExpenseNotification;
+import com.connect.accountApp.domain.household.domain.model.Household;
+import com.connect.accountApp.domain.user.application.port.out.FindHouseholdUserListPort;
 import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.domain.user.domain.model.User;
-import com.connect.accountApp.domain.settlement.application.port.out.SaveSettlementPort;
-import com.connect.accountApp.domain.settlement.domain.model.Settlement;
-import com.connect.accountApp.domain.settlement.exception.ExpenseDelegateNotFound;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,67 +20,63 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterExpenseService implements RegisterExpenseUseCase {
 
-  private final GetUserPort getUserPort;
-  private final SaveExpensePort saveExpensePort;
-  private final FindExpensePort findExpensePort;
-  private final SaveSettlementPort saveSettlementPort;
+    private final GetUserPort getUserPort;
+    private final SaveExpensePort saveExpensePort;
+    private final FindExpensePort findExpensePort;
+    private final SaveExpenseNotificationPort saveExpenseNotificationPort;
+    private final FindHouseholdUserListPort findHouseholdUserListPort;
 
 
-  @Override
+    @Override
+    public Long registerExpense(String expenseDelegateUserEmail, RegisterExpenseRequest request) {
+        User userWithHousehold = getUserPort.findUserWithHousehold(expenseDelegateUserEmail);
+        Household household = userWithHousehold.getHousehold();
 
-  public Long registerExpense(String expenseDelegateUserEmail, RegisterExpenseRequest request) {
+        Expense expense = createAndSaveExpense(request, household, userWithHousehold);
+        saveExpenseNotifications(expense, household);
 
-    User expenseDelegate = getUserPort.findUser(expenseDelegateUserEmail);
-    List<User> settlementSubjects = request.getSettlementSubjectIds().stream().map(getUserPort::getUser).toList();
-
-    validateDelegateExistInSubjects(expenseDelegate, settlementSubjects);
-
-    Expense expense = createAndSaveExpense(request);
-    createAndSaveSettlementsOfSubjects(settlementSubjects, expense, expenseDelegate);
-
-    return expense.getExpenseId();
-  }
+        return expense.getExpenseId();
+    }
 
 
-  private void validateDelegateExistInSubjects(User expenseDelegate, List<User> settlementSubjects) {
-    boolean existExistSubjects = settlementSubjects.stream()
-        .anyMatch(user -> Objects.equals(user.getUserId(), expenseDelegate.getUserId()));
+    private Expense createAndSaveExpense(RegisterExpenseRequest request, Household household, User spender) {
+        Expense newExpense = createExpense(request, household, spender);
+        Long savedExpenseId = saveExpensePort.saveExpensePort(newExpense);
+        return findExpensePort.findExpense(savedExpenseId);
+    }
 
-    if (!existExistSubjects)
-      throw new ExpenseDelegateNotFound("실제 지출 등록한 사람의 id : " + expenseDelegate.getUserId() +
-          "가 settlementSubjects : " + settlementSubjects + "에 존재하지 않습니다.");
-  }
 
-  private void createAndSaveSettlementsOfSubjects(List<User> settlementSubjects, Expense expense, User expenseDelegate) {
-    settlementSubjects.forEach(settlementSubject ->
-        {
-          Settlement settlement = createSettlement(expense, expenseDelegate, settlementSubject);
-          saveSettlementPort.saveSettlement(settlement);
-        }
-    );
-  }
+    private Expense createExpense(RegisterExpenseRequest request, Household household, User spender) {
 
-  private Expense createAndSaveExpense(RegisterExpenseRequest request) {
-    Expense newExpense = createExpense(request);
-    Long savedExpenseId = saveExpensePort.saveExpensePort(newExpense);
-    return findExpensePort.findExpense(savedExpenseId);
-  }
+        return Expense.builder()
+                .expenseAmount(request.getExpenseAmount())
+                .expenseDate(request.getExpenseDate())
+                .expenseStore(request.getExpenseStore())
+                .expenseMemo(request.getExpenseMemo())
+                .expenseCategory(request.getExpenseCategory())
+                .household(household)
+                .spender(spender)
+                .build();
+    }
 
-  private Expense createExpense(RegisterExpenseRequest request) {
-    return Expense.builder()
-        .expenseAmount(request.getExpenseAmount())
-        .expenseDate(request.getExpenseDate())
-        .expenseStore(request.getExpenseStore())
-        .expenseMemo(request.getExpenseMemo())
-        .expenseCategory(request.getExpenseCategory())
-        .build();
-  }
 
-  private Settlement createSettlement(Expense expense, User expenseDelegate, User settlementSubject) {
-    return Settlement.builder()
-        .expense(expense)
-        .user(settlementSubject)
-        .isSettlementDelegate(Objects.equals(settlementSubject.getUserId(), expenseDelegate.getUserId()))
-        .build();
-  }
+    private void saveExpenseNotifications(Expense expense, Household household) {
+        List<ExpenseNotification> expenseNotification = createExpenseNotificationOfMembers(expense, household);
+        saveExpenseNotificationPort.saveAll(expenseNotification);
+    }
+
+    private List<ExpenseNotification> createExpenseNotificationOfMembers(Expense expense, Household household) {
+        List<User> householdMembers = findHouseholdUserListPort.findHouseholdMembers(household.getHouseholdId());
+        return householdMembers.stream()
+                .map(member -> createExpenseNotification(expense, member))
+                .collect(Collectors.toList());
+    }
+
+    private ExpenseNotification createExpenseNotification(Expense expense, User member) {
+        return ExpenseNotification.builder()
+                .isRead(false)
+                .expense(expense)
+                .user(member).build();
+    }
+
 }

@@ -15,34 +15,13 @@ public class DailyExpenseCommand {
   private BigDecimal expenseAmount;
   private String expenseStore;
   private ExpenseCategory expenseCategory;
-  private List<SettlementSubjectCommand> settlementSubjects;
 
   public DailyExpenseCommand(Long expenseId, BigDecimal expenseAmount, String expenseStore,
-      ExpenseCategory expenseCategory,
-      List<SettlementSubjectCommand> settlementSubjects) {
+      ExpenseCategory expenseCategory) {
     this.expenseId = expenseId;
     this.expenseAmount = expenseAmount;
     this.expenseStore = expenseStore;
     this.expenseCategory = expenseCategory;
-    this.settlementSubjects = settlementSubjects;
-  }
-
-  @Getter
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
-  public static class SettlementSubjectCommand {
-
-    private Long userId;
-    private String userNickname;
-    private Boolean isExpenseConsumer;
-    private String userProfileImage;
-
-    public SettlementSubjectCommand(Long userId, String userNickname, Boolean isExpenseConsumer,
-        String userProfileImage) {
-      this.userId = userId;
-      this.userNickname = userNickname;
-      this.isExpenseConsumer = isExpenseConsumer;
-      this.userProfileImage = userProfileImage;
-    }
   }
 
 }

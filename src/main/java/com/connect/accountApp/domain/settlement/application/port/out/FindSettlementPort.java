@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface FindSettlementPort {
 
-  List<BigDecimal> findUserRealExpense(String userEmail, LocalDate startDate, LocalDate endDate);
+  BigDecimal findUserRealExpense(Long userId, LocalDate startDate, LocalDate endDate);
 
   List<ExpenseOfHouseholdCommand> findHouseholdExpenses(Long householdId, LocalDate startDate, LocalDate endDate);
 
