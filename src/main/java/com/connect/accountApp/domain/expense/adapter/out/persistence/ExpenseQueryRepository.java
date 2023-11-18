@@ -134,7 +134,7 @@ public class ExpenseQueryRepository {
                 .from(expenseJpaEntity)
                 .join(expenseJpaEntity.houseHoldJpaEntity, houseHoldJpaEntity)
                 .where(
-                        eqHouseholdId(householdId),
+                        expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
                         betweenDate(startTime.toLocalDate(), endTime.toLocalDate())
                 )
                 .groupBy(expenseJpaEntity.houseHoldJpaEntity.householdId)

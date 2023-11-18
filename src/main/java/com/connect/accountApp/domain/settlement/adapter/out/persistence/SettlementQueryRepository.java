@@ -25,16 +25,16 @@ public class SettlementQueryRepository {
 
     public BigDecimal findUserRealExpense(Long userId, LocalDate startDate, LocalDate endDate) {
 
+        System.out.println("userId = " + userId);
+        System.out.println("startDate = " + startDate);
+        System.out.println("endDate = " + endDate);
         return queryFactory
-                .select(expenseJpaEntity.expenseAmount)
+                .select(expenseJpaEntity.expenseAmount.sum())
                 .from(expenseJpaEntity)
-                .join(expenseJpaEntity, expenseJpaEntity)
                 .join(expenseJpaEntity.spender, userJpaEntity)
                 .where(
                         expenseJpaEntity.expenseDate.between(startDate, endDate),
-                        expenseJpaEntity.spender.userId.eq(userId)
-
-                        )
+                        expenseJpaEntity.spender.userId.eq(userId))
                 .fetchOne();
     }
 
