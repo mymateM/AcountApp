@@ -6,15 +6,32 @@ import lombok.Getter;
 @Getter
 public class SettlementCommand {
 
-  private Long giverId;
-  private Long senderId;
-  private BigDecimal settlementAmount;
+    private Long giverId;
+    private Long senderId;
+    private BigDecimal settlementAmount;
 
-  public SettlementCommand(Long giverId, Long senderId, BigDecimal settlementAmount) {
-    this.giverId = giverId;
-    this.senderId = senderId;
-    this.settlementAmount = settlementAmount;
-  }
+    public SettlementCommand(Long giverId, Long senderId, BigDecimal settlementAmount) {
+        this.giverId = giverId;
+        this.senderId = senderId;
+        this.settlementAmount = settlementAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "SettlementCommand{" +
+                "giverId=" + giverId +
+                ", senderId=" + senderId +
+                ", settlementAmount=" + settlementAmount +
+                '}';
+    }
+
+//    // 내가 sender면 command에서 sender인 애들을 가져와
+//    // 그 다음 sender가 같으면 filetering 된다.
+//    public Boolean isSettlement(Long userId) {
+//        if (this.giverId == userId) {
+//
+//        }
+//    }
 }
 
 // 지출 등록

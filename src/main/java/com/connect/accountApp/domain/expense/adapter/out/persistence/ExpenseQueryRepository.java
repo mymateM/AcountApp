@@ -168,7 +168,7 @@ public class ExpenseQueryRepository {
                         expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
                         betweenDate(startTime, endTime) //todo: 여기 포함?
                 )
-                .groupBy(userJpaEntity.houseHoldJpaEntity.householdId)
+                .groupBy(expenseJpaEntity.houseHoldJpaEntity.householdId)
                 .fetchOne();
     }
 

@@ -1,6 +1,7 @@
 package com.connect.accountApp.domain.settlement.application.service;
 
 import com.connect.accountApp.domain.expense.application.port.out.FindExpensePort;
+import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTotalExpensePort;
 import com.connect.accountApp.domain.settlement.application.port.in.GetUserSettlementUseCase;
 import com.connect.accountApp.domain.settlement.application.port.in.command.UserSettlementWithHouseholdTotalExpenseCommand;
 import com.connect.accountApp.domain.settlement.application.port.out.FindSettlementPort;
@@ -17,7 +18,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
 
   private final GetUserPort getUserPort;
   private final FindSettlementPort findSettlementPort;
-  private final FindExpensePort expensePort;
+  private final GetHouseholdTotalExpensePort getHouseholdTotalExpensePort;
 
   @Override
   public UserSettlementWithHouseholdTotalExpenseCommand getUserSettlement(String userEmail, LocalDate startDate, LocalDate endDate) {
@@ -26,7 +27,7 @@ public class GetUserSettlementService implements GetUserSettlementUseCase {
     BigDecimal userRealTotalExpense = getUserTotalRealExpense(user.getUserId(), startDate, endDate);
 
     BigDecimal householdTotalExpense =
-            expensePort.findHouseholdTotalExpenses(user.getHousehold().getHouseholdId(), startDate, endDate);
+            getHouseholdTotalExpensePort.getHouseholdTotalExpenseByDate(user.getHousehold().getHouseholdId(), startDate.atStartOfDay(), endDate.atStartOfDay());
     BigDecimal userRatioExpense = householdTotalExpense.multiply(BigDecimal.valueOf(user.getUserRatio() / 100.0));
 
     return new UserSettlementWithHouseholdTotalExpenseCommand(householdTotalExpense, userRealTotalExpense, userRatioExpense, user);
