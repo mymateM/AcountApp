@@ -18,32 +18,32 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class ExpenseNotificationQueryRepository {
 
-  private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
-  public List<ExpenseNotificationCommand> findExpenseNotificationsInHousehold(String userEmail) {
+    public List<ExpenseNotificationCommand> findExpenseNotificationsInHousehold(String userEmail) {
 
-    System.out.println("userEmail = " + userEmail);
-    return jpaQueryFactory
-        .select(Projections.constructor(ExpenseNotificationCommand.class,
-            expenseNotificationJpaEntity.id.as("expenseNotificationId"),
-            expenseNotificationJpaEntity.expenseJpaEntity.expenseId.as("expenseId"),
-            expenseNotificationJpaEntity.expenseJpaEntity.expenseCategory.as("expenseCategory"),
-            expenseNotificationJpaEntity.createdAt,
-            expenseNotificationJpaEntity.isRead,
-            expenseNotificationJpaEntity.expenseJpaEntity.expenseAmount
-        ))
-        .from(expenseNotificationJpaEntity)
-        .join(expenseNotificationJpaEntity.userJpaEntity)
-        .join(expenseNotificationJpaEntity.expenseJpaEntity)
-        .where(
-            expenseNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
-        )
-        .orderBy(expenseNotificationJpaEntity.id.asc())
-        .fetch();
-  }
+        return jpaQueryFactory
+                .select(Projections.constructor(ExpenseNotificationCommand.class,
+                        expenseNotificationJpaEntity.id.as("expenseNotificationId"),
+                        expenseNotificationJpaEntity.expenseJpaEntity.expenseId.as("expenseId"),
+                        expenseNotificationJpaEntity.expenseJpaEntity.expenseCategory.as("expenseCategory"),
+                        expenseNotificationJpaEntity.expenseJpaEntity.expenseDate.as("createAt"),
+                        expenseNotificationJpaEntity.isRead,
+                        expenseNotificationJpaEntity.expenseJpaEntity.expenseAmount,
+                        expenseNotificationJpaEntity.expenseJpaEntity.spender.userNickname.as("spenderName")
+                ))
+                .from(expenseNotificationJpaEntity)
+                .join(expenseNotificationJpaEntity.expenseJpaEntity)
+                .join(expenseNotificationJpaEntity.expenseJpaEntity.spender, expenseNotificationJpaEntity.userJpaEntity)
+                .where(
+                        expenseNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
+                )
+                .orderBy(expenseNotificationJpaEntity.id.asc())
+                .fetch();
+    }
 
-  public List<FindSpenderCommand> findSpender(List<Long> expenseIds) {
-      return null;
+    public List<FindSpenderCommand> findSpender(List<Long> expenseIds) {
+        return null;
 //
 //    return jpaQueryFactory
 //        .select(
@@ -60,17 +60,17 @@ public class ExpenseNotificationQueryRepository {
 //        )
 //        .orderBy()
 //        .fetch();
-  }
+    }
 
-  public List<ExpenseNotificationJpaEntity> findExpenseNotifications(List<Long> expenseNotificationIds) {
+    public List<ExpenseNotificationJpaEntity> findExpenseNotifications(List<Long> expenseNotificationIds) {
 
-    return jpaQueryFactory
-        .select(expenseNotificationJpaEntity)
-        .from(expenseNotificationJpaEntity)
-        .where(
-            expenseNotificationJpaEntity.id.in(expenseNotificationIds)
-        )
-        .fetch();
-  }
+        return jpaQueryFactory
+                .select(expenseNotificationJpaEntity)
+                .from(expenseNotificationJpaEntity)
+                .where(
+                        expenseNotificationJpaEntity.id.in(expenseNotificationIds)
+                )
+                .fetch();
+    }
 
 }

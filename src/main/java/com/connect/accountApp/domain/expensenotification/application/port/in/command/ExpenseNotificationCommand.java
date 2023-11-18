@@ -22,7 +22,7 @@ public class ExpenseNotificationCommand {
 
   public ExpenseNotificationCommand(Long expenseNotificationId, Long expenseId,
       ExpenseCategory expenseCategory, LocalDateTime createdAt, Boolean isRead,
-      BigDecimal expenseAmount) {
+      BigDecimal expenseAmount, String spenderName) {
     this.expenseNotificationId = expenseNotificationId;
     this.expenseId = expenseId;
     this.expenseCategoryImageUrl = expenseCategory.getImgUrl();
@@ -30,7 +30,7 @@ public class ExpenseNotificationCommand {
     this.createdAt = createdAt;
     this.isRead = isRead;
     this.expenseAmount = expenseAmount;
-//    this.spenderName = spenderName;
+    this.spenderName = spenderName;
   }
 
   public void setSpenderName(String spenderName) {
