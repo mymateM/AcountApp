@@ -2,6 +2,7 @@ package com.connect.accountApp.domain.expensenotification.adapter.port.out.persi
 
 import static com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.QExpenseJpaEntity.expenseJpaEntity;
 import static com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.QExpenseNotificationJpaEntity.expenseNotificationJpaEntity;
+import static com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.QUserJpaEntity.userJpaEntity;
 
 import com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.ExpenseNotificationJpaEntity;
 import com.connect.accountApp.domain.expensenotification.application.port.in.command.ExpenseNotificationCommand;
@@ -21,24 +22,29 @@ public class ExpenseNotificationQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     public List<ExpenseNotificationCommand> findExpenseNotificationsInHousehold(String userEmail) {
+        /*
+        (Long expenseNotificationId, Long expenseId,
+      ExpenseCategory expenseCategory, LocalDateTime createdAt, Boolean isRead,
+      BigDecimal expenseAmount, String spenderName)
+         */
 
         return jpaQueryFactory
                 .select(Projections.constructor(ExpenseNotificationCommand.class,
                         expenseNotificationJpaEntity.id.as("expenseNotificationId"),
                         expenseNotificationJpaEntity.expenseJpaEntity.expenseId.as("expenseId"),
                         expenseNotificationJpaEntity.expenseJpaEntity.expenseCategory.as("expenseCategory"),
-                        expenseNotificationJpaEntity.expenseJpaEntity.expenseDate.as("createAt"),
+                        expenseNotificationJpaEntity.expenseJpaEntity.expenseDate.as("createdAt"),
                         expenseNotificationJpaEntity.isRead,
                         expenseNotificationJpaEntity.expenseJpaEntity.expenseAmount,
                         expenseNotificationJpaEntity.expenseJpaEntity.spender.userNickname.as("spenderName")
                 ))
                 .from(expenseNotificationJpaEntity)
-                .join(expenseNotificationJpaEntity.expenseJpaEntity)
-                .join(expenseNotificationJpaEntity.expenseJpaEntity.spender, expenseNotificationJpaEntity.userJpaEntity)
+                .join(expenseNotificationJpaEntity.expenseJpaEntity, expenseJpaEntity)
+                .join(expenseNotificationJpaEntity.expenseJpaEntity.spender, userJpaEntity)
                 .where(
                         expenseNotificationJpaEntity.userJpaEntity.userEmail.eq(userEmail)
                 )
-                .orderBy(expenseNotificationJpaEntity.id.asc())
+                .orderBy(expenseNotificationJpaEntity.expenseJpaEntity.expenseDate.desc())
                 .fetch();
     }
 
