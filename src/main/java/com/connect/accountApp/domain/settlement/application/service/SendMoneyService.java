@@ -36,7 +36,7 @@ public class SendMoneyService implements SendMoneyUseCase {
                 createUserActivityNotification(receiver, savedActivityNotification);
         saveUserActivityNotificationPort.saveUserActivityNotification(userActivityNotification);
 
-        return receiver.getUserNickname();
+        return requester.getUserNickname();
     }
 
     private ActivityNotification createActivityNotification(User requester) {
