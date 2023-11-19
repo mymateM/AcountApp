@@ -11,4 +11,6 @@ public interface FcmNotificationUseCase {
 
   void sendNotificationHouseholdMember(Notification notification, Long householdId);
 
+  void sendNotificationMember(Notification notification, Long userId);
+
 }
