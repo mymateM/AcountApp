@@ -17,7 +17,7 @@ public class UpdateUserDeviceTokenService implements UpdateUserDeviceTokenUseCas
   @Override
   public void updateDeviceToken(String userEmail, String deviceToken) {
 
-    User user = getUserPort.findUser(userEmail);
+    User user = getUserPort.findUserWithHousehold(userEmail);
     user.changeDeviceToken(deviceToken);
     saveUserPort.save(user);
   }
