@@ -48,6 +48,12 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   }
 
   @Override
+  public List<TotalExpenseByCategoryCommand> getTotalUserExpenseGroupByCategory(Long userId, LocalDate startTime,
+                                                                                LocalDate endTime) {
+    return expenseQueryRepository.getUserTotalExpenseGroupByCategory(userId, startTime, endTime);
+  }
+
+  @Override
   public TotalExpenseCommand getUserSendMoney(Long userId, LocalDate date) {
     return expenseQueryRepository.getUserTotalExpenseQuery(userId, date);
   }

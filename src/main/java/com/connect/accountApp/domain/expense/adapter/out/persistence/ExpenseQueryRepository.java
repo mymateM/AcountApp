@@ -96,7 +96,8 @@ public class ExpenseQueryRepository {
                 .join(expenseJpaEntity.spender, userJpaEntity)
                 .where(
                         expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
+                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(),
+                                condition.getExpenseDateMax()),
                         eqCategory(condition.getExpenseCategory().orElse(null)),
                         expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(),
                                 condition.getExpenseAmountMax())
@@ -123,7 +124,8 @@ public class ExpenseQueryRepository {
     }
 
 
-    public BigDecimal getHouseholdTotalExpenseBetweenDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
+    public BigDecimal getHouseholdTotalExpenseBetweenDate(Long householdId, LocalDateTime startTime,
+                                                          LocalDateTime endTime) {
 
         return queryFactory
                 .select(
@@ -216,19 +218,37 @@ public class ExpenseQueryRepository {
 
     public List<TotalExpenseByCategoryCommand> getTotalExpenseGroupByCategory(Long householdId, LocalDate from,
                                                                               LocalDate to) {
-    return queryFactory
-        .select(Projections.constructor(TotalExpenseByCategoryCommand.class,
-            expenseJpaEntity.expenseCategory.as("expenseCategory"),
-            expenseJpaEntity.expenseAmount.sum().as("totalExpenseAmount"))
-        )
-        .from(expenseJpaEntity)
-        .join(expenseJpaEntity.houseHoldJpaEntity)
-        .where(
-                expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-                expenseJpaEntity.expenseDate.between(from, to)
-        )
-        .groupBy(expenseJpaEntity.expenseCategory)
-        .fetch();
+        return queryFactory
+                .select(Projections.constructor(TotalExpenseByCategoryCommand.class,
+                        expenseJpaEntity.expenseCategory.as("expenseCategory"),
+                        expenseJpaEntity.expenseAmount.sum().as("totalExpenseAmount"))
+                )
+                .from(expenseJpaEntity)
+                .join(expenseJpaEntity.houseHoldJpaEntity)
+                .where(
+                        expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
+                        expenseJpaEntity.expenseDate.between(from, to)
+                )
+                .groupBy(expenseJpaEntity.expenseCategory)
+                .fetch();
+
+    }
+
+    public List<TotalExpenseByCategoryCommand> getUserTotalExpenseGroupByCategory(Long userId, LocalDate from,
+                                                                                  LocalDate to) {
+        return queryFactory
+                .select(Projections.constructor(TotalExpenseByCategoryCommand.class,
+                        expenseJpaEntity.expenseCategory.as("expenseCategory"),
+                        expenseJpaEntity.expenseAmount.sum().as("totalExpenseAmount"))
+                )
+                .from(expenseJpaEntity)
+                .join(expenseJpaEntity.spender, userJpaEntity)
+                .where(
+                        expenseJpaEntity.spender.userId.eq(userId),
+                        expenseJpaEntity.expenseDate.between(from, to)
+                )
+                .groupBy(expenseJpaEntity.expenseCategory)
+                .fetch();
 
     }
 
@@ -246,7 +266,8 @@ public class ExpenseQueryRepository {
     private BooleanExpression betweenDate(LocalDate startDate, LocalDate endDate) {
         log.info("startDate : {}, endDate : {}", startDate, endDate);
 
-        return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate.between(startDate, endDate) : null;
+        return (startDate != null) && (endDate != null) ? expenseJpaEntity.expenseDate.between(startDate, endDate)
+                : null;
     }
 
     private BooleanExpression eqCategory(ExpenseCategory category) {
