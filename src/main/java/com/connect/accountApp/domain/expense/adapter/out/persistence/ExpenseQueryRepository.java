@@ -115,12 +115,11 @@ public class ExpenseQueryRepository {
     }
 
     private OrderSpecifier<LocalDate> sorted(SearchedCondition condition) {
-//        OrderSpecifier<LocalDate> sorted = settlementJpaEntity.expenseJpaEntity.expenseDate.asc();
-//        if (condition.getSortedByNewest()) {
-//            sorted = settlementJpaEntity.expenseJpaEntity.expenseDate.desc();
-//        }
-//        return sorted;
-        return null;
+        OrderSpecifier<LocalDate> sorted = expenseJpaEntity.expenseDate.asc();
+        if (condition.getSortedByNewest()) {
+            sorted = expenseJpaEntity.expenseDate.desc();
+        }
+        return sorted;
     }
 
 

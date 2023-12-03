@@ -19,7 +19,6 @@ public enum NotiCategory implements EnumMapperType {
 
   private String title;
   private String imgUrl;
-//  private Boolean IsActivity;
 
   NotiCategory(String title, String imgUrl) {
     this.title = title;
