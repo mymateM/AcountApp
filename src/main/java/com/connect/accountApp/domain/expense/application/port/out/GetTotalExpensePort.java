@@ -12,4 +12,6 @@ public interface GetTotalExpensePort {
       LocalDateTime endTime);
 
   List<TotalExpenseByCategoryCommand> getTotalExpenseGroupByCategory(Long householdId, LocalDate startTime, LocalDate endTime);
+
+  List<TotalExpenseByCategoryCommand> getTotalUserExpenseGroupByCategory(Long userId, LocalDate startTime, LocalDate endTime);
 }

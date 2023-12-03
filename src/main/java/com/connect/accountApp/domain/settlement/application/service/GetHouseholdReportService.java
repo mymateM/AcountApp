@@ -31,11 +31,6 @@ public class GetHouseholdReportService implements GetHouseholdReportUseCase {
     List<TotalExpenseByCategoryCommand> totalExpenseByCategoryCommands = getTotalExpensePort
         .getTotalExpenseGroupByCategory(user.getHousehold().getHouseholdId(), reportStartDate, reportEndDate);
 
-//    totalExpenseByCategoryCommands.forEach(totalExpenseByCategoryCommand -> {
-//      System.out.println("totalExpenseByCategoryCommand.getExpenseCategory() = " + totalExpenseByCategoryCommand.getExpenseCategory());
-//      System.out.println("totalExpenseByCategoryCommand.getTotalExpenseAmount() = "
-//          + totalExpenseByCategoryCommand.getTotalExpenseAmount());
-//    });
 
 
     // 카테고리 별이 아닌, 모든 지출 내역
