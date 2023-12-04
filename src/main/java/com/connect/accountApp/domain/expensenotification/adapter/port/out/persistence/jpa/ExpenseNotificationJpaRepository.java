@@ -8,4 +8,7 @@ public interface ExpenseNotificationJpaRepository extends JpaRepository<ExpenseN
 
   @Override
   <S extends ExpenseNotificationJpaEntity> List<S> saveAll(Iterable<S> entities);
+
+  @Override
+  void deleteAllById(Iterable<? extends Long> longs);
 }

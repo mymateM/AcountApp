@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.Expense
 import com.connect.accountApp.domain.expense.adapter.out.persistence.jpa.model.ExpenseJpaEntity;
 import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
 import com.connect.accountApp.domain.expense.application.port.in.command.SearchedCondition;
+import com.connect.accountApp.domain.expense.application.port.out.DeleteExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.FindDailyTotalExpensesPort;
 import com.connect.accountApp.domain.expense.application.port.out.FindExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.GetHouseholdTotalExpensePort;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSendMoneyPort,
-    GetHouseholdTotalExpensePort, FindDailyTotalExpensesPort, SaveExpensePort, FindExpensePort {
+    GetHouseholdTotalExpensePort, FindDailyTotalExpensesPort, SaveExpensePort, FindExpensePort, DeleteExpensePort {
 
   private final ExpenseQueryRepository expenseQueryRepository;
   private final ExpenseJpaRepository expenseJpaRepository;
@@ -110,4 +111,8 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
     return expenseQueryRepository.getHouseholdTotalExpense(householdId, startDate, endDate);
   }
 
+  @Override
+  public void deleteExpense(Long expenseId) {
+    expenseJpaRepository.deleteById(expenseId);
+  }
 }
