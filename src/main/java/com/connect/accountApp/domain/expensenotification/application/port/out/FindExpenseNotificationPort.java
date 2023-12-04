@@ -13,4 +13,6 @@ public interface FindExpenseNotificationPort {
 
   List<ExpenseNotification> findExpenseNotifications(List<Long> expenseNotificationIds);
 
+  List<ExpenseNotification> findExpenseNotifications(Long expenseId);
+
 }

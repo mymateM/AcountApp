@@ -79,4 +79,15 @@ public class ExpenseNotificationQueryRepository {
                 .fetch();
     }
 
+    public List<ExpenseNotificationJpaEntity> findExpenseNotifications(Long expenseId) {
+
+        return jpaQueryFactory
+                .select(expenseNotificationJpaEntity)
+                .from(expenseNotificationJpaEntity)
+                .join(expenseNotificationJpaEntity.expenseJpaEntity, expenseJpaEntity)
+                .where(
+                        expenseNotificationJpaEntity.expenseJpaEntity.expenseId.eq(expenseId)
+                )
+                .fetch();
+    }
 }

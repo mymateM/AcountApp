@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.expensenotification.adapter.port.out.persis
 import com.connect.accountApp.domain.expensenotification.adapter.port.out.persistence.jpa.model.ExpenseNotificationJpaEntity;
 import com.connect.accountApp.domain.expensenotification.application.port.in.command.ExpenseNotificationCommand;
 import com.connect.accountApp.domain.expensenotification.application.port.in.command.FindSpenderCommand;
+import com.connect.accountApp.domain.expensenotification.application.port.out.DeleteExpenseNotificationPort;
 import com.connect.accountApp.domain.expensenotification.application.port.out.FindExpenseNotificationPort;
 import com.connect.accountApp.domain.expensenotification.application.port.out.SaveExpenseNotificationPort;
 import com.connect.accountApp.domain.expensenotification.domain.model.ExpenseNotification;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class ExpenseNotificationPersistenceAdapter implements FindExpenseNotificationPort,
-    SaveExpenseNotificationPort {
+    SaveExpenseNotificationPort, DeleteExpenseNotificationPort {
 
   private final ExpenseNotificationMapper expenseNotificationMapper;
   private final ExpenseNotificationQueryRepository expenseNotificationQueryRepository;
@@ -40,10 +41,22 @@ public class ExpenseNotificationPersistenceAdapter implements FindExpenseNotific
   }
 
   @Override
+  public List<ExpenseNotification> findExpenseNotifications(Long expenseId) {
+    List<ExpenseNotificationJpaEntity> expenseNotifications =
+            expenseNotificationQueryRepository.findExpenseNotifications(expenseId);
+    return expenseNotifications.stream().map(expenseNotificationMapper::mapToDomainEntity).toList();
+  }
+
+  @Override
   public void saveAll(List<ExpenseNotification> expenseNotifications) {
     List<ExpenseNotificationJpaEntity> expenseNotificationJpaEntities = expenseNotifications.stream()
         .map(expenseNotificationMapper::mapToJpaEntity).toList();
     expenseNotificationJpaRepository.saveAll(expenseNotificationJpaEntities);
 
+  }
+
+  @Override
+  public void deleteExpenseNotification(List<Long> expenseIds) {
+    expenseNotificationJpaRepository.deleteAllById(expenseIds);
   }
 }
