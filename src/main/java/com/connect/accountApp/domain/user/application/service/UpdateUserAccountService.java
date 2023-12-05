@@ -20,7 +20,7 @@ public class UpdateUserAccountService implements UpdateUserAccountUseCase {
     public void updateUserAccount(String userEmail, UpdateUserAccountRequest request) {
 
         // user 가져옴 계좌 수정하고 저장
-        User user = getUserPort.findUser(userEmail);
+        User user = getUserPort.findUserWithHousehold(userEmail);
         Bank userBank = Bank.valueOf(request.getAccountBank());
         user.updateUserAccount(userBank, request.getAccountNumber());
 
