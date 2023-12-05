@@ -23,8 +23,14 @@ public class GetUserAccountService implements GetUserAccountUseCase {
 
     @Override
     public List<User> getMembersAccount(String userEmail) {
+        System.out.println("userEmail = " + userEmail);
         User user = getUserPort.findUserWithHousehold(userEmail);
 
+        System.out.println("user.getHousehold()1 = " + user.getHousehold());
+        List<User> householdMembers = findHouseholdUserListPort.findHouseholdMembers(
+                user.getHousehold().getHouseholdId());
+
+        System.out.println("householdMembers.size() = " + householdMembers.size());
         return findHouseholdUserListPort.findHouseholdMembers(user.getHousehold().getHouseholdId());
     }
 }
