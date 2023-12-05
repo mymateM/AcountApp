@@ -10,4 +10,6 @@ public interface FindHouseholdUserListPort {
 
   List<User> findHouseholdMembers(Long householdId);
 
+  Long findHouseholdId(String userEmail);
+
 }

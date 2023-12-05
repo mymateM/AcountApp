@@ -59,7 +59,6 @@ public class UserMapper {
   }
 
   private Household getHouseHoldOfUserJpaEntity(HouseHoldJpaEntity houseHoldJpaEntity) {
-
     if (houseHoldJpaEntity == null || houseHoldJpaEntity instanceof HibernateProxy) {
       System.out.println("hello1");
       return null;

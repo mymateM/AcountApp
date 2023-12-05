@@ -1,6 +1,7 @@
 package com.connect.accountApp.domain.user.adapter.out.persistence;
 
 import com.connect.accountApp.domain.household.adapter.out.persistence.HouseholdMapper;
+import com.connect.accountApp.domain.household.adapter.out.persistence.jpa.model.HouseHoldJpaEntity;
 import com.connect.accountApp.domain.household.domain.model.Household;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.model.UserJpaEntity;
 import com.connect.accountApp.domain.user.adapter.out.persistence.jpa.UserQueryRepository;
@@ -55,10 +56,6 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
   public User findUserWithHousehold(String userEmail) {
 
     UserJpaEntity userJpaEntity = userQueryRepository.findUserJpaEntityWithHouseholdByEmail(userEmail);
-
-    System.out.println(
-            "userJpaEntity.getHouseHoldJpaEntity().getHouseholdId() = " + userJpaEntity.getHouseHoldJpaEntity()
-                    .getHouseholdId());
     return userMapper.mapToDomainEntity(userJpaEntity);
   }
 
@@ -84,6 +81,12 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
 
     return householdJpaMember.stream()
         .map(userMapper::mapToDomainEntity).toList();
+  }
+
+  @Override
+  public Long findHouseholdId(String userEmail) {
+    UserJpaEntity userJpaEntity = userQueryRepository.findUserJpaEntityWithHouseholdByEmail(userEmail);
+    return userJpaEntity.getHouseHoldJpaEntity().getHouseholdId();
   }
 
   @Override
