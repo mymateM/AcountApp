@@ -20,7 +20,7 @@ public class GetMyPageResponse {
     @JsonProperty("user_settlement_ratio")
     private Integer userSettlementRatio;
     @JsonProperty("household_settlement_date")
-    private LocalDate householdSettlementDate;
+    private Integer householdSettlementDate;
     @JsonProperty("household_budget_amount")
     private BigDecimal householdBudgetAmount;
 

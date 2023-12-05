@@ -14,7 +14,7 @@ public class GetMyPageCommand {
     private String userImageUrl;
     private String userNickname;
     private Integer userSettlementRatio;
-    private LocalDate householdSettlementDate;
+    private Integer householdSettlementDate;
     private BigDecimal householdBudgetAmount;
 
     public GetMyPageCommand(User user) {
@@ -22,7 +22,7 @@ public class GetMyPageCommand {
         this.userImageUrl = user.getUserImgUrl();
         this.userNickname = user.getUserNickname();
         this.userSettlementRatio = user.getUserRatio();
-        this.householdSettlementDate = user.getHousehold().getHouseholdSettlementDate();
+        this.householdSettlementDate = user.getHousehold().getHouseholdSettlementDayOfMonth();
         this.householdBudgetAmount = user.getHousehold().getHouseholdBudget();
     }
 }
