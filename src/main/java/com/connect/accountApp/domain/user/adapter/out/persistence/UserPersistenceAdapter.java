@@ -56,6 +56,9 @@ public class UserPersistenceAdapter implements GetUserPort, GetRoommateSendMoney
 
     UserJpaEntity userJpaEntity = userQueryRepository.findUserJpaEntityWithHouseholdByEmail(userEmail);
 
+    System.out.println(
+            "userJpaEntity.getHouseHoldJpaEntity().getHouseholdId() = " + userJpaEntity.getHouseHoldJpaEntity()
+                    .getHouseholdId());
     return userMapper.mapToDomainEntity(userJpaEntity);
   }
 
