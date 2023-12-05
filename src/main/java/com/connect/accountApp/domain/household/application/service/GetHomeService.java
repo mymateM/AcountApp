@@ -33,7 +33,7 @@ public class GetHomeService implements GetHouseholdHomeUseCase {
         Household household = userWithHousehold.getHousehold();
 
         // 현재 날짜에서 가장 가까운 정산일을 가져온다. // 10 24
-        LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.of(2023, 11, 23),
+        LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(),
                 household.getHouseholdSettlementDayOfMonth());
 
         BigDecimal householdPreviousTotalExpense = getHouseholdPreviousTotalExpense(pastNearSettlementDate,
@@ -52,7 +52,7 @@ public class GetHomeService implements GetHouseholdHomeUseCase {
 
 //        int dDay = Period.between(LocalDate.now(), pastNearSettlementDate.toLocalDate().plusMonths(1)).getDays();
         int dDay = Period.between(pastNearSettlementDate.toLocalDate().plusMonths(1),
-                LocalDate.of(2023, 11, 23)).getDays() + 1;
+                LocalDate.now()).getDays() + 1;  //here
 
         return new GetHouseholdHomeCommand(household, householdNowTotalExpense, householdPreviousTotalExpense, dDay,
                 pastNearSettlementDate.toLocalDate());
@@ -71,13 +71,13 @@ public class GetHomeService implements GetHouseholdHomeUseCase {
 //
 //        LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(),
 //                household.getHouseholdSettlementDayOfMonth());
-        LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.of(2023, 11, 23),
+        LocalDateTime pastNearSettlementDate = getPastNearSettlementDate(LocalDate.now(),  //here
                 household.getHouseholdSettlementDayOfMonth());
 
 //        BigDecimal userByNowTotalExpense = findSettlementPort.findUserRealExpense(userWithHousehold.getUserId(),
 //                pastNearSettlementDate.toLocalDate(), LocalDate.now());
         BigDecimal userByNowTotalExpense = findSettlementPort.findUserRealExpense(userWithHousehold.getUserId(),
-                pastNearSettlementDate.toLocalDate(), LocalDate.of(2023, 11, 23));
+                pastNearSettlementDate.toLocalDate(), LocalDate.now());  //here
 //        BigDecimal userByNowTotalExpense =
 //                getHouseholdTotalExpensePort.getUserTotalExpenseByDate(userWithHousehold.getUserId(),
 //                        pastNearSettlementDate, LocalDateTime.now());
@@ -98,7 +98,7 @@ public class GetHomeService implements GetHouseholdHomeUseCase {
         System.out.println("pastNearSettlementDate = " + pastNearSettlementDate);
         LocalDateTime previousStartTime = pastNearSettlementDate.toLocalDate().atStartOfDay().minusMonths(1);
         System.out.println("previousStartTime = " + previousStartTime);
-        LocalDateTime previousEndTime = LocalDate.of(2023, 11, 22).atStartOfDay().plusDays(1).minusSeconds(1)
+        LocalDateTime previousEndTime = LocalDate.now().minusDays(1).atStartOfDay().plusDays(1).minusSeconds(1)  //here
                 .minusMonths(1);
         System.out.println("previousEndTime = " + previousEndTime);
         return getHouseholdTotalExpensePort.getHouseholdTotalExpenseByDate(householdId, previousStartTime,
