@@ -8,12 +8,20 @@ import static com.connect.accountApp.domain.user.domain.model.Bank.DigitType.DIG
 import java.util.List;
 
 public enum Bank {
+
   WOORI("우리은행", "woori.png", List.of(DIGIT_13)),
   HANA("하나은행", "hana.png", List.of(DIGIT_14)),
   KB("국민은행", "kb.png", List.of(DIGIT_12, DIGIT_14)),
   SINHAN("신한은행", "sinhan.png", List.of(DIGIT_11, DIGIT_12)),
   SC("제일은행", "sc.png", List.of(DIGIT_11)),
   CITI("씨티은행", "citi.png", List.of(DIGIT_12)),
+  BNK("경남은행", "bnk.png", List.of(DIGIT_12)),
+  IBK("IBK 기업은행", "ibk.png", List.of(DIGIT_12)),
+  DGB("대구은행", "dgb.png", List.of(DIGIT_12)),
+  MG("새마을", "mg.png", List.of(DIGIT_12)),
+  POST("우체국", "post.png", List.of(DIGIT_12)),
+  KAKAO("카카오", "kakao.png", List.of(DIGIT_12)),
+  TOSS("토스", "toss.png", List.of(DIGIT_12)),
   NH("농협은행", "nh.png", List.of(DIGIT_13));
 
 
