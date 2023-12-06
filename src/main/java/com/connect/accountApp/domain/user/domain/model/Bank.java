@@ -21,6 +21,7 @@ public enum Bank {
   MG("새마을금고", "mg.png", List.of(DIGIT_12)),
   POST("우체국은행", "post.png", List.of(DIGIT_12)),
   KAKAO("카카오뱅크", "kakao.png", List.of(DIGIT_12)),
+  JEJU("제주은행", "jeju.png", List.of(DIGIT_12)),
   TOSS("토스뱅크", "toss.png", List.of(DIGIT_12)),
   NH("농협은행", "nh.png", List.of(DIGIT_13));
 

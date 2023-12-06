@@ -96,12 +96,9 @@ public class ExpenseQueryRepository {
                 .join(expenseJpaEntity.spender, userJpaEntity)
                 .where(
                         expenseJpaEntity.houseHoldJpaEntity.householdId.eq(householdId),
-                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(),
-                                condition.getExpenseDateMax()),
+                        expenseJpaEntity.expenseDate.between(condition.getExpenseDateMin(), condition.getExpenseDateMax()),
                         eqCategory(condition.getExpenseCategory().orElse(null)),
-                        expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(),
-                                condition.getExpenseAmountMax())
-
+                        expenseJpaEntity.expenseAmount.between(condition.getExpenseAmountMin(), condition.getExpenseAmountMax())
                 )
                 .orderBy(sorted)
                 .transform(GroupBy.groupBy(expenseJpaEntity.expenseId).list(
@@ -109,7 +106,8 @@ public class ExpenseQueryRepository {
                                         expenseJpaEntity.expenseId,
                                         expenseJpaEntity.expenseAmount,
                                         expenseJpaEntity.expenseStore,
-                                        expenseJpaEntity.expenseCategory
+                                        expenseJpaEntity.expenseCategory,
+                                        expenseJpaEntity.expenseDate
                                 )
                         )
                 );

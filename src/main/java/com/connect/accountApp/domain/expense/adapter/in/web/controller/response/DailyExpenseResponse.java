@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.expense.adapter.in.web.controller.response
 import com.connect.accountApp.domain.expense.application.port.in.command.DailyExpenseCommand;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
@@ -29,6 +30,7 @@ public class DailyExpenseResponse {
         private String expenseCategoryName;
         private String expenseCategoryImage;
         private List settlementSubjects;
+        private LocalDate expenseDate;
 
         public DailyExpense(DailyExpenseCommand command) {
             this.expenseId = command.getExpenseId();
@@ -37,6 +39,7 @@ public class DailyExpenseResponse {
             this.expenseCategoryName = command.getExpenseCategory().getTitle();
             this.expenseCategoryImage = command.getExpenseCategory().getImgUrl();
             this.settlementSubjects = Collections.EMPTY_LIST;
+            this.expenseDate = command.getExpenseDate();
         }
     }
 
