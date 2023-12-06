@@ -14,14 +14,14 @@ public enum Bank {
   KB("국민은행", "kb.png", List.of(DIGIT_12, DIGIT_14)),
   SINHAN("신한은행", "sinhan.png", List.of(DIGIT_11, DIGIT_12)),
   SC("제일은행", "sc.png", List.of(DIGIT_11)),
-  CITI("씨티은행", "citi.png", List.of(DIGIT_12)),
+  CITI("씨티뱅크", "citi.png", List.of(DIGIT_12)),
   BNK("경남은행", "bnk.png", List.of(DIGIT_12)),
-  IBK("IBK 기업은행", "ibk.png", List.of(DIGIT_12)),
+  IBK("IBK기업은행", "ibk.png", List.of(DIGIT_12)),
   DGB("대구은행", "dgb.png", List.of(DIGIT_12)),
-  MG("새마을", "mg.png", List.of(DIGIT_12)),
-  POST("우체국", "post.png", List.of(DIGIT_12)),
-  KAKAO("카카오", "kakao.png", List.of(DIGIT_12)),
-  TOSS("토스", "toss.png", List.of(DIGIT_12)),
+  MG("새마을금고", "mg.png", List.of(DIGIT_12)),
+  POST("우체국은행", "post.png", List.of(DIGIT_12)),
+  KAKAO("카카오뱅크", "kakao.png", List.of(DIGIT_12)),
+  TOSS("토스뱅크", "toss.png", List.of(DIGIT_12)),
   NH("농협은행", "nh.png", List.of(DIGIT_13));
 
 
