@@ -81,7 +81,8 @@ public class ExpenseQueryRepository {
                                         expenseJpaEntity.expenseId,
                                         expenseJpaEntity.expenseAmount,
                                         expenseJpaEntity.expenseStore,
-                                        expenseJpaEntity.expenseCategory
+                                        expenseJpaEntity.expenseCategory,
+                                        expenseJpaEntity.expenseDate
                                 )
                         )
                 );
