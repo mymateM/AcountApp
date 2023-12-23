@@ -5,6 +5,7 @@ import com.connect.accountApp.domain.bill.application.port.in.RegisterBillUseCas
 import com.connect.accountApp.domain.bill.domain.model.BillCategory;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import com.connect.accountApp.global.common.application.port.out.FcmNotificationUseCase;
+import com.connect.accountApp.global.utils.NotificationUtils;
 import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,31 +21,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/bill")
 public class RegisterBillController {
 
-  private final RegisterBillUseCase registerBillUseCase;
-  private final FcmNotificationUseCase fcmNotificationUseCase;
+    private final RegisterBillUseCase registerBillUseCase;
+    private final FcmNotificationUseCase fcmNotificationUseCase;
 
-  @PostMapping("")
-  public ResponseEntity registerBill(
-      @AuthenticationPrincipal UserDetails userDetails,
-      @RequestBody RegisterBillRequest request) {
+    @PostMapping("")
+    public ResponseEntity registerBill(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody RegisterBillRequest request) {
 
-    String userEmail = userDetails.getUsername();
-    Long billId = registerBillUseCase.registerBill(userEmail, request);
+        String userEmail = userDetails.getUsername();
+        Long billId = registerBillUseCase.registerBill(userEmail, request);
 
-    Notification notification = createNotification(request);
-    fcmNotificationUseCase.sendNotificationHouseholdMember(notification, userEmail);
+        Notification notification =
+                NotificationUtils.createBillNotification(BillCategory.valueOf(request.getBillCategoryTitle()));
+        fcmNotificationUseCase.sendNotificationHouseholdMember(notification, userEmail);
 
-    return ResponseEntity.ok(SuccessResponse.create201CreatedResponse(billId));
-  }
+        return ResponseEntity.ok(SuccessResponse.create201CreatedResponse(billId));
+    }
 
-  private Notification createNotification(RegisterBillRequest request) {
-    BillCategory billCategory = BillCategory.valueOf(request.getBillCategoryTitle());
-    return Notification
-        .builder()
-        .setTitle("고지서")
-        .setBody("새로운 고지서를 확인하세요!")
-        .setImage(billCategory.getImgUrl())
-        .build();
-  }
 
 }
