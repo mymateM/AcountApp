@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GetMySettlementController {
 
-
   private final GetMySettlementUseCase getMySettlementUseCase;
-
 
   @GetMapping("/settlement/me/{userId}")
   public ResponseEntity getMySettlement(@PathVariable Long userId) {
@@ -26,7 +24,4 @@ public class GetMySettlementController {
 
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
   }
-
-
-
 }

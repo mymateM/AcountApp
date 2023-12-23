@@ -1,11 +1,10 @@
 package com.connect.accountApp.domain.household.adapter.in.web.controller;
 
-import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.UPDATE_SETTLEMENT_DATE;
-
 import com.connect.accountApp.domain.household.adapter.in.web.request.UpdateSettlementDayOfMonthRequest;
 import com.connect.accountApp.domain.household.application.port.in.UpdateSettlementDayOfMonthUseCase;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import com.connect.accountApp.global.common.application.port.out.FcmNotificationUseCase;
+import com.connect.accountApp.global.utils.NotificationUtils;
 import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +28,7 @@ public class UpdateHouseholdSettlementDateController {
 
     String userEmail = userDetails.getUsername();
     updateSettlementDayOfMonthUseCase.updateSettlementDayOfMonth(userEmail, request.getDayOfMonth());
-
-    Notification notification = Notification.builder()
-        .setTitle(UPDATE_SETTLEMENT_DATE.getTitle())
-        .setBody("정산일이 " + request.getDayOfMonth() + "일로 바뀌었어요!.")
-        .setImage(UPDATE_SETTLEMENT_DATE.getImgUrl())
-        .build();
+    Notification notification = NotificationUtils.updateSettlementDate(request.getDayOfMonth());
 
     fcmNotificationUseCase.sendNotificationHouseholdMember(notification, userEmail);
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse());
