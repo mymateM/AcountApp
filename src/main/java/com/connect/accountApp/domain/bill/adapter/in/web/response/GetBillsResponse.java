@@ -45,7 +45,4 @@ public class GetBillsResponse {
       this.billPaymentAmount = command.getBillPaymentAmount().setScale(0, RoundingMode.FLOOR);
     }
   }
-
-
-
 }

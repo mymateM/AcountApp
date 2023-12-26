@@ -58,8 +58,5 @@ public class BillPersistenceAdapter implements FindBillPort, SaveBillPort, Delet
     public void deleteBills(List<Long> billIds) {
         billJpaRepository.deleteAllById(billIds);
     }
-//
-//    public void deleteBill(Long billIds) {
-//        billJpaRepository.deleteAll(billIds);
-//    }
+
 }

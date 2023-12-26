@@ -21,15 +21,12 @@ public class GetBillController {
     private final GetBillUseCase getBillUseCase;
 
     @GetMapping("/bill/{bill_id}")
-    public ResponseEntity getBillsUseCase(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable("bill_id") Long billId) {
+    public ResponseEntity getBillsUseCase(@AuthenticationPrincipal UserDetails userDetails,
+                                          @PathVariable("bill_id") Long billId) {
 
         Bill bill = getBillUseCase.getBill(billId);
 
         GetBillResponse response = new GetBillResponse(bill);
         return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
     }
-
-
 }

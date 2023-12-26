@@ -18,8 +18,7 @@ public class RecentBillCategoriesResponse {
     @JsonProperty("recent_bill_category")
     private List<RecentBillCategoryResponse> recentBillCategories;
 
-    public RecentBillCategoriesResponse(
-            List<RecentBillCategoryCommand> recentBillCategories) {
+    public RecentBillCategoriesResponse(List<RecentBillCategoryCommand> recentBillCategories) {
         this.recentBillCategories =
                 recentBillCategories.stream().map(RecentBillCategoryResponse::new).toList();
     }
@@ -40,6 +39,4 @@ public class RecentBillCategoriesResponse {
             this.billPaymentAmount = command.getBillPaymentAmount().setScale(0, RoundingMode.FLOOR);
         }
     }
-
-
 }

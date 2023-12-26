@@ -25,9 +25,8 @@ public class RegisterBillController {
     private final FcmNotificationUseCase fcmNotificationUseCase;
 
     @PostMapping("")
-    public ResponseEntity registerBill(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody RegisterBillRequest request) {
+    public ResponseEntity registerBill(@AuthenticationPrincipal UserDetails userDetails,
+                                       @RequestBody RegisterBillRequest request) {
 
         String userEmail = userDetails.getUsername();
         Long billId = registerBillUseCase.registerBill(userEmail, request);

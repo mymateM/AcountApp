@@ -28,7 +28,7 @@ public class GetBillResponse {
 
     public GetBillResponse(Bill bill) {
         this.billCategory = bill.getBillCategory().getTitle();
-        this.billPaymentAmount = bill.getBillPayment().setScale(0, RoundingMode.FLOOR);
+        this.billPaymentAmount = bill.getBillPayment().setScale(0, RoundingMode.FLOOR); // todo 모든 BigDecimal은 내림으로 소수점 없이
         this.billImageUrl = bill.getBillCategory().getImgUrl();
         this.billPaymentDate = bill.getBillPaymentDate();
         this.billMemo = bill.getBillMemo();

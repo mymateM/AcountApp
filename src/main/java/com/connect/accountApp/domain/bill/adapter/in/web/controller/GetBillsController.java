@@ -23,9 +23,8 @@ public class GetBillsController {
   private final GetBillsUseCase getBillsUseCase;
 
   @GetMapping("/bills/{bill-category}")
-  public ResponseEntity getBillsUseCase(
-      @AuthenticationPrincipal UserDetails userDetails,
-      @PathVariable("bill-category") BillCategory billCategory) {
+  public ResponseEntity getBillsUseCase(@AuthenticationPrincipal UserDetails userDetails,
+                                        @PathVariable("bill-category") BillCategory billCategory) {
 
     String userEmail = userDetails.getUsername();
     List<BillCommand> commands = getBillsUseCase.getBills(userEmail, billCategory);

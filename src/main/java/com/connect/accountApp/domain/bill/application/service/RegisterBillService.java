@@ -30,7 +30,6 @@ public class RegisterBillService implements RegisterBillUseCase {
 
   private final GetUserPort getUserPort;
   private final SaveBillPort saveBillPort;
-//  private final FindBillPort findBillPort;
   private final SaveVirtualAccountPort saveVirtualAccountPort;
 
 

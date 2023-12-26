@@ -24,7 +24,6 @@ public class DeleteBillsController {
                                       @RequestParam("bill_id_list") List<Long> billIds) {
 
         String userEmail = userDetails.getUsername();
-
         deleteBillsUseCase.deleteBills(userEmail, billIds);
         return ResponseEntity.ok(SuccessResponse.create204NoContentResponse());
     }
