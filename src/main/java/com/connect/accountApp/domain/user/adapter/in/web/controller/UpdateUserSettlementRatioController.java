@@ -4,6 +4,7 @@ import com.connect.accountApp.domain.user.adapter.in.web.request.UpdateUserSettl
 import com.connect.accountApp.domain.user.application.port.in.command.UpdateUserSettlementRatioUseCase;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import com.connect.accountApp.global.common.application.port.out.FcmNotificationUseCase;
+import com.connect.accountApp.global.utils.NotificationUtils;
 import com.google.firebase.messaging.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +28,8 @@ public class UpdateUserSettlementRatioController {
         String userEmail = userDetails.getUsername();
         updateUserSettlementRatioUseCase.updateUserSettlementRatio(userEmail, request);
 
-
-        Notification notification = Notification.builder()
-                .setTitle("정산 비율 변경")
-                .setBody("비율 변경 소식이에요! 내 비율은 얼마일까요?")
-                .setImage("")
-                .build();
-
+        Notification notification = NotificationUtils.updateUserSettlementNotification();
         fcmNotificationUseCase.sendNotificationHouseholdMember(notification, userEmail);
-
         return ResponseEntity.ok(SuccessResponse.create200SuccessResponse());
     }
 }

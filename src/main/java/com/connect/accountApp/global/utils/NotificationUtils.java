@@ -42,4 +42,13 @@ public class NotificationUtils {
                 .build();
 
     }
+
+    public static Notification updateUserSettlementNotification() {
+        return  Notification.builder()
+                .setTitle("정산 비율 변경")
+                .setBody("비율 변경 소식이에요! 내 비율은 얼마일까요?")
+                .setImage("")
+                .build();
+
+    }
 }
