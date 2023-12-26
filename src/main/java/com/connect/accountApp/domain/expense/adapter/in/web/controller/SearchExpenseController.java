@@ -26,7 +26,7 @@ public class SearchExpenseController {
 
     @PostMapping("/search")
     public ResponseEntity searchExpense(@AuthenticationPrincipal UserDetails userDetails,
-                                          @RequestParam("expense_date_max") LocalDate expenseDateMax,
+                                        @RequestParam("expense_date_max") LocalDate expenseDateMax,
                                         @RequestParam("expense_date_min") LocalDate expenseDateMin,
                                         @RequestParam("expense_category_name") String expenseCategoryName,
                                         @RequestParam("expense_amount_max") BigDecimal expenseAmountMax,
@@ -34,8 +34,10 @@ public class SearchExpenseController {
                                         @RequestParam("sorted_by_newest") Boolean sortedByNewest) {
 
         String userEmail = userDetails.getUsername();
-        SearchedCondition condition = new SearchedCondition(expenseDateMax, expenseDateMin, expenseCategoryName,
-                expenseAmountMax, expenseAmountMin, sortedByNewest);
+        SearchedCondition condition =
+                new SearchedCondition(
+                        expenseDateMax, expenseDateMin, expenseCategoryName,
+                        expenseAmountMax, expenseAmountMin, sortedByNewest);
         List<DailyExpenseCommand> commands = searchExpenseUseCase.getSearchedExpense(userEmail, condition);
         DailyExpenseResponse response = new DailyExpenseResponse(commands);
         return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));

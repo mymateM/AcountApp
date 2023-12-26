@@ -19,10 +19,7 @@ public class GetDailyTotalExpensesOfHouseholdService implements GetDailyTotalExp
 
   @Override
   public List<DailyTotalExpensesCommand> getDailyTotalExpensesOfHousehold(String userEmail, LocalDate date) {
-
     User user = getUserPort.findUserWithHousehold(userEmail);
-
-
     List<DailyTotalExpensesCommand> dailyTotalExpensesCommand = findDailyTotalExpensesPort
         .FindDailyTotalExpenses(user.getHousehold().getHouseholdId(), date);
 

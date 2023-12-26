@@ -41,7 +41,6 @@ public class ExpenseQueryRepository {
                         userJpaEntity.userRatio
                 ))
                 .from(expenseJpaEntity)
-//        .join(expenseJpaEntity., userJpaEntity)
                 .where(
                         eqHouseholdId(householdId),
                         betweenDate(startTime, endTime)

@@ -19,11 +19,8 @@ public class GetDailyExpenseService implements GetDailyExpenseUseCase {
 
   @Override
   public List<DailyExpenseCommand> getDailyExpense(String userEmail, LocalDate date) {
-
     User user = getUserPort.findUserWithHousehold(userEmail);
-
     List<DailyExpenseCommand> DailyExpenseCommands = findExpensePort.findDailyExpenses(user.getHousehold().getHouseholdId(), date);
-
     return DailyExpenseCommands;
   }
 }

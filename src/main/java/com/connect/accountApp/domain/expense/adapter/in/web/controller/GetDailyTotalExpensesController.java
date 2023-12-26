@@ -24,9 +24,9 @@ public class GetDailyTotalExpensesController { // 월별 지출 캘린더
 
   @GetMapping("/daily-total/month/{year}/{month}/{dayOfMonth}")
   public ResponseEntity getDailyTotalExpenses(@AuthenticationPrincipal UserDetails userDetails,
-      @PathVariable("year") int year,
-      @PathVariable("month") int month,
-      @PathVariable("dayOfMonth") int dayOfMonth) {
+                                              @PathVariable("year") int year,
+                                              @PathVariable("month") int month,
+                                              @PathVariable("dayOfMonth") int dayOfMonth) {
 
     String userEmail = userDetails.getUsername();
     LocalDate date = LocalDate.of(year, month, dayOfMonth);

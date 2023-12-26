@@ -20,25 +20,6 @@ public class UserQueryRepository {
 
   private final JPAQueryFactory jpaQueryFactory;
 
-  public List<RoommateSendMoneyCommand> getRoommateSendMoney(Long householdId, Long userId) {
-
-    return jpaQueryFactory
-        .select(Projections.constructor(RoommateSendMoneyCommand.class,
-            userJpaEntity.userId,
-            userJpaEntity.userNickname.as("userName"),
-            userJpaEntity.userRatio,
-            userJpaEntity.userAccountBank,
-            userJpaEntity.userAccount
-        ))
-        .from(userJpaEntity)
-        .where(
-            eqHouseholdId(householdId),
-            notInUserId(userId)
-        )
-        .fetch();
-
-  }
-
   public List<UserJpaEntity> getHouseholdMember(Long householdId) {
 
     return jpaQueryFactory
@@ -67,16 +48,9 @@ public class UserQueryRepository {
 
   }
 
-
-
   private BooleanExpression eqHouseholdId(Long householdId) {
     log.info("UserQueryRepository => householdId : {}", householdId);
     return householdId != null ? userJpaEntity.houseHoldJpaEntity.householdId.eq(householdId) : null;
-  }
-
-  private BooleanExpression notInUserId(Long userId) {
-    log.info("UserQueryRepository => userId : {}", userId);
-    return userId != null ? userJpaEntity.userId.notIn(userId) : null;
   }
 
   private BooleanExpression eqUserEmail(String userEmail) {

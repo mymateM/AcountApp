@@ -1,6 +1,5 @@
 package com.connect.accountApp.domain.expense.application.service;
 
-import com.connect.accountApp.domain.bill.application.port.out.DeleteBillPort;
 import com.connect.accountApp.domain.expense.application.port.in.DeleteExpenseUseCase;
 import com.connect.accountApp.domain.expense.application.port.out.DeleteExpensePort;
 import com.connect.accountApp.domain.expense.application.port.out.FindExpensePort;

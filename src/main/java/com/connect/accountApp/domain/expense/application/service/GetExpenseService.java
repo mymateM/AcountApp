@@ -14,7 +14,6 @@ public class GetExpenseService implements GetExpenseUseCase {
 
     @Override
     public Expense getExpense(Long expenseId) {
-
         return findExpensePort.findExpense(expenseId);
     }
 }

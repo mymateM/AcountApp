@@ -22,9 +22,7 @@ public class GetExpenseController {
 
     @GetMapping("/{expense_id}")
     public ResponseEntity getDailyExpenseOfDay(@AuthenticationPrincipal UserDetails userDetails, @PathVariable("expense_id") Long expenseId) {
-
-        String userEmail = userDetails.getUsername();
-
+        
         Expense expense = getExpenseUseCase.getExpense(expenseId);
         GetExpenseResponse response = new GetExpenseResponse(expense);
 

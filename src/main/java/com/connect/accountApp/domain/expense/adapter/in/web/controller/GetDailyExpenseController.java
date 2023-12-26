@@ -26,16 +26,14 @@ public class GetDailyExpenseController {
 
   @GetMapping("/daily-total/day/{year}/{month}/{dayOfMonth}")
   public ResponseEntity getDailyExpenseOfDay(@AuthenticationPrincipal UserDetails userDetails,
-      @Min(0) @PathVariable("year") int year,
-      @Size(min = 1, max = 12) @PathVariable("month") int month,
-      @PathVariable("dayOfMonth") int dayOfMonth) {
+                                             @Min(0) @PathVariable("year") int year,
+                                             @Size(min = 1, max = 12) @PathVariable("month") int month,
+                                             @PathVariable("dayOfMonth") int dayOfMonth) {
 
     String userEmail = userDetails.getUsername();
     LocalDate date = LocalDate.of(year, month, dayOfMonth);
-
     List<DailyExpenseCommand> commands = getDailyExpenseUseCase.getDailyExpense(userEmail, date);
     DailyExpenseResponse response = new DailyExpenseResponse(commands);
-
     return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
 
   }

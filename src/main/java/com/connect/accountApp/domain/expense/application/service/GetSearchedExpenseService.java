@@ -19,12 +19,9 @@ public class GetSearchedExpenseService implements SearchExpenseUseCase {
 
     @Override
     public List<DailyExpenseCommand> getSearchedExpense(String userEmail, SearchedCondition condition) {
-
         User user = getUserPort.findUserWithHousehold(userEmail);
         Long householdId = user.getHousehold().getHouseholdId();
-
         List<DailyExpenseCommand> dailyExpenseCommands = findExpensePort.findSearchedExpenses(householdId, condition);
-
         return dailyExpenseCommands;
     }
 }

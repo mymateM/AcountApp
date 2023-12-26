@@ -24,9 +24,6 @@ public class RegisterExpenseController {
   @PostMapping("")
   public ResponseEntity registerExpense(@AuthenticationPrincipal UserDetails userDetails,
       @RequestBody RegisterExpenseRequest request) {
-
-    log.info("[controller] : {}", "RegisterExpenseController");
-
     String userEmail = userDetails.getUsername();
     Long expenseId = registerExpenseUseCase.registerExpense(userEmail, request);
     return ResponseEntity.ok(SuccessResponse.create201CreatedResponse(expenseId));

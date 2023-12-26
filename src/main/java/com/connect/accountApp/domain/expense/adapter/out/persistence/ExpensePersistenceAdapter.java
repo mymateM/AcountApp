@@ -33,15 +33,6 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   private final ExpenseMapper expenseMapper;
 
   @Override
-  public List<TotalExpenseCommand> getTotalExpense(Long householdId, LocalDateTime startTime,
-      LocalDateTime endTime) {
-
-    List<TotalExpenseCommand> totalExpenseQuery  = expenseQueryRepository.getTotalExpenseQuery(
-        householdId, startTime.toLocalDate(), endTime.toLocalDate());
-    return totalExpenseQuery;
-  }
-
-  @Override
   public List<TotalExpenseByCategoryCommand> getTotalExpenseGroupByCategory(Long householdId,
       LocalDate startTime, LocalDate endTime) {
 
@@ -60,20 +51,9 @@ public class ExpensePersistenceAdapter implements GetTotalExpensePort, GetUserSe
   }
 
   @Override
-  public int getHouseholdTotalExpense(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
-    return 1;
-//    return expenseQueryRepository.getHouseholdTotalExpense(householdId, startTime.toLocalDate(), endTime.toLocalDate());
-  }
-
-  @Override
   public BigDecimal getHouseholdTotalExpenseByDate(Long householdId, LocalDateTime startTime, LocalDateTime endTime) {
     return expenseQueryRepository.getHouseholdTotalExpenseBetweenDate(householdId, startTime,
             endTime.plusDays(1).minusSeconds(1));
-  }
-
-  @Override
-  public BigDecimal getUserTotalExpenseByDate(Long userId, LocalDateTime startTime, LocalDateTime endTime) {
-    return expenseQueryRepository.getUserTotalExpense(userId, startTime, endTime);
   }
 
   @Override
