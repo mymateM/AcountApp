@@ -1,6 +1,5 @@
 package com.connect.accountApp.global.common.adapter.in.web;
 
-import com.connect.accountApp.domain.user.application.port.out.GetUserPort;
 import com.connect.accountApp.global.common.adapter.in.web.response.SuccessResponse;
 import com.connect.accountApp.global.common.application.port.in.QuartzTestUseCase;
 import lombok.RequiredArgsConstructor;
