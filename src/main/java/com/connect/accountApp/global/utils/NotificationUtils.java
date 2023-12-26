@@ -1,5 +1,6 @@
 package com.connect.accountApp.global.utils;
 
+import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.REQUEST_SETTLEMENT;
 import static com.connect.accountApp.domain.activitynotification.domain.model.NotiCategory.UPDATE_SETTLEMENT_DATE;
 
 import com.connect.accountApp.domain.bill.domain.model.BillCategory;
@@ -31,5 +32,14 @@ public class NotificationUtils {
                 .setBody("정산일이 " + dayOfMonth + "일로 바뀌었어요!.")
                 .setImage(UPDATE_SETTLEMENT_DATE.getImgUrl())
                 .build();
+    }
+
+    public static Notification sendMoneyNotification(String requesterName) {
+        return Notification.builder()
+                .setTitle(REQUEST_SETTLEMENT.getTitle())
+                .setImage(REQUEST_SETTLEMENT.getImgUrl())
+                .setBody("콕! " + requesterName + "님에게 이번 달 정산을 하러 가볼까요?")
+                .build();
+
     }
 }
