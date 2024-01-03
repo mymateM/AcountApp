@@ -3,6 +3,7 @@ package com.connect.accountApp.domain.household.application.port.in.command;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import com.connect.accountApp.domain.household.domain.model.Household;
+import com.connect.accountApp.global.utils.NvlUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -26,25 +27,32 @@ public class GetHouseholdHomeCommand {
     private Integer expenseDuration;
 
 
-    public GetHouseholdHomeCommand(Household household, BigDecimal byNowExpense, BigDecimal byPreviousExpense, int dDay, LocalDate pastNearSettlementDate) {
+    public GetHouseholdHomeCommand(Household household, BigDecimal byNowExpense, BigDecimal byPreviousExpense, int dDay,
+                                   LocalDate pastNearSettlementDate) {
+        BigDecimal nvlByNowExpense = NvlUtils.nvl(byNowExpense);
+        BigDecimal nvlByPreviousExpense = NvlUtils.nvl(byPreviousExpense);
         this.householdId = household.getHouseholdId();
         this.householdName = household.getHouseholdName();
-        this.byNowExpense = byNowExpense ;
-        this.byPreviousExpense = byPreviousExpense;
-        this.byNowBudgetRatio = byNowExpense.divide(household.getHouseholdBudget()).multiply(BigDecimal.valueOf(100L));
+        this.byNowExpense = NvlUtils.nvl(nvlByNowExpense);
+        this.byPreviousExpense = nvlByPreviousExpense;
+        this.byNowBudgetRatio = nvlByNowExpense.divide(household.getHouseholdBudget()).multiply(BigDecimal.valueOf(100L));
         this.settlementDDay = dDay;
-        this.nowExpenseDiff = byPreviousExpense.subtract(byNowExpense);
-        this.isHouseholdBudgetOverWarn = isHouseholdBudgetOverWarn(household.getHouseholdBudget(), pastNearSettlementDate, byNowExpense);
+        this.nowExpenseDiff = nvlByPreviousExpense.subtract(nvlByNowExpense);
+        this.isHouseholdBudgetOverWarn = isHouseholdBudgetOverWarn(household.getHouseholdBudget(),
+                pastNearSettlementDate, nvlByNowExpense);
         this.expenseDuration = Period.between(pastNearSettlementDate, LocalDate.now()).getDays();
     }
 
-    private boolean isHouseholdBudgetOverWarn(BigDecimal budget, LocalDate pastNearSettlementDate, BigDecimal householdByNowExpense) {
+    private boolean isHouseholdBudgetOverWarn(BigDecimal budget, LocalDate pastNearSettlementDate,
+                                              BigDecimal householdByNowExpense) {
 
+        BigDecimal nvlBudget = NvlUtils.nvl(budget);
+        BigDecimal nvlHouseholdByNowExpense = NvlUtils.nvl(householdByNowExpense);
         int passDay = dayDiff(pastNearSettlementDate, LocalDate.now());
         int settlementDayDiff = dayDiff(pastNearSettlementDate, pastNearSettlementDate.plusMonths(1));
-        BigDecimal standard = budget.divide(BigDecimal.valueOf(settlementDayDiff), 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(passDay));
-
-        return standard.compareTo(householdByNowExpense) <= 0;
+        BigDecimal standard = nvlBudget.divide(BigDecimal.valueOf(settlementDayDiff), 2, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(passDay));
+        return standard.compareTo(nvlHouseholdByNowExpense) <= 0;
     }
 
     private int dayDiff(LocalDate startDate, LocalDate endDate) {

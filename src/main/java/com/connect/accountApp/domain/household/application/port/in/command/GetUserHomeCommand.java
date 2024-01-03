@@ -1,5 +1,6 @@
 package com.connect.accountApp.domain.household.application.port.in.command;
 
+import com.connect.accountApp.global.utils.NvlUtils;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,9 +16,11 @@ public class GetUserHomeCommand {
     private BigDecimal userByNowLeftExpense;
 
     public GetUserHomeCommand(Long userId, BigDecimal userTotalBudget, BigDecimal userByNowTotalExpense) {
+        BigDecimal nvlUserTotalBudget = NvlUtils.nvl(userTotalBudget);
+        BigDecimal nvlUserByNowTotalExpense = NvlUtils.nvl(userByNowTotalExpense);
         this.userId = userId;
-        this.userTotalBudget = userTotalBudget;
-        this.userByNowTotalExpense = userByNowTotalExpense;
-        this.userByNowLeftExpense = userTotalBudget.subtract(userByNowTotalExpense);
+        this.userTotalBudget = nvlUserTotalBudget;
+        this.userByNowTotalExpense = nvlUserByNowTotalExpense;
+        this.userByNowLeftExpense = nvlUserTotalBudget.subtract(nvlUserByNowTotalExpense);
     }
 }

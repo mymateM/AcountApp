@@ -9,6 +9,6 @@ spring:
         - devdb
         - tokendev
         - fcm-dev
-    active: dev
+    active: loc
   pid:
     file: /home/ubuntu/app/step2/accountApp.pid
